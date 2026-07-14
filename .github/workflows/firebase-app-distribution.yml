@@ -1,0 +1,46 @@
+name: Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch: 
+
+jobs:
+  build-and-distribute:
+    name: Build and Distribute APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Clean and Get Dependencies
+        run: |
+          flutter clean
+          flutter pub get
+
+      - name: Run Build Runner
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
+        with:
+          appId: '1:221402846484:android:b234709d61139da90d5e01'
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-release.apk
