@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fitness/core/routes/routes.dart';
-import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -196,9 +195,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFF000B1F), // deep navy
-                  Color(0xFF011234), // dark blue
-                  Color(0xFF02369C), // brand blue
+                  Color(0xFF181818), // deep charcoal
+                  Color(0xFF242424), // main charcoal
+                  Color(0xFF2D2D2D), // lighter charcoal
                 ],
                 stops: [0.0, 0.5, 1.0],
               ),
@@ -256,8 +255,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFF00E5FF).withValues(alpha: 0.3),
-                      AppColors.primaryLight.withValues(alpha: 0.15),
+                      const Color(0xFFFF4100).withValues(alpha: 0.3),
+                      const Color(0xFFFF4100).withValues(alpha: 0.15),
                       Colors.transparent,
                     ],
                     stops: const [0.0, 0.5, 1.0],
@@ -278,17 +277,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xFF00E5FF).withValues(alpha: 0.4),
+                    color: const Color(0xFFFF4100).withValues(alpha: 0.4),
                     width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF00E5FF).withValues(alpha: 0.2),
+                      color: const Color(0xFFFF4100).withValues(alpha: 0.2),
                       blurRadius: 20,
                       spreadRadius: 5,
                     ),
                     BoxShadow(
-                      color: const Color(0xFF00E5FF).withValues(alpha: 0.10),
+                      color: const Color(0xFFFF4100).withValues(alpha: 0.10),
                       blurRadius: 40,
                       spreadRadius: 10,
                     ),
@@ -342,7 +341,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ShaderMask(
               shaderCallback: (bounds) {
                 return LinearGradient(
-                  colors: const [Colors.white, Color(0xFF00E5FF), Colors.white],
+                  colors: const [Colors.white, Color(0xFFFF4100), Colors.white],
                   stops: [
                     (_shimmerAnimation.value - 0.3).clamp(0.0, 1.0),
                     _shimmerAnimation.value.clamp(0.0, 1.0),
@@ -399,11 +398,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       gradient: const LinearGradient(
-                        colors: [AppColors.primaryLight, Color(0xFF00E5FF)],
+                        colors: [Color(0xFFFF7A00), Color(0xFFFF4100)],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF00E5FF).withValues(alpha: 0.5),
+                          color: const Color(0xFFFF4100).withValues(alpha: 0.5),
                           blurRadius: 8,
                           offset: const Offset(0, 0),
                         ),
@@ -457,7 +456,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF00E5FF).withValues(alpha: 0.3),
+                  color: const Color(0xFFFF4100).withValues(alpha: 0.3),
                   blurRadius: p.size * 3,
                 ),
               ],
