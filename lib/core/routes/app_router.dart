@@ -14,7 +14,7 @@ final GoRouter router = GoRouter(
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,
-      page: (state, context) => const SignupPage(),
+      page: (state, context) => const SplashPage(),
     ),
     _customAnimatedGoRoute(
       route: Routes.onBoard,
