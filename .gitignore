@@ -50,3 +50,22 @@ app.*.map.json
 *.mocks.dart
 *.gr.dart
 
+# Firebase configuration files (Contains sensitive API keys)
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/macos/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+firebase.json
+
+# Environment variables
+.env
+.env.*
+
+# Android Keystore files for signing
+*.jks
+*.keystore
+key.properties
+android/key.properties
+
+# Flutter plugins cache
+.flutter-plugins

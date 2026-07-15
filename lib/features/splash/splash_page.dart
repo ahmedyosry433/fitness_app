@@ -166,7 +166,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     // Navigate after animation completes + brief pause
     Timer(const Duration(milliseconds: 3600), () {
       if (mounted) {
-        context.go(Routes.login);
+        context.go(Routes.onBoard);
       }
     });
   }
