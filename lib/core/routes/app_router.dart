@@ -1,5 +1,6 @@
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/singup_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ final GoRouter router = GoRouter(
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,
-      page: (state, context) => const SplashPage(),
+      page: (state, context) => const SignupPage(),
     ),
     _customAnimatedGoRoute(
       route: Routes.onBoard,
@@ -22,6 +23,10 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.login,
       page: (state, context) => const LoginPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => const SignupPage(),
     ),
   ],
 );

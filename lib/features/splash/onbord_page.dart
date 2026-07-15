@@ -38,20 +38,22 @@ class _OnboardPageState extends State<OnboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background Image
           Positioned.fill(
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-              child: Image.asset(
-                'assets/images/back.jpg',
-                fit: BoxFit.cover,
+            child: Transform.scale(
+              scale: 1.1, 
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                child: Image.asset(
+                  'assets/images/back.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
 
-          // Page View for Characters
           PageView.builder(
             controller: _pageController,
             onPageChanged: (index) {
@@ -73,7 +75,6 @@ class _OnboardPageState extends State<OnboardPage> {
             },
           ),
 
-          // Skip Button
           if (_currentIndex < 2)
             Positioned(
               top: 50,
