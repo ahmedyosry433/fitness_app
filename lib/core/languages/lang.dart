@@ -27,4 +27,5 @@ class LanguageHelper {
 }
 
 // Generate Locale Keys
-// flutter pub run easy_localization:generate -S assets/localization -O lib/core/languages -f keys -o locale_keys.g.dart
+// dart run easy_localization:generate -S assets/localization -O lib/core/languages -f keys -o locale_keys.g.dart
+// dart run easy_localization:generate -S assets/localization -O lib/core/languages -f json

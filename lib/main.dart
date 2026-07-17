@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/app.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/helper/bloc/bloc_observer.dart';
+import 'package:fitness/core/languages/codegen_loader.g.dart';
 import 'package:fitness/core/languages/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   Bloc.observer = MyBlocObserver();
   await ScreenUtil.ensureScreenSize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -20,9 +21,11 @@ void main() async {
   runApp(
     EasyLocalization(
       supportedLocales: [arabicLocale, englishLocale],
-      fallbackLocale: arabicLocale,
+      fallbackLocale: englishLocale,
       startLocale: englishLocale,
       path: assetsLocalization,
+      assetLoader: const CodegenLoader(),
+      useFallbackTranslations: true,
       child: FitnessApp(),
     ),
   );

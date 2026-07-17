@@ -1,5 +1,7 @@
 import 'package:fitness/core/routes/routes.dart';
-import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/forget_password_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +18,20 @@ final GoRouter router = GoRouter(
       page: (state, context) => const SplashPage(),
     ),
     _customAnimatedGoRoute(
-      route: Routes.onBoard,
-      page: (state, context) => const OnboardPage(),
-    ),
-    _customAnimatedGoRoute(
       route: Routes.login,
       page: (state, context) => const LoginPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => const RegisterPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.forgetPassword,
+      page: (state, context) => const ForgetPasswordPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.onBoard,
+      page: (state, context) => const OnboardPage(),
     ),
   ],
 );
