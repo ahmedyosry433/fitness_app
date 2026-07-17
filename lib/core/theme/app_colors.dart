@@ -5,6 +5,9 @@ class AppColors {
   // --- Primary and Brand Colors ---
   static const Color prime = Color(0xFF02369C); // main brand color
   static const Color primeAccent = Color(0xFF11CE19); // accent/brand green
+  static const Color primaryOrange = Color(0xFFFF4500); // main orange
+  static const Color primaryOrangeDark = Color(0xFFFF4100); // dark orange
+  static const Color primaryOrangeLight = Color(0xFFFF7A00); // light orange
 
   // --- Light Theme Colors ---
   static const Color primaryLight = Color(0xFF02369C); // prime

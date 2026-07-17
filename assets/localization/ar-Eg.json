@@ -112,5 +112,31 @@
     "splash": {
         "title": "سوبر فيتنس",
         "subtitle": "تدريب · تغيير · انتصار"
+    },
+    "onboarding": {
+        "page1_title": "ثمن التميز\nهو الانضباط",
+        "page2_title": "اللياقة لم تكن\nممتعة هكذا من قبل",
+        "page3_title": "لا مزيد من الأعذار\nافعلها الآن",
+        "subtitle": "هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى",
+        "skip": "تخطي",
+        "next": "التالي",
+        "back": "السابق",
+        "do_it": "ابدأ الآن"
+    },
+    "login": {
+        "title": "صفحة تسجيل الدخول"
+    },
+    "complete_register": {
+        "tell_us_about_yourself": "أخبرنا عن نفسك!",
+        "we_need_to_know_your_gender": "نحتاج لمعرفة جنسك",
+        "how_old_are_you": "كم عمرك ؟",
+        "this_helps_us_create_your_personalized_plan": "هذا يساعدنا في إنشاء خطتك المخصصة",
+        "what_is_your_weight": "ما هو وزنك ؟",
+        "what_is_your_height": "ما هو طولك ؟",
+        "year": "سنة",
+        "kg": "كجم",
+        "cm": "سم",
+        "male": "ذكر",
+        "female": "أنثى"
     }
 }

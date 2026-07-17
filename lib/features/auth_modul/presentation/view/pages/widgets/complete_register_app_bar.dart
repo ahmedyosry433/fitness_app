@@ -1,9 +1,10 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SignupAppBar extends StatelessWidget {
+class CompleteRegisterAppBar extends StatelessWidget {
   final VoidCallback onBack;
 
-  const SignupAppBar({
+  const CompleteRegisterAppBar({
     super.key,
     required this.onBack,
   });
@@ -21,7 +22,7 @@ class SignupAppBar extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: const BoxDecoration(
-                color: Color(0xFFFF4500),
+                color: AppColors.primaryOrange,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),

@@ -1,3 +1,4 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -229,8 +230,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFFFF4100).withValues(alpha: 0.3),
-                      const Color(0xFFFF4100).withValues(alpha: 0.15),
+                      AppColors.primaryOrangeDark.withValues(alpha: 0.3),
+                      AppColors.primaryOrangeDark.withValues(alpha: 0.15),
                       Colors.transparent,
                     ],
                     stops: const [0.0, 0.5, 1.0],
@@ -250,17 +251,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xFFFF4100).withValues(alpha: 0.4),
+                    color: AppColors.primaryOrangeDark.withValues(alpha: 0.4),
                     width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF4100).withValues(alpha: 0.2),
+                      color: AppColors.primaryOrangeDark.withValues(alpha: 0.2),
                       blurRadius: 20,
                       spreadRadius: 5,
                     ),
                     BoxShadow(
-                      color: const Color(0xFFFF4100).withValues(alpha: 0.10),
+                      color: AppColors.primaryOrangeDark.withValues(alpha: 0.10),
                       blurRadius: 40,
                       spreadRadius: 10,
                     ),
@@ -312,7 +313,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ShaderMask(
               shaderCallback: (bounds) {
                 return LinearGradient(
-                  colors: const [Colors.white, Color(0xFFFF4100), Colors.white],
+                  colors: const [Colors.white, AppColors.primaryOrangeDark, Colors.white],
                   stops: [
                     (_shimmerAnimation.value - 0.3).clamp(0.0, 1.0),
                     _shimmerAnimation.value.clamp(0.0, 1.0),
@@ -368,11 +369,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       gradient: const LinearGradient(
-                        colors: [Color(0xFFFF7A00), Color(0xFFFF4100)],
+                        colors: [AppColors.primaryOrangeLight, AppColors.primaryOrangeDark],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFF4100).withValues(alpha: 0.5),
+                          color: AppColors.primaryOrangeDark.withValues(alpha: 0.5),
                           blurRadius: 8,
                           offset: const Offset(0, 0),
                         ),
@@ -424,7 +425,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFF4100).withValues(alpha: 0.3),
+                  color: AppColors.primaryOrangeDark.withValues(alpha: 0.3),
                   blurRadius: p.size * 3,
                 ),
               ],

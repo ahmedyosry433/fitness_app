@@ -1,10 +1,13 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SignupGenderSelection extends StatelessWidget {
-  final String selectedGender;
-  final ValueChanged<String> onChanged;
+import 'package:fitness/core/enums/gender.dart';
 
-  const SignupGenderSelection({
+class CompleteRegisterGenderSelection extends StatelessWidget {
+  final Gender selectedGender;
+  final ValueChanged<Gender> onChanged;
+
+  const CompleteRegisterGenderSelection({
     super.key,
     required this.selectedGender,
     required this.onChanged,
@@ -15,14 +18,14 @@ class SignupGenderSelection extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildGenderOption('Male', Icons.male),
+        _buildGenderOption(Gender.male, Icons.male),
         const SizedBox(height: 30),
-        _buildGenderOption('Female', Icons.female),
+        _buildGenderOption(Gender.female, Icons.female),
       ],
     );
   }
 
-  Widget _buildGenderOption(String gender, IconData icon) {
+  Widget _buildGenderOption(Gender gender, IconData icon) {
     final isSelected = selectedGender == gender;
     return GestureDetector(
       onTap: () => onChanged(gender),
@@ -33,9 +36,9 @@ class SignupGenderSelection extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? const Color(0xFFFF4500) : Colors.transparent,
+              color: isSelected ? AppColors.primaryOrange : Colors.transparent,
               border: Border.all(
-                color: isSelected ? const Color(0xFFFF4500) : Colors.white54,
+                color: isSelected ? AppColors.primaryOrange : Colors.white54,
                 width: 2,
               ),
             ),
@@ -47,7 +50,7 @@ class SignupGenderSelection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            gender,
+            gender.localizedName,
             style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
         ],

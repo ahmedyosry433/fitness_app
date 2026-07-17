@@ -1,10 +1,11 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SignupStepIndicator extends StatelessWidget {
+class CompleteRegisterStepIndicator extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
 
-  const SignupStepIndicator({
+  const CompleteRegisterStepIndicator({
     super.key,
     required this.currentStep,
     this.totalSteps = 6,
@@ -22,7 +23,7 @@ class SignupStepIndicator extends StatelessWidget {
             value: (currentStep + 1) / totalSteps,
             strokeWidth: 3,
             backgroundColor: Colors.white24,
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF4500)),
+            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryOrange),
           ),
         ),
         Text(

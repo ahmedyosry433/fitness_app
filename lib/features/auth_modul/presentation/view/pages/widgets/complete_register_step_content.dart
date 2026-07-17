@@ -1,14 +1,15 @@
+import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/complete_register_step_indicator.dart';
 import 'package:flutter/material.dart';
-import 'signup_step_indicator.dart';
 
-class SignupStepContent extends StatelessWidget {
+class CompleteRegisterStepContent extends StatelessWidget {
   final int currentStep;
   final String title;
   final String subtitle;
   final Widget child;
   final VoidCallback onNext;
 
-  const SignupStepContent({
+  const CompleteRegisterStepContent({
     super.key,
     required this.currentStep,
     required this.title,
@@ -22,7 +23,7 @@ class SignupStepContent extends StatelessWidget {
     return Column(
       children: [
         const Spacer(flex: 1),
-        SignupStepIndicator(currentStep: currentStep),
+        CompleteRegisterStepIndicator(currentStep: currentStep),
         const SizedBox(height: 20),
         Text(
           title,
@@ -62,7 +63,7 @@ class SignupStepContent extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onNext,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF4500),
+                      backgroundColor: AppColors.primaryOrange,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     ),

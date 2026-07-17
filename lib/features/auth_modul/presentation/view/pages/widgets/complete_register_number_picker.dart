@@ -1,14 +1,15 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'horizontal_number_picker.dart';
 
-class SignupNumberPicker extends StatelessWidget {
+class CompleteRegisterNumberPicker extends StatelessWidget {
   final int minValue;
   final int maxValue;
   final int initialValue;
   final String label;
   final ValueChanged<int> onChanged;
 
-  const SignupNumberPicker({
+  const CompleteRegisterNumberPicker({
     super.key,
     required this.minValue,
     required this.maxValue,
@@ -25,7 +26,7 @@ class SignupNumberPicker extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: Color(0xFFFF4500),
+            color: AppColors.primaryOrange,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -44,7 +45,7 @@ class SignupNumberPicker extends StatelessWidget {
               bottom: 0,
               child: Icon(
                 Icons.arrow_drop_up,
-                color: Color(0xFFFF4500),
+                color: AppColors.primaryOrange,
                 size: 40,
               ),
             ),

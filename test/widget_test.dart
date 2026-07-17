@@ -1,29 +1,61 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/app.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/core/languages/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const FitnessApp());
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    // Provide a mock for SharedPreferences which is used by EasyLocalization
+    SharedPreferences.setMockInitialValues({});
+    await EasyLocalization.ensureInitialized();
+    
+    // Initialize dependency injection for the app
+    configureDependencies();
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('FitnessApp full app smoke test (Splash Screen)', (WidgetTester tester) async {
+    // Provide a physical size for ScreenUtil to initialize correctly in tests
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 3.0;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Build the app with EasyLocalization wrapper just like in main.dart
+    await tester.pumpWidget(
+      EasyLocalization(
+        supportedLocales: const [arabicLocale, englishLocale],
+        fallbackLocale: arabicLocale,
+        startLocale: englishLocale,
+        path: assetsLocalization,
+        child: const FitnessApp(),
+      ),
+    );
+
+    // Let the first frame render (SplashPage)
     await tester.pump();
+    
+    // We should expect to see the FitnessApp in the widget tree
+    expect(find.byType(FitnessApp), findsOneWidget);
+    
+    // We expect SplashPage to be rendered since it's the initial route
+    // Splash page contains an Image widget for the logo
+    expect(find.byType(Image), findsWidgets);
+    
+    // Fast-forward time by 4 seconds. 
+    // This allows the Future.delayed and Timer in SplashPage to complete,
+    // which triggers the navigation to OnboardPage and disposes the repeating animations.
+    await tester.pump(const Duration(seconds: 4));
+    
+    // Pump another frame to finish the navigation transition
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Now we should be on the OnboardPage
+    // (Optional: verify something on the OnboardPage if you want)
+
+    // Reset view size
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
   });
 }

@@ -54,6 +54,9 @@ dependencies:
   flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
   firebase_core: ^4.12.1
+  get_it: ^9.2.1
+  shared_preferences: ^2.5.5
+  flutter_cache_manager: ^3.4.1
 
 dev_dependencies:
   flutter_test:

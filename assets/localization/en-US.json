@@ -113,5 +113,31 @@
     "splash": {
         "title": "SUPER FITNESS",
         "subtitle": "TRAIN  ·  TRANSFORM  ·  TRIUMPH"
+    },
+    "onboarding": {
+        "page1_title": "The Price Of Excellence\nIs Discipline",
+        "page2_title": "Fitness Has Never Been So\nMuch Fun",
+        "page3_title": "NO MORE EXCUSES\nDo It Now",
+        "subtitle": "Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna\nUt Gravida Quis Id Pretium Purus. Mauris Massa",
+        "skip": "Skip",
+        "next": "Next",
+        "back": "Back",
+        "do_it": "Do IT"
+    },
+    "login": {
+        "title": "AuthModul page"
+    },
+    "complete_register": {
+        "tell_us_about_yourself": "TELL US ABOUT YOURSELF!",
+        "we_need_to_know_your_gender": "We Need To Know Your Gender",
+        "how_old_are_you": "HOW OLD ARE YOU ?",
+        "this_helps_us_create_your_personalized_plan": "This Helps Us Create Your Personalized Plan",
+        "what_is_your_weight": "WHAT IS YOUR WEIGHT ?",
+        "what_is_your_height": "WHAT IS YOUR HEIGHT ?",
+        "year": "Year",
+        "kg": "Kg",
+        "cm": "CM",
+        "male": "Male",
+        "female": "Female"
     }
 }
