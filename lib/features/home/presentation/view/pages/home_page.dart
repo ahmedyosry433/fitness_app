@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +17,6 @@ class _HomePageState extends State<HomePage> {
       extendBody: true,
       body: Stack(
         children: [
-          // Background Image with Blur
           Positioned.fill(
             child: Image.asset(
               'assets/images/home_back.jpg',
@@ -35,26 +36,25 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Header Section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hi Ahmed ,',
-                            style: TextStyle(
+                            LocaleKeys.home_hi_name.tr(args: ['Ahmed']),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                             ),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text(
-                            "Let's Start Your Day",
-                            style: TextStyle(
+                            LocaleKeys.home_lets_start_your_day.tr(),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
