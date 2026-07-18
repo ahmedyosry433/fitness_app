@@ -56,7 +56,7 @@ class _RegisterViewState extends State<_RegisterView> {
           context: context,
           header: LocaleKeys.auth_register_success.tr(),
         ).showToast();
-        context.go(Routes.login);
+        context.pop();
       case RegisterShowErrorNavigation(:final message):
         CustomToast(
           context: context,
@@ -100,7 +100,7 @@ class _RegisterViewState extends State<_RegisterView> {
       passwordController: _passwordController,
       confirmPasswordController: _confirmPasswordController,
       onRegister: _submit,
-      onLogin: () => context.go(Routes.login),
+      onLogin: () => context.pop(),
       nameValidator: (value) {
         if (value == null || value.trim().isEmpty) {
           return LocaleKeys.validations_name_required.tr();

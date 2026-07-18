@@ -52,7 +52,7 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
           context: context,
           header: LocaleKeys.auth_forget_success.tr(),
         ).showToast();
-        context.go(Routes.login);
+        context.pop();
       case ForgetPasswordShowErrorNavigation(:final message):
         CustomToast(
           context: context,
@@ -82,7 +82,7 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
       formKey: _formKey,
       emailController: _emailController,
       onSubmit: _submit,
-      onBackToLogin: () => context.go(Routes.login),
+      onBackToLogin: () => context.pop(),
       emailValidator: (value) {
         if (value == null || value.trim().isEmpty) {
           return LocaleKeys.validations_email_required.tr();
