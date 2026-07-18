@@ -18,6 +18,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+<<<<<<< HEAD
 import '../../features/auth/api/api_client/auth_api_client.dart' as _i824;
 import '../../features/auth/api/datasources/auth_local_data_source_impl.dart'
     as _i563;
@@ -37,6 +38,24 @@ import '../../features/auth/presentation/view_model/cubit/login/login_cubit.dart
     as _i646;
 import '../../features/auth/presentation/view_model/cubit/register/register_cubit.dart'
     as _i848;
+=======
+import '../../features/auth_modul/api/datasources/auth_modul_remote_data_source_impl.dart'
+    as _i306;
+import '../../features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart'
+    as _i94;
+import '../../features/auth_modul/data/repositories/auth_modul_repository_impl.dart'
+    as _i515;
+import '../../features/auth_modul/domain/repositories/auth_modul_repository.dart'
+    as _i566;
+import '../../features/auth_modul/domain/use_cases/forget_password_use_case.dart'
+    as _i42;
+import '../../features/auth_modul/domain/use_cases/reset_password_use_case.dart'
+    as _i840;
+import '../../features/auth_modul/domain/use_cases/verify_otp_use_case.dart'
+    as _i215;
+import '../../features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart'
+    as _i667;
+>>>>>>> 556ea6b (feat(auth): implement forget password)
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -63,6 +82,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+<<<<<<< HEAD
     gh.lazySingleton<_i271.AuthLocalDataSourceContract>(
       () => _i563.AuthLocalDataSourceImpl(
         gh<_i460.SharedPreferences>(),
@@ -71,6 +91,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i824.AuthApiClient>(
       () => authInjectableModule.authApiClient(gh<_i361.Dio>()),
+=======
+    gh.factory<_i94.AuthModulRemoteDataSource>(
+      () => _i306.AuthModulRemoteDataSourceImpl(),
+>>>>>>> 556ea6b (feat(auth): implement forget password)
     );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
@@ -87,6 +111,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+<<<<<<< HEAD
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(
         gh<_i453.AuthRemoteDataSourceContract>(),
@@ -101,11 +126,36 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i848.RegisterCubit>(
       () => _i848.RegisterCubit(gh<_i787.AuthRepository>()),
+=======
+    gh.factory<_i566.AuthModulRepository>(
+      () => _i515.AuthModulRepositoryImpl(
+        remoteDataSource: gh<_i94.AuthModulRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i42.ForgetPasswordUseCase>(
+      () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i840.ResetPasswordUseCase>(
+      () => _i840.ResetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i215.VerifyOtpUseCase>(
+      () => _i215.VerifyOtpUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i667.ForgetPasswordCubit>(
+      () => _i667.ForgetPasswordCubit(
+        gh<_i42.ForgetPasswordUseCase>(),
+        gh<_i215.VerifyOtpUseCase>(),
+        gh<_i840.ResetPasswordUseCase>(),
+      ),
+>>>>>>> 556ea6b (feat(auth): implement forget password)
     );
     return this;
   }
 }
 
 class _$CoreInjectableModule extends _i291.CoreInjectableModule {}
+<<<<<<< HEAD
 
 class _$AuthInjectableModule extends _i563.AuthInjectableModule {}
+=======
+>>>>>>> 556ea6b (feat(auth): implement forget password)

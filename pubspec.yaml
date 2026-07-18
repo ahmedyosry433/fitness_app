@@ -63,12 +63,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
+  flutter_gen_runner: null
   flutter_lints: ^6.0.0
   build_runner: ^2.4.15
   retrofit_generator: ^10.2.7
@@ -92,6 +87,7 @@ flutter:
     - assets/images/
     - assets/images/auth/
     - assets/icons/
+    - assets/localization/ar-Eg.json
     - assets/localization/en-US.json
     - assets/localization/ar-EG.json
   fonts:
