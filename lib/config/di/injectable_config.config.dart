@@ -18,8 +18,24 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/auth_modul/api/datasources/auth_modul_remote_data_source_impl.dart'
+    as _i306;
+import '../../features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart'
+    as _i94;
+import '../../features/auth_modul/data/repositories/auth_modul_repository_impl.dart'
+    as _i515;
+import '../../features/auth_modul/domain/repositories/auth_modul_repository.dart'
+    as _i566;
+import '../../features/auth_modul/domain/use_cases/forget_password_use_case.dart'
+    as _i42;
+import '../../features/auth_modul/domain/use_cases/reset_password_use_case.dart'
+    as _i840;
+import '../../features/auth_modul/domain/use_cases/verify_otp_use_case.dart'
+    as _i215;
+import '../../features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart'
+    as _i667;
 import '../api/app_interceptors.dart' as _i781;
-import 'register_module.dart' as _i746;
+import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -43,6 +59,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i94.AuthModulRemoteDataSource>(
+      () => _i306.AuthModulRemoteDataSourceImpl(),
+    );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
         dio: gh<_i361.Dio>(),
@@ -55,8 +74,29 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.factory<_i566.AuthModulRepository>(
+      () => _i515.AuthModulRepositoryImpl(
+        remoteDataSource: gh<_i94.AuthModulRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i42.ForgetPasswordUseCase>(
+      () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i840.ResetPasswordUseCase>(
+      () => _i840.ResetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i215.VerifyOtpUseCase>(
+      () => _i215.VerifyOtpUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i667.ForgetPasswordCubit>(
+      () => _i667.ForgetPasswordCubit(
+        gh<_i42.ForgetPasswordUseCase>(),
+        gh<_i215.VerifyOtpUseCase>(),
+        gh<_i840.ResetPasswordUseCase>(),
+      ),
+    );
     return this;
   }
 }
 
-class _$CoreInjectableModule extends _i746.CoreInjectableModule {}
+class _$CoreInjectableModule extends _i291.CoreInjectableModule {}
