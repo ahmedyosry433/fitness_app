@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
-import 'package:fitness/core/routes/routes.dart';
+
 import 'package:fitness/core/shared/widgets/custom_toast.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/register_body_widget.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
