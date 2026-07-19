@@ -137,7 +137,7 @@
         "year": "Year",
         "kg": "Kg",
         "cm": "CM",
-        "male": "Male",
-        "female": "Female"
+        "gender_male": "Male",
+        "gender_female": "Female"
     }
 }
