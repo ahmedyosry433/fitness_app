@@ -9,7 +9,9 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:dio/dio.dart' as _i361;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -39,10 +41,18 @@ import '../../features/auth/presentation/view_model/cubit/register/register_cubi
     as _i848;
 import '../../features/auth_modul/api/datasources/auth_modul_remote_data_source_impl.dart'
     as _i306;
+import '../../features/auth_modul/api/datasources/social_auth_data_source_impl.dart'
+    as _i943;
 import '../../features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart'
     as _i94;
+import '../../features/auth_modul/data/datasources/social_auth_data_source_contract.dart'
+    as _i801;
 import '../../features/auth_modul/data/repositories/auth_modul_repository_impl.dart'
     as _i515;
+import '../../features/auth_modul/data/services/meta_horizon_auth_service.dart'
+    as _i872;
+import '../../features/auth_modul/data/services/user_firestore_service.dart'
+    as _i104;
 import '../../features/auth_modul/domain/repositories/auth_modul_repository.dart'
     as _i566;
 import '../../features/auth_modul/domain/use_cases/forget_password_use_case.dart'
@@ -51,12 +61,30 @@ import '../../features/auth_modul/domain/use_cases/reset_password_use_case.dart'
     as _i840;
 import '../../features/auth_modul/domain/use_cases/signup_use_case.dart'
     as _i124;
+import '../../features/auth_modul/domain/use_cases/social_sign_in_use_case.dart'
+    as _i123;
 import '../../features/auth_modul/domain/use_cases/verify_otp_use_case.dart'
     as _i215;
 import '../../features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart'
     as _i667;
 import '../../features/auth_modul/presentation/signup/view_model/cubit/signup_cubit.dart'
     as _i76;
+import '../../features/login/api/api_client/login_api_client.dart' as _i395;
+import '../../features/login/api/datasources/login_local_data_source_impl.dart'
+    as _i438;
+import '../../features/login/api/datasources/login_remote_data_source_impl.dart'
+    as _i904;
+import '../../features/login/data/datasources/login_local_data_source_contract.dart'
+    as _i325;
+import '../../features/login/data/datasources/login_remote_data_source_contract.dart'
+    as _i736;
+import '../../features/login/data/repositories/login_repository_impl.dart'
+    as _i1066;
+import '../../features/login/domain/repositories/login_repository.dart'
+    as _i902;
+import '../../features/login/login_di.dart' as _i871;
+import '../../features/login/presentation/view_model/cubit/login_cubit.dart'
+    as _i753;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -69,11 +97,18 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final coreInjectableModule = _$CoreInjectableModule();
     final authInjectableModule = _$AuthInjectableModule();
+    final loginInjectableModule = _$LoginInjectableModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => coreInjectableModule.prefs(),
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => coreInjectableModule.dio());
+    gh.lazySingleton<_i59.FirebaseAuth>(
+      () => coreInjectableModule.firebaseAuth,
+    );
+    gh.lazySingleton<_i974.FirebaseFirestore>(
+      () => coreInjectableModule.firestore,
+    );
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => coreInjectableModule.secureStorage(),
     );
@@ -95,14 +130,32 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i824.AuthApiClient>(
       () => authInjectableModule.authApiClient(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i395.LoginApiClient>(
+      () => loginInjectableModule.loginApiClient(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i325.LoginLocalDataSourceContract>(
+      () => _i438.LoginLocalDataSourceImpl(
+        gh<_i460.SharedPreferences>(),
+        gh<_i558.FlutterSecureStorage>(),
+      ),
+    );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
         dio: gh<_i361.Dio>(),
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.lazySingleton<_i872.MetaHorizonAuthService>(
+      () => _i872.MetaHorizonAuthService(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i736.LoginRemoteDataSourceContract>(
+      () => _i904.LoginRemoteDataSourceImpl(gh<_i395.LoginApiClient>()),
+    );
     gh.lazySingleton<_i453.AuthRemoteDataSourceContract>(
       () => _i723.AuthRemoteDataSourceImpl(gh<_i824.AuthApiClient>()),
+    );
+    gh.lazySingleton<_i104.UserFirestoreService>(
+      () => _i104.UserFirestoreService(gh<_i974.FirebaseFirestore>()),
     );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
@@ -110,34 +163,30 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
-    gh.factory<_i566.AuthModulRepository>(
-      () => _i515.AuthModulRepositoryImpl(
-        remoteDataSource: gh<_i94.AuthModulRemoteDataSource>(),
+    gh.lazySingleton<_i801.SocialAuthDataSourceContract>(
+      () => _i943.AuthModulSocialAuthDataSourceImpl(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i872.MetaHorizonAuthService>(),
+      ),
+    );
+    gh.lazySingleton<_i902.LoginRepository>(
+      () => _i1066.LoginRepositoryImpl(
+        gh<_i736.LoginRemoteDataSourceContract>(),
+        gh<_i325.LoginLocalDataSourceContract>(),
       ),
     );
     gh.lazySingleton<_i787.AuthRepository>(
       () => _i153.AuthRepositoryImpl(
         gh<_i453.AuthRemoteDataSourceContract>(),
         gh<_i271.AuthLocalDataSourceContract>(),
+        gh<_i801.SocialAuthDataSourceContract>(),
+        gh<_i104.UserFirestoreService>(),
       ),
     );
-    gh.factory<_i42.ForgetPasswordUseCase>(
-      () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
-    );
-    gh.factory<_i840.ResetPasswordUseCase>(
-      () => _i840.ResetPasswordUseCase(gh<_i566.AuthModulRepository>()),
-    );
-    gh.factory<_i124.SignUpUseCase>(
-      () => _i124.SignUpUseCase(gh<_i566.AuthModulRepository>()),
-    );
-    gh.factory<_i215.VerifyOtpUseCase>(
-      () => _i215.VerifyOtpUseCase(gh<_i566.AuthModulRepository>()),
-    );
-    gh.factory<_i667.ForgetPasswordCubit>(
-      () => _i667.ForgetPasswordCubit(
-        gh<_i42.ForgetPasswordUseCase>(),
-        gh<_i215.VerifyOtpUseCase>(),
-        gh<_i840.ResetPasswordUseCase>(),
+    gh.factory<_i566.AuthModulRepository>(
+      () => _i515.AuthModulRepositoryImpl(
+        remoteDataSource: gh<_i94.AuthModulRemoteDataSource>(),
+        socialAuthDataSource: gh<_i801.SocialAuthDataSourceContract>(),
       ),
     );
     gh.factory<_i391.ForgetPasswordCubit>(
@@ -149,8 +198,37 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i848.RegisterCubit>(
       () => _i848.RegisterCubit(gh<_i787.AuthRepository>()),
     );
+    gh.factory<_i753.LoginCubit>(
+      () => _i753.LoginCubit(gh<_i787.AuthRepository>()),
+    );
+    gh.factory<_i42.ForgetPasswordUseCase>(
+      () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i840.ResetPasswordUseCase>(
+      () => _i840.ResetPasswordUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i124.SignUpUseCase>(
+      () => _i124.SignUpUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i123.SocialSignInUseCase>(
+      () => _i123.SocialSignInUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i215.VerifyOtpUseCase>(
+      () => _i215.VerifyOtpUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i667.ForgetPasswordCubit>(
+      () => _i667.ForgetPasswordCubit(
+        gh<_i42.ForgetPasswordUseCase>(),
+        gh<_i215.VerifyOtpUseCase>(),
+        gh<_i840.ResetPasswordUseCase>(),
+      ),
+    );
     gh.factory<_i76.SignUpCubit>(
-      () => _i76.SignUpCubit(gh<_i124.SignUpUseCase>()),
+      () => _i76.SignUpCubit(
+        gh<_i124.SignUpUseCase>(),
+        gh<_i123.SocialSignInUseCase>(),
+        gh<_i104.UserFirestoreService>(),
+      ),
     );
     return this;
   }
@@ -159,3 +237,5 @@ extension GetItInjectableX on _i174.GetIt {
 class _$CoreInjectableModule extends _i291.CoreInjectableModule {}
 
 class _$AuthInjectableModule extends _i563.AuthInjectableModule {}
+
+class _$LoginInjectableModule extends _i871.LoginInjectableModule {}

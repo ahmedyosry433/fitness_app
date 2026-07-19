@@ -14,7 +14,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   await Firebase.initializeApp();
-  configureDependencies();
   Bloc.observer = MyBlocObserver();
   await ScreenUtil.ensureScreenSize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

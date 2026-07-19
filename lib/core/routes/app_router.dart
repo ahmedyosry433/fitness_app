@@ -1,18 +1,13 @@
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
-import 'package:fitness/features/auth_modul/presentation/signup/view_model/cubit/signup_cubit.dart';
-import 'package:fitness/features/auth_modul/presentation/signup/views/signup_view.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
-import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
-import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
+
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
@@ -23,10 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.forgetPassword, // Open home directly to test bottom nav
+  initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
@@ -39,11 +35,9 @@ final GoRouter router = GoRouter(
     ),
     _customAnimatedGoRoute(
       route: Routes.register,
-      page: (state, context) => BlocProvider(
-        create: (context) => getIt<SignUpCubit>(),
-        child: const SignUpView(),
-      ),
+      page: (state, context) => const RegisterPage(),
     ),
+
     _customAnimatedGoRoute(
       route: Routes.forgetPassword,
       page: (state, context) => BlocProvider(
@@ -113,40 +107,6 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
-    _customAnimatedGoRoute(
-      route: Routes.login,
-      page: (state, context) => const LoginPage(),
-    ),
-    _customAnimatedGoRoute(
-      route: Routes.register,
-      page: (state, context) => const CompleteRegisterPage(),
-    ),
-    _customAnimatedGoRoute(
-      route: Routes.forgetPassword,
-      page: (state, context) => BlocProvider(
-        create: (context) => getIt<ForgetPasswordCubit>(),
-        child: ForgetPasswordView(),
-      ),
-    ),
-    _customAnimatedGoRoute(
-      route: Routes.otpVerificationView,
-      page: (state, context) {
-        final cubit = state.extra as ForgetPasswordCubit;
-        return BlocProvider.value(
-          value: cubit,
-          child: OtpVerificationView(),
-        );
-      },
-    ),
-  _customAnimatedGoRoute(
-      route: Routes.createNewPasswordView,
-      page: (state, context) {
-        final cubit = state.extra as ForgetPasswordCubit;
-        return BlocProvider.value(
-          value: cubit,
-          child: const CreateNewPasswordView(),
-        );
-      },
     ),
   ],
 );

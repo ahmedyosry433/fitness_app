@@ -40,6 +40,10 @@ class $AssetsImagesGen {
   AssetGenImage get fullShotMan =>
       const AssetGenImage('assets/images/full_shot_man.png');
 
+  /// File path: assets/images/home_back.jpg
+  AssetGenImage get homeBack =>
+      const AssetGenImage('assets/images/home_back.jpg');
+
   /// File path: assets/images/human_gym.png
   AssetGenImage get humanGym =>
       const AssetGenImage('assets/images/human_gym.png');
@@ -56,14 +60,20 @@ class $AssetsImagesGen {
   AssetGenImage get icLauncher =>
       const AssetGenImage('assets/images/ic_launcher.png');
 
+  /// File path: assets/images/singup_back.png
+  AssetGenImage get singupBack =>
+      const AssetGenImage('assets/images/singup_back.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     back,
     fullShotMan,
+    homeBack,
     humanGym,
     humanGym2,
     humanGym3,
     icLauncher,
+    singupBack,
   ];
 }
 

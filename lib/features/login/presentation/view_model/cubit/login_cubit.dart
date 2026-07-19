@@ -3,8 +3,8 @@ import 'package:fitness/config/base_state/base_cubit.dart';
 import 'package:fitness/config/base_state/base_state.dart';
 import 'package:fitness/features/auth/data/models/login_params.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
-import 'package:fitness/features/login/domain/repositories/login_repository.dart';
-import 'package:fitness/features/auth/presentation/view_model/cubit/login/auth_social_provider.dart';
+import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
+import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 import 'package:injectable/injectable.dart';
 
 part 'login_events.dart';
@@ -13,23 +13,23 @@ part 'login_states.dart';
 
 @injectable
 class LoginCubit extends BaseCubit<LoginState, LoginEvent, LoginNavigation> {
-  LoginCubit(this._loginRepository) : super(const LoginState());
+  LoginCubit(this._authRepository) : super(const LoginState());
 
-  final LoginRepository _loginRepository;
+  final AuthRepository _authRepository;
 
   @override
   Future<void> doAction(LoginEvent event) async => switch (event) {
-    LoginSubmittedEvent() => _login(event),
-    TogglePasswordVisibilityEvent() => _togglePassword(),
-    SocialLoginEvent(:final provider) => _socialLogin(provider),
-  };
+        LoginSubmittedEvent() => _login(event),
+        TogglePasswordVisibilityEvent() => _togglePassword(),
+        SocialLoginEvent(:final provider) => _socialLogin(provider),
+      };
 
   Future<void> _login(LoginSubmittedEvent event) async {
     if (state.loginState.state == StateType.loading) return;
 
     emit(state.copyWith(loginState: const BaseState.loading()));
 
-    final result = await _loginRepository.login(
+    final result = await _authRepository.login(
       params: LoginParams(email: event.email, password: event.password),
     );
 
@@ -56,12 +56,23 @@ class LoginCubit extends BaseCubit<LoginState, LoginEvent, LoginNavigation> {
 
     emit(state.copyWith(loginState: const BaseState.loading()));
 
-    // TODO: integrate provider SDK / backend social auth endpoint.
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final result = await _authRepository.socialLogin(provider: provider);
 
-    emit(state.copyWith(loginState: const BaseState.initial()));
-    doNavigationAction(
-      LoginShowErrorNavigation('${provider.name} login is not available yet'),
+    result.when(
+      success: (user) {
+        emit(state.copyWith(loginState: BaseState.success(user)));
+        doNavigationAction(const LoginSuccessNavigation());
+      },
+      error: (exception) {
+        emit(state.copyWith(loginState: BaseState.error(exception)));
+        if (exception != null) {
+          final message = exception
+              .toString()
+              .replaceFirst(RegExp(r'^Exception:\s*'), '');
+          doNavigationAction(LoginShowErrorNavigation(message));
+        }
+      },
     );
   }
 }
+

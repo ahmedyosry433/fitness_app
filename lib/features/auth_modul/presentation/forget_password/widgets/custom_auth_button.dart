@@ -22,7 +22,9 @@ class CustomAuthButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFF5722), // البرتقالي المميز
-          disabledBackgroundColor: const Color(0xFFFF5722).withOpacity(0.5),
+          disabledBackgroundColor: const Color(
+            0xFFFF5722,
+          ).withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),

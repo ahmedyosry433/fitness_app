@@ -23,7 +23,7 @@ class AuthBackground extends StatelessWidget {
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Container(color: Colors.black.withOpacity(0.65)),
+              child: Container(color: Colors.black.withValues(alpha: 0.65)),
             ),
           ),
           SafeArea(

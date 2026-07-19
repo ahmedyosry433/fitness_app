@@ -56,12 +56,23 @@ class LoginCubit extends BaseCubit<LoginState, LoginEvent, LoginNavigation> {
 
     emit(state.copyWith(loginState: const BaseState.loading()));
 
-    // TODO: integrate provider SDK / backend social auth endpoint.
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final result = await _authRepository.socialLogin(provider: provider);
 
-    emit(state.copyWith(loginState: const BaseState.initial()));
-    doNavigationAction(
-      LoginShowErrorNavigation('${provider.name} login is not available yet'),
+    result.when(
+      success: (user) {
+        emit(state.copyWith(loginState: BaseState.success(user)));
+        doNavigationAction(const LoginSuccessNavigation());
+      },
+      error: (exception) {
+        emit(state.copyWith(loginState: BaseState.error(exception)));
+        if (exception != null) {
+          final message = exception
+              .toString()
+              .replaceFirst(RegExp(r'^Exception:\s*'), '');
+          doNavigationAction(LoginShowErrorNavigation(message));
+        }
+      },
     );
   }
+
 }

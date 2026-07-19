@@ -66,16 +66,6 @@ class AuthModulRepositoryImpl implements AuthModulRepository {
   }
 
   @override
-  Future<Result<AuthCommonResponse>> signUp(SignUpRequest request) async {
-    try {
-      final response = await remoteDataSource.signUp(request);
-      return Success(data: response);
-    } catch (e) {
-      return Error(exception: Exception(e.toString()));
-    }
-  }
-
-  @override
   Future<Result<SocialAccountModel>> socialSignIn(
     AuthSocialProvider provider,
   ) async {

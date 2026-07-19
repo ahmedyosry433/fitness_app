@@ -39,7 +39,6 @@ dependencies:
   internet_connection_checker_plus: ^3.1.1
   flutter_secure_storage: ^10.3.1
   injectable: ^3.0.0
-  get_it: ^8.0.3
   flutter_bloc: ^9.1.1
   equatable: ^2.1.0
   pretty_dio_logger: ^1.4.0
@@ -59,10 +58,7 @@ dependencies:
   cloud_firestore: ^6.0.1
   google_sign_in: ^7.2.0
   flutter_facebook_auth: ^7.1.1
-  json_annotation: ^4.11.0
   get_it: ^8.0.3
-  shared_preferences: ^2.5.3
-  flutter_cache_manager: ^3.4.1
   retrofit: 4.9.2
   json_annotation: ^4.9.0
   shared_preferences: ^2.5.3
@@ -71,9 +67,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  injectable_generator: ^3.0.2
-  json_serializable: ^6.9.4
-  build_runner: null
   flutter_gen_runner: null
   flutter_lints: ^6.0.0
   build_runner: ^2.4.15

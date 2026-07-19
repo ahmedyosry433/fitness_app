@@ -26,18 +26,19 @@ class _HomePageState extends State<HomePage> {
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-              ),
+              child: Container(color: Colors.black.withValues(alpha: 0.5)),
             ),
           ),
-          
+
           SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 20.0,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -65,17 +66,15 @@ class _HomePageState extends State<HomePage> {
                       CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.grey[800],
-                        backgroundImage: const AssetImage('assets/images/human_gym.png'),
+                        backgroundImage: const AssetImage(
+                          'assets/images/human_gym.png',
+                        ),
                       ),
                     ],
                   ),
                 ),
-                
-                const Expanded(
-                  child: SizedBox(
-                    width: double.infinity,
-                  ),
-                ),
+
+                const Expanded(child: SizedBox(width: double.infinity)),
               ],
             ),
           ),

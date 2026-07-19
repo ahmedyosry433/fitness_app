@@ -15,9 +15,5 @@ abstract class AuthModulRepository {
     ResetPasswordRequest request,
   );
   Future<Result<AuthCommonResponse>> signUp(SignUpRequest request);
-  Future<Result<SocialAccountModel>> socialSignIn(
-    AuthSocialProvider provider,
-  );
-  Future<Result<AuthCommonResponse>> signUp(SignUpRequest request);
+  Future<Result<SocialAccountModel>> socialSignIn(AuthSocialProvider provider);
 }
-

@@ -14,8 +14,8 @@ part 'signup_navigation.dart';
 part 'signup_states.dart';
 
 @injectable
-class SignUpCubit extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> {
-  SignUpCubit(this._signUpUseCase) : super(const SignUpState());
+class SignUpCubit
+    extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> {
   SignUpCubit(
     this._signUpUseCase,
     this._socialSignInUseCase,
@@ -28,11 +28,11 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> 
 
   @override
   Future<void> doAction(SignUpEvent event) async => switch (event) {
-        SignUpSubmittedEvent() => _signUp(event),
-        SocialSignInSubmittedEvent() => _socialSignIn(event),
-        TogglePasswordVisibilityEvent() => _togglePassword(),
-        ToggleConfirmPasswordVisibilityEvent() => _toggleConfirmPassword(),
-      };
+    SignUpSubmittedEvent() => _signUp(event),
+    SocialSignInSubmittedEvent() => _socialSignIn(event),
+    TogglePasswordVisibilityEvent() => _togglePassword(),
+    ToggleConfirmPasswordVisibilityEvent() => _toggleConfirmPassword(),
+  };
 
   Future<void> _socialSignIn(SocialSignInSubmittedEvent event) async {
     if (state.signUpState.state == StateType.loading) return;
@@ -44,12 +44,14 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> 
     result.when(
       success: (account) async {
         if (account == null) return;
-        await _userFirestoreService.saveUserProfile(
-          uid: account.uid,
-          name: account.name,
-          email: account.email,
-          photoUrl: account.photoUrl,
-        );
+        try {
+          await _userFirestoreService.saveUserProfile(
+            uid: account.uid,
+            name: account.name,
+            email: account.email,
+            photoUrl: account.photoUrl,
+          );
+        } catch (_) {}
 
         final response = AuthCommonResponse(
           status: 'success',
@@ -62,13 +64,12 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> 
       error: (exception) {
         emit(state.copyWith(signUpState: BaseState.error(exception)));
         if (exception != null) {
-          doNavigationAction(
-            SignUpShowErrorNavigation(exception.toString()),
-          );
+          doNavigationAction(SignUpShowErrorNavigation(exception.toString()));
         }
       },
     );
   }
+
 
   Future<void> _signUp(SignUpSubmittedEvent event) async {
     if (state.signUpState.state == StateType.loading) return;
@@ -100,9 +101,7 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> 
       error: (exception) {
         emit(state.copyWith(signUpState: BaseState.error(exception)));
         if (exception != null) {
-          doNavigationAction(
-            SignUpShowErrorNavigation(exception.toString()),
-          );
+          doNavigationAction(SignUpShowErrorNavigation(exception.toString()));
         }
       },
     );

@@ -30,10 +30,9 @@ class _SignUpViewState extends State<SignUpView> {
   @override
   void initState() {
     super.initState();
-    _navigationSub = context
-        .read<SignUpCubit>()
-        .navigationStream
-        .listen(_handleNavigation);
+    _navigationSub = context.read<SignUpCubit>().navigationStream.listen(
+      _handleNavigation,
+    );
   }
 
   void _handleNavigation(SignUpNavigation navigation) {
@@ -48,10 +47,7 @@ class _SignUpViewState extends State<SignUpView> {
         context.go(Routes.login);
       case SignUpShowErrorNavigation(:final message):
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(message), backgroundColor: Colors.red),
         );
     }
   }
@@ -59,14 +55,14 @@ class _SignUpViewState extends State<SignUpView> {
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     context.read<SignUpCubit>().doAction(
-          SignUpSubmittedEvent(
-            name: _nameController.text.trim(),
-            email: _emailController.text.trim(),
-            phone: _phoneController.text.trim(),
-            password: _passwordController.text,
-            confirmPassword: _confirmPasswordController.text,
-          ),
-        );
+      SignUpSubmittedEvent(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+      ),
+    );
   }
 
   @override
@@ -115,10 +111,10 @@ class _SignUpViewState extends State<SignUpView> {
                 child: Container(
                   padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.04),
+                    color: Colors.white.withValues(alpha: 0.04),
                     borderRadius: BorderRadius.circular(24.0),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
                       width: 1.0,
                     ),
                   ),

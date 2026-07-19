@@ -43,13 +43,10 @@ class _OnboardPageState extends State<OnboardPage> {
         children: [
           Positioned.fill(
             child: Transform.scale(
-              scale: 1.1, 
+              scale: 1.1,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-                child: Image.asset(
-                  'assets/images/back.jpg',
-                  fit: BoxFit.cover,
-                ),
+                child: Image.asset('assets/images/back.jpg', fit: BoxFit.cover),
               ),
             ),
           ),
@@ -64,7 +61,7 @@ class _OnboardPageState extends State<OnboardPage> {
             itemCount: _pages.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 220.0), 
+                padding: const EdgeInsets.only(bottom: 220.0),
                 child: Center(
                   child: Image.asset(
                     _pages[index]['image']!,
@@ -85,10 +82,7 @@ class _OnboardPageState extends State<OnboardPage> {
                 },
                 child: Text(
                   LocaleKeys.onboarding_skip.tr(),
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                 ),
               ),
             ),
@@ -98,19 +92,24 @@ class _OnboardPageState extends State<OnboardPage> {
             right: 0,
             bottom: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(40),
+              ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0.1),
-                        Colors.black.withOpacity(0.8),
+                        Colors.black.withValues(alpha: 0.1),
+                        Colors.black.withValues(alpha: 0.8),
                       ],
                     ),
                   ),
@@ -188,7 +187,10 @@ class _OnboardPageState extends State<OnboardPage> {
                               },
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(color: Colors.white54),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
@@ -215,13 +217,18 @@ class _OnboardPageState extends State<OnboardPage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryOrange,
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               child: Text(
-                                _currentIndex == 2 ? LocaleKeys.onboarding_do_it.tr() : LocaleKeys.onboarding_next.tr(),
+                                _currentIndex == 2
+                                    ? LocaleKeys.onboarding_do_it.tr()
+                                    : LocaleKeys.onboarding_next.tr(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,

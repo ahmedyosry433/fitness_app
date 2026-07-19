@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitness/config/firebase/firebase_auth_config.dart';
 import 'package:injectable/injectable.dart';
+
 
 /// Service responsible for storing and retrieving user profile documents in Cloud Firestore.
 @lazySingleton
@@ -17,21 +19,27 @@ class UserFirestoreService {
     String? phone,
     String? photoUrl,
   }) async {
-    final docRef = _firestore
-        .collection(FirebaseAuthConfig.usersCollection)
-        .doc(uid);
+    try {
+      final docRef = _firestore
+          .collection(FirebaseAuthConfig.usersCollection)
+          .doc(uid);
 
-    final data = <String, dynamic>{
-      'uid': uid,
-      'name': name,
-      'email': email,
-      if (phone != null && phone.isNotEmpty) 'phone': phone,
-      if (photoUrl != null && photoUrl.isNotEmpty) 'photoUrl': photoUrl,
-      'updatedAt': FieldValue.serverTimestamp(),
-    };
+      final data = <String, dynamic>{
+        'uid': uid,
+        'name': name,
+        'email': email,
+        if (phone != null && phone.isNotEmpty) 'phone': phone,
+        if (photoUrl != null && photoUrl.isNotEmpty) 'photoUrl': photoUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
 
-    await docRef.set(data, SetOptions(merge: true));
+      await docRef.set(data, SetOptions(merge: true));
+    } catch (e) {
+      log('Firestore saveUserProfile skipped (non-fatal): $e',
+          name: 'UserFirestoreService');
+    }
   }
+
 
   /// Retrieves the user profile document from Cloud Firestore.
   Future<Map<String, dynamic>?> getUserProfile(String uid) async {
