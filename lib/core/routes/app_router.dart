@@ -6,9 +6,14 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/views/f
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/auth_modul/presentation/signup/view_model/cubit/signup_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/signup/views/signup_view.dart';
+import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
+import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
+import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
+import 'package:fitness/features/workout/presentation/view/pages/workout_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +21,7 @@ import 'package:go_router/go_router.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.forgetPassword,
+  initialLocation: Routes.splash, // Open home directly to test bottom nav
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
@@ -64,6 +69,45 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
+    ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return MainScaffold(navigationShell: navigationShell);
+      },
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            _customAnimatedGoRoute(
+              route: Routes.home,
+              page: (state, context) => const HomePage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            _customAnimatedGoRoute(
+              route: Routes.aiAgent,
+              page: (state, context) => const AiAgentPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            _customAnimatedGoRoute(
+              route: Routes.workout,
+              page: (state, context) => const WorkoutPage(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            _customAnimatedGoRoute(
+              route: Routes.profile,
+              page: (state, context) => const ProfilePage(),
+            ),
+          ],
+        ),
+      ],
     ),
   ],
 );

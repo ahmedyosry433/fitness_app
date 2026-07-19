@@ -100,8 +100,12 @@ class AppColors {
   // red
   static const Color redCC = Color(0xffCC1010);
 
+  // orange
+  static const Color orangePrimary = Color(0xFFFF5722);
+
   // green
   static const Color green0C = Color(0xff0CB359);
+  static const Color black22 = Color(0xFF222222);
 
   // fitness brand accent (from splash / auth screens)
   static const Color fitnessOrange = Color(0xFFFF4100);
