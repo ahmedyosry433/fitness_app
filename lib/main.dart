@@ -4,6 +4,7 @@ import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/helper/bloc/bloc_observer.dart';
 import 'package:fitness/core/languages/codegen_loader.g.dart';
 import 'package:fitness/core/languages/lang.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
+  await Firebase.initializeApp();
+  configureDependencies();
   Bloc.observer = MyBlocObserver();
   await ScreenUtil.ensureScreenSize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

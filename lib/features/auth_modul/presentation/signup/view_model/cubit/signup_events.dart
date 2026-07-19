@@ -27,3 +27,9 @@ class TogglePasswordVisibilityEvent extends SignUpEvent {
 class ToggleConfirmPasswordVisibilityEvent extends SignUpEvent {
   const ToggleConfirmPasswordVisibilityEvent();
 }
+
+class SocialSignInSubmittedEvent extends SignUpEvent {
+  final AuthSocialProvider provider;
+
+  const SocialSignInSubmittedEvent(this.provider);
+}
