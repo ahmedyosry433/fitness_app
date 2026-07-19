@@ -138,5 +138,13 @@
         "cm": "سم",
         "gender_male": "ذكر",
         "gender_female": "أنثى"
+    },
+    "home": {
+        "hi_name": "أهلاً {} ،",
+        "lets_start_your_day": "دعنا نبدأ يومك",
+        "explore": "استكشف",
+        "smart_coach": "المدرب الذكي",
+        "workout": "تمرين",
+        "profile": "حسابي"
     }
 }

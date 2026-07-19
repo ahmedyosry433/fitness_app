@@ -139,5 +139,13 @@
         "cm": "CM",
         "gender_male": "Male",
         "gender_female": "Female"
+    },
+    "home": {
+        "hi_name": "Hi {} ,",
+        "lets_start_your_day": "Let's Start Your Day",
+        "explore": "Explore",
+        "smart_coach": "Smart coach",
+        "workout": "Workout",
+        "profile": "Profile"
     }
 }
