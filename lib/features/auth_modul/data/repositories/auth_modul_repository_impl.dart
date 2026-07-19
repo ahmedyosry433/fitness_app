@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 
 import '../models/request/forget_password_request.dart';
 import '../models/request/reset_password_request.dart';
+import '../models/request/signup_request.dart';
 import '../models/response/auth_common_response.dart';
 
 @Injectable(as: AuthModulRepository)
@@ -41,6 +42,16 @@ class AuthModulRepositoryImpl implements AuthModulRepository {
   ) async {
     try {
       final response = await remoteDataSource.resetPassword(request);
+      return Success(data: response);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<AuthCommonResponse>> signUp(SignUpRequest request) async {
+    try {
+      final response = await remoteDataSource.signUp(request);
       return Success(data: response);
     } catch (e) {
       return Error(exception: Exception(e.toString()));
