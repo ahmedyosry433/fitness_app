@@ -32,6 +32,7 @@ class ForgetPasswordBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthScaffoldWidget(
       showBackButton: true,
+      onBack: onBackToLogin,
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsetsDirectional.symmetric(

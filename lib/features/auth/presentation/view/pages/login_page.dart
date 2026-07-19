@@ -53,6 +53,7 @@ class _LoginViewState extends State<_LoginView> {
           context: context,
           header: LocaleKeys.auth_login_success.tr(),
         ).showToast();
+        context.go(Routes.home);
       case LoginShowErrorNavigation(:final message):
         CustomToast(
           context: context,

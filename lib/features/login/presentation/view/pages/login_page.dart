@@ -3,57 +3,58 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
-
+import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_toast.dart';
-import 'package:fitness/features/auth/presentation/view/widgets/forget_password_body_widget.dart';
-import 'package:fitness/features/auth/presentation/view_model/cubit/forget_password/forget_password_cubit.dart';
+import 'package:fitness/features/login/presentation/view/widgets/login_body.dart';
+import 'package:fitness/features/login/presentation/view_model/cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
-class ForgetPasswordPage extends StatelessWidget {
-  const ForgetPasswordPage({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ForgetPasswordCubit>(),
-      child: const _ForgetPasswordView(),
+      create: (_) => getIt<LoginCubit>(),
+      child: const _LoginView(),
     );
   }
 }
 
-class _ForgetPasswordView extends StatefulWidget {
-  const _ForgetPasswordView();
+class _LoginView extends StatefulWidget {
+  const _LoginView();
 
   @override
-  State<_ForgetPasswordView> createState() => _ForgetPasswordViewState();
+  State<_LoginView> createState() => _LoginViewState();
 }
 
-class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
+class _LoginViewState extends State<_LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  StreamSubscription<ForgetPasswordNavigation>? _navigationSub;
+  final _passwordController = TextEditingController();
+  StreamSubscription<LoginNavigation>? _navigationSub;
 
   @override
   void initState() {
     super.initState();
     _navigationSub = context
-        .read<ForgetPasswordCubit>()
+        .read<LoginCubit>()
         .navigationStream
         .listen(_handleNavigation);
   }
 
-  void _handleNavigation(ForgetPasswordNavigation navigation) {
+  void _handleNavigation(LoginNavigation navigation) {
     switch (navigation) {
-      case ForgetPasswordSuccessNavigation():
+      case LoginSuccessNavigation():
         CustomToast(
           context: context,
-          header: LocaleKeys.auth_forget_success.tr(),
+          header: LocaleKeys.auth_login_success.tr(),
         ).showToast();
-        context.pop();
-      case ForgetPasswordShowErrorNavigation(:final message):
+        context.go(Routes.home);
+      case LoginShowErrorNavigation(:final message):
         CustomToast(
           context: context,
           header: message,
@@ -64,8 +65,11 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
 
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    context.read<ForgetPasswordCubit>().doAction(
-          ForgetPasswordSubmittedEvent(email: _emailController.text.trim()),
+    context.read<LoginCubit>().doAction(
+          LoginSubmittedEvent(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          ),
         );
   }
 
@@ -73,22 +77,31 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
   void dispose() {
     _navigationSub?.cancel();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ForgetPasswordBodyWidget(
+    return LoginBody(
       formKey: _formKey,
       emailController: _emailController,
-      onSubmit: _submit,
-      onBackToLogin: () => context.pop(),
+      passwordController: _passwordController,
+      onLogin: _submit,
+      onForgetPassword: () => context.push(Routes.forgetPassword),
+      onRegister: () => context.push(Routes.register),
       emailValidator: (value) {
         if (value == null || value.trim().isEmpty) {
           return LocaleKeys.validations_email_required.tr();
         }
         if (!value.contains('@')) {
           return LocaleKeys.validations_email_invalid.tr();
+        }
+        return null;
+      },
+      passwordValidator: (value) {
+        if (value == null || value.isEmpty) {
+          return LocaleKeys.validations_password_required.tr();
         }
         return null;
       },
