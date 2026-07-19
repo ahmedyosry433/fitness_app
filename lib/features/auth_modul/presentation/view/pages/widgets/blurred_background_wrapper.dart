@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
 
 class BlurredBackgroundWrapper extends StatelessWidget {
@@ -8,7 +9,7 @@ class BlurredBackgroundWrapper extends StatelessWidget {
   const BlurredBackgroundWrapper({
     super.key,
     required this.child,
-    this.imagePath = 'assets/images/singup_back.png',
+    this.imagePath = AppImages.signupBack,
   });
 
   @override

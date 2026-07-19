@@ -15,4 +15,5 @@ class AppImages {
   static const String humanGym2 = "assets/images/human_gym2.png";
   static const String humanGym3 = "assets/images/human_gym3.png";
   static const String back = "assets/images/back.jpg";
+  static const String homeBack = "assets/images/home_back.jpg";
 }

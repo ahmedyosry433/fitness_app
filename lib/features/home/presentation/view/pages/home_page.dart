@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/core/values/app_images.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/home_back.jpg',
+              AppImages.homeBack,
               fit: BoxFit.cover,
             ),
           ),
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                       CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.grey[800],
-                        backgroundImage: const AssetImage('assets/images/human_gym.png'),
+                        backgroundImage: const AssetImage(AppImages.humanGym),
                       ),
                     ],
                   ),
