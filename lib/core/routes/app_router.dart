@@ -4,6 +4,8 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/view_mo
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
+import 'package:fitness/features/auth_modul/presentation/signup/view_model/cubit/signup_cubit.dart';
+import 'package:fitness/features/auth_modul/presentation/signup/views/signup_view.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,13 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.login,
       page: (state, context) => const LoginPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => BlocProvider(
+        create: (context) => getIt<SignUpCubit>(),
+        child: const SignUpView(),
+      ),
     ),
     _customAnimatedGoRoute(
       route: Routes.forgetPassword,
