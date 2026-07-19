@@ -1,6 +1,7 @@
 import 'package:fitness/features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart';
 import 'package:fitness/features/auth_modul/data/models/request/forget_password_request.dart';
 import 'package:fitness/features/auth_modul/data/models/request/reset_password_request.dart';
+import 'package:fitness/features/auth_modul/data/models/request/signup_request.dart';
 import 'package:fitness/features/auth_modul/data/models/response/auth_common_response.dart';
 import 'package:injectable/injectable.dart';
 
@@ -38,6 +39,15 @@ class AuthModulRemoteDataSourceImpl implements AuthModulRemoteDataSource {
     return AuthCommonResponse(
       status: "success",
       message: "Password has been reset successfully",
+    );
+  }
+
+  @override
+  Future<AuthCommonResponse> signUp(SignUpRequest request) async {
+    await Future.delayed(const Duration(milliseconds: 1200));
+    return AuthCommonResponse(
+      status: "success",
+      message: "Account created successfully for ${request.name}",
     );
   }
 }

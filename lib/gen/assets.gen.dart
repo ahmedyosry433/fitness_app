@@ -30,6 +30,9 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// Directory path: assets/images/auth
+  $AssetsImagesAuthGen get auth => const $AssetsImagesAuthGen();
+
   /// File path: assets/images/back.jpg
   AssetGenImage get back => const AssetGenImage('assets/images/back.jpg');
 
@@ -67,6 +70,9 @@ class $AssetsImagesGen {
 class $AssetsLocalizationGen {
   const $AssetsLocalizationGen();
 
+  /// File path: assets/localization/ar-EG.json
+  String get arEG => 'assets/localization/ar-EG.json';
+
   /// File path: assets/localization/ar-Eg.json
   String get arEg => 'assets/localization/ar-Eg.json';
 
@@ -74,7 +80,57 @@ class $AssetsLocalizationGen {
   String get enUS => 'assets/localization/en-US.json';
 
   /// List of all assets
-  List<String> get values => [arEg, enUS];
+  List<String> get values => [arEG, arEg, enUS];
+}
+
+class $AssetsImagesAuthGen {
+  const $AssetsImagesAuthGen();
+
+  /// File path: assets/images/auth/divider_line.svg
+  String get dividerLine => 'assets/images/auth/divider_line.svg';
+
+  /// File path: assets/images/auth/icon_apple.svg
+  String get iconApple => 'assets/images/auth/icon_apple.svg';
+
+  /// File path: assets/images/auth/icon_apple_bg.svg
+  String get iconAppleBg => 'assets/images/auth/icon_apple_bg.svg';
+
+  /// File path: assets/images/auth/icon_eye.svg
+  String get iconEye => 'assets/images/auth/icon_eye.svg';
+
+  /// File path: assets/images/auth/icon_facebook.svg
+  String get iconFacebook => 'assets/images/auth/icon_facebook.svg';
+
+  /// File path: assets/images/auth/icon_google.svg
+  String get iconGoogle => 'assets/images/auth/icon_google.svg';
+
+  /// File path: assets/images/auth/icon_lock.svg
+  String get iconLock => 'assets/images/auth/icon_lock.svg';
+
+  /// File path: assets/images/auth/icon_mail.svg
+  String get iconMail => 'assets/images/auth/icon_mail.svg';
+
+  /// File path: assets/images/auth/login_background.png
+  AssetGenImage get loginBackground =>
+      const AssetGenImage('assets/images/auth/login_background.png');
+
+  /// File path: assets/images/auth/login_logo.png
+  AssetGenImage get loginLogo =>
+      const AssetGenImage('assets/images/auth/login_logo.png');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    dividerLine,
+    iconApple,
+    iconAppleBg,
+    iconEye,
+    iconFacebook,
+    iconGoogle,
+    iconLock,
+    iconMail,
+    loginBackground,
+    loginLogo,
+  ];
 }
 
 abstract final class Assets {
