@@ -12,6 +12,8 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/views/c
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
+import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
@@ -114,6 +116,10 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.login,
       page: (state, context) => const LoginPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => const CompleteRegisterPage(),
     ),
     _customAnimatedGoRoute(
       route: Routes.forgetPassword,
