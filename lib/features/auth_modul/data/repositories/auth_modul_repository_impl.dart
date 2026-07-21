@@ -1,5 +1,6 @@
 import 'package:fitness/config/base_response/base_response.dart';
 import 'package:fitness/features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart';
+import 'package:fitness/features/auth_modul/data/models/request/verify_otp_request.dart';
 import 'package:fitness/features/auth_modul/domain/repositories/auth_modul_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -26,9 +27,9 @@ class AuthModulRepositoryImpl implements AuthModulRepository {
   }
 
   @override
-  Future<Result<AuthCommonResponse>> verifyOtp(String email, String otp) async {
+  Future<Result<AuthCommonResponse>> verifyOtp(VerifyOtpRequest request) async {
     try {
-      final response = await remoteDataSource.verifyOtp(email, otp);
+      final response = await remoteDataSource.verifyOtp(request);
       return Success(data: response);
     } catch (e) {
       return Error(exception: Exception(e.toString()));

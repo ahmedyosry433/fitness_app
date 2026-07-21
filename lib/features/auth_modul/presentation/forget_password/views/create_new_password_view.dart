@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
@@ -81,12 +82,13 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                       const SizedBox(height: 16),
                       CustomAuthTextField(
                         controller: confirmPasswordController,
-                        hintText: "Confirm Password",
+                        hintText: LocaleKeys.validations_confirm_password,
                         prefixIcon: Icons.lock_outline,
                         isPassword: true,
                         validator: (value) {
                           if (value != passwordController.text) {
-                            return "Passwords do not match";
+                            return LocaleKeys
+                                .validations_confirm_password_invalid;
                           }
                           return null;
                         },

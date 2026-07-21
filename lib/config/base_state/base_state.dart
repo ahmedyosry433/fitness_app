@@ -6,30 +6,36 @@ enum StateType { initial, loading, moreLoading, success, error }
 class BaseState<T> extends Equatable {
   final StateType? state;
   final T? data;
-  final Exception? exception;
+  final String? errorMessage;
 
-  const BaseState({this.state = StateType.initial, this.data, this.exception});
+  const BaseState({
+    this.state = StateType.initial,
+    this.data,
+    this.errorMessage,
+  });
 
   @override
-  List<Object?> get props => [state, data, exception];
+  List<Object?> get props => [state, data, errorMessage];
 
   const BaseState.initial()
     : state = StateType.initial,
       data = null,
-      exception = null;
+      errorMessage = null;
 
   const BaseState.loading()
     : state = StateType.loading,
       data = null,
-      exception = null;
+      errorMessage = null;
 
   const BaseState.success(this.data)
     : state = StateType.success,
-      exception = null;
+      errorMessage = null;
 
-  const BaseState.error(this.exception) : state = StateType.error, data = null;
+  const BaseState.error(this.errorMessage)
+    : state = StateType.error,
+      data = null;
   const BaseState.all({
-    required this.exception,
+    required this.errorMessage,
     required this.data,
     required this.state,
   });
@@ -39,7 +45,7 @@ class BaseState<T> extends Equatable {
     required R Function(T data) success,
     required R Function() loading,
     R Function()? moreLoading,
-    required R Function(Exception exception) error,
+    required R Function(String errorMessage) error,
     required R Function() initial,
   }) {
     return switch (state ?? StateType.initial) {
@@ -47,12 +53,12 @@ class BaseState<T> extends Equatable {
       StateType.loading => loading(),
       StateType.moreLoading => moreLoading != null ? moreLoading() : loading(),
       StateType.success => success(data as T),
-      StateType.error => error(exception!),
+      StateType.error => error(errorMessage ?? "An unexpected error occurred"),
     };
   }
 
   @override
   String toString() {
-    return 'BaseState(state:$state,${data != null ? ',data: $data, ' : ''}${exception != null ? ',exception: $exception' : ''})';
+    return 'BaseState(state:$state,${data != null ? ',data: $data, ' : ''}${errorMessage != null ? ',exception: $errorMessage' : ''})';
   }
 }

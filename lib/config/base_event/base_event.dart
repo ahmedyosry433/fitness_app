@@ -2,14 +2,14 @@ sealed class BaseEvent {
   const BaseEvent();
 }
 
-class DisplayError extends BaseEvent {
+class ShowSuccessToastEvent extends BaseEvent {
   final String message;
-  const DisplayError(this.message);
+  const ShowSuccessToastEvent(this.message);
 }
 
-class DisplaySuccess extends BaseEvent {
+class ShowErrorToastEvent extends BaseEvent {
   final String message;
-  const DisplaySuccess(this.message);
+  const ShowErrorToastEvent(this.message);
 }
 
 class NavigateEvent extends BaseEvent {
