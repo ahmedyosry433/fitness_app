@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
@@ -87,8 +89,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                "Enter Your OTP Check Your Email",
+              Text(
+                LocaleKeys.forget_password_enter_otp_check_email.tr(),
                 style: TextStyle(
                   color: Colors.white60,
                   fontSize: 13,
@@ -131,15 +133,23 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                     focusedPinTheme: focusedPinTheme,
                                     errorPinTheme: errorPinTheme,
                                     forceErrorState: isOtpInvalid,
-                                    errorText:
-                                        "Invalid OTP code, please try again",
+                                    errorText: LocaleKeys
+                                        .forget_password_invalid_otp_code
+                                        .tr(),
                                     errorTextStyle: const TextStyle(
                                       color: Colors.redAccent,
                                       fontSize: 12,
                                     ),
                                     onChanged: (value) {
                                       if (isOtpInvalid) {
-                                        setState(() => isOtpInvalid = false);
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              if (mounted) {
+                                                setState(() {
+                                                  isOtpInvalid = false;
+                                                });
+                                              }
+                                            });
                                       }
                                     },
                                     validator: (value) {
@@ -156,7 +166,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                         BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
                           builder: (context, state) {
                             return CustomAuthButton(
-                              title: "Confirm",
+                              title: LocaleKeys.forget_password_confirm.tr(),
                               isLoading: state.state == StateType.loading,
                               onPressed: () {
                                 if (otpFormKey.currentState!.validate()) {
@@ -173,8 +183,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                "Didn't Receive Verification Code?",
+                              Text(
+                                LocaleKeys.forget_password_didnt_receive_code
+                                    .tr(),
                                 style: TextStyle(
                                   color: Colors.white60,
                                   fontSize: 12,
@@ -185,8 +196,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 onPressed: () {
                                   cubit.doAction(ResendOtpIntent());
                                 },
-                                child: const Text(
-                                  "Resend Code?",
+                                child: Text(
+                                  LocaleKeys.forget_password_resend_code.tr(),
                                   style: TextStyle(
                                     color: Color(0xFFFF5722),
                                     fontWeight: FontWeight.bold,

@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
@@ -20,7 +22,7 @@ class ForgetPasswordView extends StatefulWidget {
 
 class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   final emailController = TextEditingController();
-
+ final GlobalKey<FormState> _forgetFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
     emailController.dispose();
@@ -30,7 +32,6 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ForgetPasswordCubit>();
-    final forgetFormKey = GlobalKey<FormState>();
 
     return AuthBackground(
       child: BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
@@ -41,13 +42,13 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
         },
 
         child: Form(
-          key: forgetFormKey,
+          key: _forgetFormKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Enter Your Email",
+              Text(
+                LocaleKeys.forget_password_enter_your_email.tr(),
                 style: TextStyle(
                   color: Colors.white60,
                   fontSize: 14,
@@ -55,8 +56,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                "Forget Password",
+               Text(
+                LocaleKeys.forget_password,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -84,29 +85,31 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                       children: [
                         CustomAuthTextField(
                           controller: emailController,
-                          hintText: "Email",
+                          hintText: LocaleKeys.forget_password_email.tr(),
                           prefixIcon: Icons.email_outlined,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return "Please enter your email";
+                              return LocaleKeys
+                                  .forget_password_enter_your_email.tr();
                             }
                             if (!RegExp(
                               r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                             ).hasMatch(value)) {
-                              return "Please enter a valid email address";
+                              return LocaleKeys.forget_password_please_enter_valid_email.tr();
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 24),
-                        BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
-                          builder: (context, state) {
+                        BlocSelector<ForgetPasswordCubit, ForgetPasswordState,StateType?>(
+                          selector: (state) => state.state,
+                          builder: (context, stateType) {
                             return CustomAuthButton(
                               title: "Sent OTP",
-                              isLoading: state.state == StateType.loading,
+                              isLoading: stateType == StateType.loading,
                               onPressed: () {
-                                if (forgetFormKey.currentState!.validate()) {
+                                if (_forgetFormKey.currentState!.validate()) {
                                   cubit.doAction(
                                     SendOtpIntent(emailController.text),
                                   );

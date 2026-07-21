@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
@@ -37,13 +38,13 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Make Sure Its 8 Characters Or More",
+            Text(
+              LocaleKeys.forget_password_make_sure_8_characters_or_more.tr(),
               style: TextStyle(color: Colors.white60, fontSize: 13),
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Create New Password",
+             Text(
+              LocaleKeys.forget_password_create_new_password.tr(),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -69,12 +70,13 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                     children: [
                       CustomAuthTextField(
                         controller: passwordController,
-                        hintText: "Password",
+                        hintText: LocaleKeys.forget_password,
                         prefixIcon: Icons.lock_outline,
                         isPassword: true,
                         validator: (value) {
                           if (value == null || value.length < 8) {
-                            return "Password must be at least 8 characters long";
+                            return LocaleKeys
+                                .forget_password_password_at_least_8_characters.tr();
                           }
                           return null;
                         },
@@ -82,13 +84,13 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                       const SizedBox(height: 16),
                       CustomAuthTextField(
                         controller: confirmPasswordController,
-                        hintText: LocaleKeys.validations_confirm_password,
+                        hintText: LocaleKeys.validations_confirm_password.tr(),
                         prefixIcon: Icons.lock_outline,
                         isPassword: true,
                         validator: (value) {
                           if (value != passwordController.text) {
                             return LocaleKeys
-                                .validations_confirm_password_invalid;
+                                .validations_confirm_password_invalid.tr();
                           }
                           return null;
                         },

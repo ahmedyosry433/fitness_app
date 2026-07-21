@@ -108,7 +108,19 @@
         "confirm_password": "Confirm password",
         "email_sent_message": "Verify code has been sent to your email successfully",
         "code_correct": "Code is correct, please reset your password",
-        "password_reset_success": "Your password has been reset successfully, please log in again"
+        "password_reset_success": "Your password has been reset successfully, please log in again",
+        "make_sure_8_characters_or_more": "Make sure it's 8 characters or more",
+        "create_new_password": "Create New Password",
+        "password_at_least_8_characters": "Password must be at least 8 characters long",
+        "enter_your_email": "Enter Your Email",
+        "forget_password": "Forget Password",
+        "email": "Email",
+        "please_enter_your_email": "Please enter your email",
+        "please_enter_valid_email": "Please enter a valid email address",
+        "enter_otp_check_email": "Enter your OTP, check your email",
+        "invalid_otp_code": "Invalid OTP code, please try again",
+        "confirm": "Confirm",
+        "didnt_receive_code": "Didn't receive verification code?"
     },
     "splash": {
         "title": "SUPER FITNESS",
