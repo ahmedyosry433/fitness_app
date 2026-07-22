@@ -147,5 +147,22 @@
         "smart_coach": "Smart coach",
         "workout": "Workout",
         "profile": "Profile"
+    },
+    "exercise": {
+        "chest_exercise": "Chest Exercise",
+        "chest_exercise_desc": "Lorem Ipsum Dolor Sit Amet Consectetur. Tempus Volutpat Ut Nisi Morbi.",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced",
+        "failed_to_load": "Failed to load exercises:\n{}",
+        "no_exercises_found": "No exercises found for this level.",
+        "min": "MIN",
+        "cal": "Cal",
+        "close": "Close",
+        "groups_times": "3 Groups * 15 Times",
+        "skeleton_title": "Skeleton Title",
+        "skeleton_desc": "Skeleton description text goes here...",
+        "lorem_ipsum": "Lorem Ipsum Dolor Sit\nAmet Consectetur. Tempus",
+        "invalid_video_url": "Invalid Video URL"
     }
 }

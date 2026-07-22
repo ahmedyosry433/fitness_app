@@ -2,6 +2,7 @@ import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
+import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
@@ -14,13 +15,14 @@ import 'package:go_router/go_router.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.home, // Open home directly to test bottom nav
+  initialLocation: Routes.exercise, // Open exercise directly to test it
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
     ),
+
     _customAnimatedGoRoute(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
@@ -71,6 +73,10 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.exercise,
+      page: (state, context) => const ExerciseModulePage(),
     ),
   ],
 );

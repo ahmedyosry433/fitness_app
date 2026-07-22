@@ -6,9 +6,8 @@ import 'injectable_config.config.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit(
-  initializerName: 'init', // default
-  preferRelativeImports: true, // default
-  asExtension: true, // default
+  initializerName: 'init', 
+  preferRelativeImports: true, 
+  asExtension: true, 
 )
-void configureDependencies() => getIt.init();
-// dart run build_runner build --delete-conflicting-outputs
+Future<void> configureDependencies() async => await getIt.init();
