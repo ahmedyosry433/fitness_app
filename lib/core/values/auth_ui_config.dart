@@ -13,7 +13,7 @@ class AuthUiConfig {
 
   static const double cardBlurSigma = 17.3;
   static const double cardRadius = 50;
-  static const double pillRadius = 20;
+  static const double pillRadius = 26;
   static const double horizontalPadding = 16;
   static const double fieldSpacing = 16;
   static const double sectionSpacing = 24;
@@ -37,7 +37,7 @@ class AuthUiConfig {
   static const double orDividerWidth = 343;
   static const double orLineWidth = 80;
   static const double orLineGap = 20;
-  static const double primaryButtonHeight = 40;
+  static const double primaryButtonHeight = 52;
 
   static Color get screenOverlayColor =>
       const Color(0xFF1A1A1A).withValues(alpha: 0.5);

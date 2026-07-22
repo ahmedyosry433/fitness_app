@@ -47,6 +47,10 @@ class PasswordField extends StatelessWidget {
           FieldAssets.iconEye,
           width: GlobalTextFieldTheme.fieldIconSize,
           height: GlobalTextFieldTheme.fieldIconSize,
+          colorFilter: ColorFilter.mode(
+            GlobalTextFieldTheme.fieldHintColor,
+            BlendMode.srcIn,
+          ),
         ),
       ),
     );

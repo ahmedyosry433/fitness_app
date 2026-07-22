@@ -36,6 +36,7 @@ class AuthScaffoldWidget extends StatelessWidget {
           children: [
             AuthBackgroundImageWidget(imagePath: backgroundImage),
             if (showTopLogo) const AuthTopLogoOverlayWidget(),
+            child,
             if (showBackButton)
               SafeArea(
                 child: Align(
@@ -49,7 +50,6 @@ class AuthScaffoldWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            child,
           ],
         ),
       ),

@@ -52,6 +52,7 @@ class RegisterBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthScaffoldWidget(
       showBackButton: true,
+      onBack: onLogin,
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsetsDirectional.symmetric(
