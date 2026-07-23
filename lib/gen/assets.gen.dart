@@ -23,8 +23,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/close_eye.svg
   String get closeEye => 'assets/icons/close_eye.svg';
 
+  /// File path: assets/icons/eye.svg
+  String get eye => 'assets/icons/eye.svg';
+
+  /// File path: assets/icons/lock.svg
+  String get lock => 'assets/icons/lock.svg';
+
+  /// File path: assets/icons/mail.svg
+  String get mail => 'assets/icons/mail.svg';
+
   /// List of all assets
-  List<String> get values => [calendar, clock, closeEye];
+  List<String> get values => [calendar, clock, closeEye, eye, lock, mail];
 }
 
 class $AssetsImagesGen {

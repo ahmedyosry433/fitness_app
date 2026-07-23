@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class AuthBackground extends StatelessWidget {
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-              child: Container(color: Colors.black.withOpacity(0.65)),
+              child: Container(color: AppColors.black.withOpacity(0.65)),
             ),
           ),
           SafeArea(
@@ -38,7 +39,8 @@ class AuthBackground extends StatelessWidget {
                       Center(
                         child: Image.asset(
                           AppImages.imagesIcLauncher,
-                          height: 70,
+                          height: 48,
+                          width: 70,
                         ),
                       ),
                       const SizedBox(height: 50),
