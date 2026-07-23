@@ -20,6 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import '../../core/user_helper/user_helper.dart' as _i589;
 import '../../features/exercise_module/api/api_client/exercise_module_api_client.dart'
     as _i723;
+import '../../features/exercise_module/data/datasources/exercise_remote_data_source.dart'
+    as _i868;
 import '../../features/exercise_module/data/repositories/exercise_repository_impl.dart'
     as _i1072;
 import '../../features/exercise_module/domain/repositories/exercise_repository.dart'
@@ -64,14 +66,10 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
-    gh.factory<_i112.ExerciseRepository>(
-      () => _i1072.ExerciseRepositoryImpl(gh<_i723.ExerciseModuleApiClient>()),
-    );
-    gh.factory<_i198.GetDifficultyLevelsUseCase>(
-      () => _i198.GetDifficultyLevelsUseCase(gh<_i112.ExerciseRepository>()),
-    );
-    gh.factory<_i692.GetExercisesUseCase>(
-      () => _i692.GetExercisesUseCase(gh<_i112.ExerciseRepository>()),
+    gh.factory<_i868.ExerciseRemoteDataSource>(
+      () => _i868.ExerciseRemoteDataSourceImpl(
+        gh<_i723.ExerciseModuleApiClient>(),
+      ),
     );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
@@ -79,8 +77,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.factory<_i112.ExerciseRepository>(
+      () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
+    );
+    gh.factory<_i198.GetDifficultyLevelsUseCase>(
+      () => _i198.GetDifficultyLevelsUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i692.GetExercisesUseCase>(
+      () => _i692.GetExercisesUseCase(gh<_i112.ExerciseRepository>()),
+    );
     gh.factory<_i215.ExerciseModuleCubit>(
-      () => _i215.ExerciseModuleCubit(gh<_i692.GetExercisesUseCase>()),
+      () => _i215.ExerciseModuleCubit(
+        gh<_i692.GetExercisesUseCase>(),
+        gh<_i198.GetDifficultyLevelsUseCase>(),
+      ),
     );
     return this;
   }

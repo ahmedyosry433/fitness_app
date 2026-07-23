@@ -1,4 +1,5 @@
 import 'package:fitness/features/exercise_module/data/models/exercise_model.dart';
+import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'exercise_response_model.g.dart';
@@ -20,4 +21,6 @@ class ExerciseResponseModel {
       _$ExerciseResponseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExerciseResponseModelToJson(this);
+
+  List<ExerciseEntity> get exerciseEntities => exercises?.map((e) => e.toEntity()).toList() ?? [];
 }

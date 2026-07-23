@@ -1,16 +1,24 @@
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 
+class ExerciseModel {
+  final String id;
+  final String title;
+  final String description;
+  final String videoUrl;
+  final String thumbnailUrl;
+  final String time;
+  final String calories;
+  final String level;
 
-class ExerciseModel extends ExerciseEntity {
   const ExerciseModel({
-    required super.id,
-    required super.title,
-    required super.description,
-    required super.videoUrl,
-    required super.thumbnailUrl,
-    required super.time,
-    required super.calories,
-    required super.level,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.videoUrl,
+    required this.thumbnailUrl,
+    required this.time,
+    required this.calories,
+    required this.level,
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
@@ -46,5 +54,18 @@ class ExerciseModel extends ExerciseEntity {
       'short_youtube_demonstration_link': videoUrl,
       'difficulty_level': level,
     };
+  }
+
+  ExerciseEntity toEntity() {
+    return ExerciseEntity(
+      id: id,
+      title: title,
+      description: description,
+      videoUrl: videoUrl,
+      thumbnailUrl: thumbnailUrl,
+      time: time,
+      calories: calories,
+      level: level,
+    );
   }
 }

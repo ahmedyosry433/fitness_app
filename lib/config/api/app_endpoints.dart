@@ -9,4 +9,9 @@ class AppEndPoints {
       '$baseUrl/exercises/random?targetMuscleGroupId=69d982ed85f6bfa972bf2218&difficultyLevelId=69d982ed85f6bfa972bf2216&limit=5';
   static const String exercisesByMuscleAndDifficultyEndpoint =
       '$baseUrl/exercises/by-muscle-difficulty?primeMoverMuscleId=69d982ef85f6bfa972bf2248&difficultyLevelId=69d982ed85f6bfa972bf2216';
+  static const String exercises = '/exercises';
+  static const String exercisesByMuscleAndDifficulty = '/exercises/by-muscle-difficulty';
+  static const String difficultyLevels = '/levels';
+  static const String primeMoverMuscleIdParam = 'primeMoverMuscleId';
+  static const String difficultyLevelIdParam = 'difficultyLevelId';
 }

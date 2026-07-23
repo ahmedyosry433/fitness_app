@@ -9,28 +9,9 @@ class GetExercisesUseCase {
 
   GetExercisesUseCase(this.repository);
 
-  Future<Result<List<ExerciseEntity>>> call(int difficultyIndex) async {
-    final result = await repository.getAllExercises();
-    return result.when(
-      success: (data) {
-        final levelText = _getLevelText(difficultyIndex);
-        final filtered = data?.where((e) => e.level == levelText).toList() ?? [];
-        return Success(data: filtered);
-      },
-      error: (exception) => Error(exception: exception),
-    );
-  }
-
-  String _getLevelText(int index) {
-    switch (index) {
-      case 0:
-        return 'Beginner';
-      case 1:
-        return 'Intermediate';
-      case 2:
-        return 'Advanced';
-      default:
-        return 'Beginner';
-    }
+  Future<Result<List<ExerciseEntity>>> call(
+      {required String primeMoverMuscleId, required String difficultyLevelId}) async {
+    return await repository.getAllExercises(
+        primeMoverMuscleId: primeMoverMuscleId, difficultyLevelId: difficultyLevelId);
   }
 }

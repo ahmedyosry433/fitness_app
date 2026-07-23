@@ -9,7 +9,9 @@ class GetDifficultyLevelsUseCase {
 
   GetDifficultyLevelsUseCase(this.repository);
 
-  Future<Result<List<DifficultyLevelEntity>>> call(String primeMoverMuscleId) async {
-    return await repository.getDifficultyLevels(primeMoverMuscleId: primeMoverMuscleId);
+  Future<Result<List<DifficultyLevelEntity>>> call(String primeMoverMuscleId) {
+    return repository.getDifficultyLevels(
+      primeMoverMuscleId: primeMoverMuscleId,
+    );
   }
 }

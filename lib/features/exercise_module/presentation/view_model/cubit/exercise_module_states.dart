@@ -1,40 +1,49 @@
 import 'package:equatable/equatable.dart';
+import 'package:fitness/features/exercise_module/domain/entities/difficulty_level_entity.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 
-enum ExerciseStatus { initial, loading, success, failure }
-
-class ExerciseModuleState extends Equatable {
-  final ExerciseStatus status;
+class ExerciseModuleData extends Equatable {
   final List<ExerciseEntity> exercises;
   final int selectedDifficultyIndex;
-  final String errorMessage;
+  final List<DifficultyLevelEntity> difficultyLevels;
+  final String primeMoverMuscleId;
+  final String pageTitle;
+  final String pageDescription;
 
-  const ExerciseModuleState({
-    this.status = ExerciseStatus.initial,
+  const ExerciseModuleData({
     this.exercises = const [],
     this.selectedDifficultyIndex = 0,
-    this.errorMessage = '',
+    this.difficultyLevels = const [],
+    this.primeMoverMuscleId = '',
+    this.pageTitle = '',
+    this.pageDescription = '',
   });
 
-  ExerciseModuleState copyWith({
-    ExerciseStatus? status,
+  ExerciseModuleData copyWith({
     List<ExerciseEntity>? exercises,
     int? selectedDifficultyIndex,
-    String? errorMessage,
+    List<DifficultyLevelEntity>? difficultyLevels,
+    String? primeMoverMuscleId,
+    String? pageTitle,
+    String? pageDescription,
   }) {
-    return ExerciseModuleState(
-      status: status ?? this.status,
+    return ExerciseModuleData(
       exercises: exercises ?? this.exercises,
       selectedDifficultyIndex: selectedDifficultyIndex ?? this.selectedDifficultyIndex,
-      errorMessage: errorMessage ?? this.errorMessage,
+      difficultyLevels: difficultyLevels ?? this.difficultyLevels,
+      primeMoverMuscleId: primeMoverMuscleId ?? this.primeMoverMuscleId,
+      pageTitle: pageTitle ?? this.pageTitle,
+      pageDescription: pageDescription ?? this.pageDescription,
     );
   }
 
   @override
   List<Object> get props => [
-    status, 
     exercises, 
     selectedDifficultyIndex, 
-    errorMessage
+    difficultyLevels,
+    primeMoverMuscleId,
+    pageTitle,
+    pageDescription,
   ];
 }

@@ -76,7 +76,15 @@ final GoRouter router = GoRouter(
     ),
     _customAnimatedGoRoute(
       route: Routes.exercise,
-      page: (state, context) => const ExerciseModulePage(),
+      page: (state, context) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return ExerciseModulePage(
+          primeMoverMuscleId: extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248',
+          pageTitle: extra?['pageTitle'] ?? '',
+          pageDescription: extra?['pageDescription'] ?? '',
+          backgroundImage: extra?['backgroundImage'] ?? '',
+        );
+      },
     ),
   ],
 );

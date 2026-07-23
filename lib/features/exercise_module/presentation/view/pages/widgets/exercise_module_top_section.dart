@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_states.dart';
+import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 
 class ExerciseModuleTopSection extends StatelessWidget {
   const ExerciseModuleTopSection({super.key});
@@ -58,39 +60,50 @@ class ExerciseModuleTopSection extends StatelessWidget {
           ),
           SizedBox(height: 180.h), // Spacing to match the top area of the image
           
-          Center(
-            child: Text(
-              tr('exercise.chest_exercise'),
-              style: 28.bold.copyWith(
-                color: AppColors.whiteFF,
-              ),
-            ),
-          ),
-          SizedBox(height: 15.h),
-          Text(
-            tr('exercise.chest_exercise_desc'),
-            textAlign: TextAlign.left,
-            style: 14.regular.copyWith(
-              color: AppColors.grayCF,
-              height: 1.5,
-            ),
+          BlocBuilder<ExerciseModuleCubit, BaseState<ExerciseModuleData>>(
+            builder: (context, state) {
+              final data = state.data ?? const ExerciseModuleData();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      data.pageTitle.isNotEmpty ? data.pageTitle : LocaleKeys.exercise_chest_exercise.tr(),
+                      style: 28.bold.copyWith(
+                        color: AppColors.whiteFF,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15.h),
+                  Text(
+                    data.pageDescription.isNotEmpty ? data.pageDescription : LocaleKeys.exercise_chest_exercise_desc.tr(),
+                    textAlign: TextAlign.left,
+                    style: 14.regular.copyWith(
+                      color: AppColors.grayCF,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           SizedBox(height: 20.h),
-          BlocBuilder<ExerciseModuleCubit, ExerciseModuleState>(
+          BlocBuilder<ExerciseModuleCubit, BaseState<ExerciseModuleData>>(
             builder: (context, state) {
-              int totalMins = state.exercises.fold(
+              final exercises = state.data?.exercises ?? [];
+              int totalMins = exercises.fold(
                 0,
                 (sum, item) => sum + (int.tryParse(item.time) ?? 0),
               );
-              int totalCals = state.exercises.fold(
+              int totalCals = exercises.fold(
                 0,
                 (sum, item) => sum + (int.tryParse(item.calories) ?? 0),
               );
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildChip('$totalMins ${tr('exercise.min')}'),
-                  _buildChip('$totalCals ${tr('exercise.cal')}', isOrangeText: true),
+                  _buildChip('$totalMins ${LocaleKeys.exercise_min.tr()}'),
+                  _buildChip('$totalCals ${LocaleKeys.exercise_cal.tr()}', isOrangeText: true),
                 ],
               );
             },

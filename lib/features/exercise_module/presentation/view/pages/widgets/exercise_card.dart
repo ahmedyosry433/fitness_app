@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'video_player_popup.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -25,7 +25,11 @@ class ExerciseCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.h), // adjusted padding
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: AppColors.black22,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         child: Row(
           children: [
             // Image
@@ -65,14 +69,14 @@ class ExerciseCard extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    tr('exercise.groups_times'),
+                    LocaleKeys.exercise_groups_times.tr(),
                     style: 12.regular.copyWith(color: AppColors.grayCF),
                   ),
                   SizedBox(height: 4.h),
                   Text(
                     exercise.description.isNotEmpty 
                         ? exercise.description 
-                        : tr('exercise.lorem_ipsum'),
+                        : LocaleKeys.exercise_lorem_ipsum.tr(),
                     style: 11.regular.copyWith(
                       color: AppColors.grayA6,
                       height: 1.3,

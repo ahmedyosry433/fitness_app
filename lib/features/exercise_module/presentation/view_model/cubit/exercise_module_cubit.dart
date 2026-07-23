@@ -1,41 +1,103 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fitness/features/exercise_module/domain/use_cases/get_difficulty_levels_use_case.dart';
 import 'package:fitness/features/exercise_module/domain/use_cases/get_exercises_use_case.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/config/base_state/base_state.dart';
+
+import '../exercise_intent.dart';
 import 'exercise_module_states.dart';
 
 @injectable
-class ExerciseModuleCubit extends Cubit<ExerciseModuleState> {
+class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
   final GetExercisesUseCase getExercisesUseCase;
+  final GetDifficultyLevelsUseCase getDifficultyLevelsUseCase;
 
   ExerciseModuleCubit(
     this.getExercisesUseCase,
-  ) : super(const ExerciseModuleState());
+    this.getDifficultyLevelsUseCase,
+  ) : super(const BaseState.initial());
 
-  void init() {
-    loadExercises(0);
+  ExerciseModuleData get _data => state.data ?? const ExerciseModuleData();
+
+  void processIntent(ExerciseIntent intent) {
+    if (intent is InitExerciseModuleIntent) {
+      _init(
+        primeMoverMuscleId: intent.primeMoverMuscleId,
+        pageTitle: intent.pageTitle,
+        pageDescription: intent.pageDescription,
+      );
+    } else if (intent is LoadExercisesIntent) {
+      _loadExercises(intent.difficultyIndex);
+    }
   }
 
-  Future<void> loadExercises(int difficultyIndex) async {
-    emit(state.copyWith(
-      status: ExerciseStatus.loading,
-      selectedDifficultyIndex: difficultyIndex,
-    ));
+  Future<void> _init({
+    required String primeMoverMuscleId,
+    required String pageTitle,
+    required String pageDescription,
+  }) async {
+    emit(BaseState.all(
+        state: StateType.loading,
+        data: _data.copyWith(
+          primeMoverMuscleId: primeMoverMuscleId,
+          pageTitle: pageTitle,
+          pageDescription: pageDescription,
+        ),
+        exception: null));
+    
+    final levelsResult = await getDifficultyLevelsUseCase(primeMoverMuscleId);
+    
+    levelsResult.when(
+      success: (levels) {
+        emit(BaseState.all(
+            state: StateType.success,
+            data: _data.copyWith(difficultyLevels: levels ?? []),
+            exception: null));
+        _loadExercises(0);
+      },
+      error: (exception) {
+        emit(BaseState.all(
+            state: StateType.error,
+            data: _data,
+            exception: Exception(exception?.toString() ?? LocaleKeys.error_api_failure_unknown.tr())));
+      },
+    );
+  }
 
-    final result = await getExercisesUseCase(difficultyIndex);
+  Future<void> _loadExercises(int difficultyIndex) async {
+    if (_data.difficultyLevels.isEmpty) return;
+
+    emit(BaseState.all(
+        state: StateType.loading,
+        data: _data.copyWith(selectedDifficultyIndex: difficultyIndex),
+        exception: null));
+
+    // Ensure index is within bounds, fallback to first if not
+    final safeIndex = (difficultyIndex >= 0 && difficultyIndex < _data.difficultyLevels.length) 
+        ? difficultyIndex 
+        : 0;
+    final difficultyLevelId = _data.difficultyLevels[safeIndex].id;
+
+    final result = await getExercisesUseCase(
+      primeMoverMuscleId: _data.primeMoverMuscleId,
+      difficultyLevelId: difficultyLevelId,
+    );
 
     result.when(
       success: (exercises) {
-        emit(state.copyWith(
-          status: ExerciseStatus.success,
-          exercises: exercises,
-        ));
+        emit(BaseState.all(
+            state: StateType.success,
+            data: _data.copyWith(exercises: exercises),
+            exception: null));
       },
       error: (exception) {
-        emit(state.copyWith(
-          status: ExerciseStatus.failure,
-          errorMessage: exception?.toString() ?? 'An unknown error occurred',
-        ));
+        emit(BaseState.all(
+            state: StateType.error,
+            data: _data,
+            exception: Exception(exception?.toString() ?? LocaleKeys.error_api_failure_unknown.tr())));
       },
     );
   }

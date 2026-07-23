@@ -13,9 +13,12 @@ abstract class ExerciseModuleApiClient {
   @factoryMethod
   factory ExerciseModuleApiClient(Dio dio) = _ExerciseModuleApiClient;
 
-  @GET('/exercises')
-  Future<ExerciseResponseModel> getExercises();
+  @GET(AppEndPoints.exercisesByMuscleAndDifficulty)
+  Future<ExerciseResponseModel> getExercises(
+    @Query(AppEndPoints.primeMoverMuscleIdParam) String primeMoverMuscleId,
+    @Query(AppEndPoints.difficultyLevelIdParam) String difficultyLevelId,
+  );
 
-  @GET('/difficulty-levels')
-  Future<DifficultyLevelResponseModel> getDifficultyLevels(@Query('primeMoverMuscleId') String primeMoverMuscleId);
+  @GET(AppEndPoints.difficultyLevels)
+  Future<DifficultyLevelResponseModel> getDifficultyLevels(@Query(AppEndPoints.primeMoverMuscleIdParam) String primeMoverMuscleId);
 }

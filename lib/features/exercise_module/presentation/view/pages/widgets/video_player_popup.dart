@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 
 class VideoPlayerPopup extends StatefulWidget {
   final String videoUrl;
@@ -65,14 +66,14 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                tr('exercise.invalid_video_url'),
+                LocaleKeys.exercise_invalid_video_url.tr(),
                 style: 16.regular.copyWith(color: AppColors.whiteFF),
               ),
               SizedBox(height: 15.h),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(backgroundColor: AppColors.orangePrimary),
-                child: Text(tr('exercise.close'), style: 14.regular.copyWith(color: AppColors.whiteFF)),
+                child: Text(LocaleKeys.exercise_close.tr(), style: 14.regular.copyWith(color: AppColors.whiteFF)),
               ),
             ],
           ),
