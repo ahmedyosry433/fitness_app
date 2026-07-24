@@ -8,4 +8,5 @@ abstract class Routes {
   static const String aiAgent = '/aiAgent';
   static const String workout = '/workout';
   static const String profile = '/profile';
+  static const String detailsFood = '/detailsFood';
 }

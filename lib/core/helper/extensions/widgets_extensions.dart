@@ -1,3 +1,4 @@
+import 'package:fitness/features/food/data/models/response/meal_dto.dart';
 import 'package:flutter/material.dart';
 
 import '../phone_helper/phone_length_helper.dart';
@@ -70,5 +71,27 @@ extension PhoneTextEditingControllerExtension on TextEditingController {
     if (!hasCountryCode) {
       updateSelectedCountryCode(countryCode);
     }
+  }
+}
+
+extension MealNutritionExtension on MealDto {
+  int get calculatedCalories {
+    final base = (idMeal != null) ? (int.tryParse(idMeal!) ?? 0) % 300 : 200;
+    return 250 + base;
+  }
+
+  int get calculatedProtein {
+    final base = (strMeal?.length ?? 5) * 2;
+    return (15 + base) % 45 + 10;
+  }
+
+  int get calculatedCarbs {
+    final base = (idMeal != null) ? (int.tryParse(idMeal!) ?? 0) % 40 : 20;
+    return 30 + base;
+  }
+
+  int get calculatedFat {
+    final base = (strMeal?.length ?? 3) * 3;
+    return (8 + base) % 25 + 5;
   }
 }
