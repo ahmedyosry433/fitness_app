@@ -18,7 +18,7 @@ abstract class AppValidators {
 
   static String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return LocaleKeys.forget_password.tr();
+      return LocaleKeys.forget_password;
     }
 
     if (password.length < 8) {
