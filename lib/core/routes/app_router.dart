@@ -11,11 +11,14 @@ import 'package:fitness/features/workout/presentation/view/pages/workout_page.da
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
+import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.exercise, // Open exercise directly to test it
+  initialLocation: Routes.home, // Open home directly to test bottom nav
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
@@ -78,11 +81,25 @@ final GoRouter router = GoRouter(
       route: Routes.exercise,
       page: (state, context) {
         final extra = state.extra as Map<String, dynamic>?;
-        return ExerciseModulePage(
-          primeMoverMuscleId: extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248',
-          pageTitle: extra?['pageTitle'] ?? '',
-          pageDescription: extra?['pageDescription'] ?? '',
-          backgroundImage: extra?['backgroundImage'] ?? '',
+        final primeMoverMuscleId = extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
+        final pageTitle = extra?['pageTitle'] ?? '';
+        final pageDescription = extra?['pageDescription'] ?? '';
+        final backgroundImage = extra?['backgroundImage'] ?? '';
+
+        return BlocProvider(
+          create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
+            InitExerciseModuleIntent(
+              primeMoverMuscleId: primeMoverMuscleId,
+              pageTitle: pageTitle,
+              pageDescription: pageDescription,
+            )
+          ),
+          child: ExerciseModulePage(
+            primeMoverMuscleId: primeMoverMuscleId,
+            pageTitle: pageTitle,
+            pageDescription: pageDescription,
+            backgroundImage: backgroundImage,
+          ),
         );
       },
     ),

@@ -11,7 +11,7 @@ import '../exercise_intent.dart';
 import 'exercise_module_states.dart';
 
 @injectable
-class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
+class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
   final GetExercisesUseCase getExercisesUseCase;
   final GetDifficultyLevelsUseCase getDifficultyLevelsUseCase;
 
@@ -20,7 +20,7 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
     this.getDifficultyLevelsUseCase,
   ) : super(const BaseState.initial());
 
-  ExerciseModuleData get _data => state.data ?? const ExerciseModuleData();
+  ExerciseModuleUIModel get _data => state.data ?? const ExerciseModuleUIModel();
 
   void processIntent(ExerciseIntent intent) {
     if (intent is InitExerciseModuleIntent) {
@@ -52,9 +52,16 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
     
     levelsResult.when(
       success: (levels) {
+        if (levels == null || levels.isEmpty) {
+          emit(BaseState.all(
+              state: StateType.error,
+              data: _data,
+              exception: Exception(LocaleKeys.exercise_no_exercises_found.tr())));
+          return;
+        }
         emit(BaseState.all(
             state: StateType.success,
-            data: _data.copyWith(difficultyLevels: levels ?? []),
+            data: _data.copyWith(difficultyLevels: levels),
             exception: null));
         _loadExercises(0);
       },
@@ -62,7 +69,7 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
         emit(BaseState.all(
             state: StateType.error,
             data: _data,
-            exception: Exception(exception?.toString() ?? LocaleKeys.error_api_failure_unknown.tr())));
+            exception: exception));
       },
     );
   }
@@ -97,7 +104,7 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleData>> {
         emit(BaseState.all(
             state: StateType.error,
             data: _data,
-            exception: Exception(exception?.toString() ?? LocaleKeys.error_api_failure_unknown.tr())));
+            exception: exception));
       },
     );
   }

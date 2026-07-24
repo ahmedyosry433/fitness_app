@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/core/shared/widgets/custom_cached_image.dart';
 import 'video_player_popup.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -35,25 +36,14 @@ class ExerciseCard extends StatelessWidget {
             // Image
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: exercise.thumbnailUrl.isNotEmpty
-                  ? Image.network(
-                      exercise.thumbnailUrl,
-                      width: 75.w,
-                      height: 75.w,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Image.asset(
-                        AppImages.exercisesBack,
-                        width: 75.w,
-                        height: 75.w,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Image.asset(
-                      AppImages.exercisesBack,
-                      width: 75.w,
-                      height: 75.w,
-                      fit: BoxFit.cover,
-                    ),
+              child: CustomCachedImage(
+                imagePath: exercise.thumbnailUrl,
+                width: 75.w,
+                height: 75.w,
+                fit: BoxFit.cover,
+                errorImage: AppImages.exercisesBack,
+                radius: 12.r,
+              ),
             ),
             SizedBox(width: 15.w),
             // Info

@@ -8,15 +8,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
-import 'package:fitness/config/di/injectable_config.dart';
+
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_states.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 import 'package:fitness/config/base_state/base_state.dart';
 
-import 'widgets/exercise_module_top_section.dart';
-import 'widgets/exercise_module_tabs.dart';
+import 'package:fitness/core/shared/widgets/custom_cached_image.dart';
 import 'widgets/exercise_card.dart';
 
 class ExerciseModulePage extends StatelessWidget {
@@ -33,25 +32,58 @@ class ExerciseModulePage extends StatelessWidget {
     this.backgroundImage = '',
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
-        InitExerciseModuleIntent(
-          primeMoverMuscleId: primeMoverMuscleId,
-          pageTitle: pageTitle,
-          pageDescription: pageDescription,
-        )
+  Widget _buildTab(
+    BuildContext context,
+    String label,
+    int index,
+    bool isSelected,
+  ) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          context.read<ExerciseModuleCubit>().processIntent(
+            LoadExercisesIntent(index),
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 4.w),
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Text(
+            label,
+            style: 13.bold.copyWith(color: AppColors.whiteFF),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
-      child: _ExerciseModulePageContent(backgroundImage: backgroundImage),
     );
   }
-}
 
-class _ExerciseModulePageContent extends StatelessWidget {
-  final String backgroundImage;
-
-  const _ExerciseModulePageContent({required this.backgroundImage});
+  Widget _buildChip(String label, {bool isOrangeText = false}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: AppColors.transparent,
+        border: Border.all(
+          color: isOrangeText
+              ? AppColors.orangePrimary
+              : AppColors.whiteFF.withOpacity(0.3),
+        ),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Text(
+        label,
+        style: 12.semiBold.copyWith(
+          color: isOrangeText ? AppColors.orangePrimary : AppColors.whiteFF,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +93,7 @@ class _ExerciseModulePageContent extends StatelessWidget {
         children: [
           // Bottom Background Image (home_back)
           Positioned.fill(
-            child: Image.asset(
-              AppImages.homeBack,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(AppImages.homeBack, fit: BoxFit.cover),
           ),
           // Blur Bottom Section
           Positioned.fill(
@@ -85,26 +114,22 @@ class _ExerciseModulePageContent extends StatelessWidget {
               imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
               child: backgroundImage.isNotEmpty
                   ? (backgroundImage.startsWith('http')
-                      ? Image.network(
-                          backgroundImage,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
-                          errorBuilder: (context, error, stackTrace) => Image.asset(
-                            AppImages.exercisesBack,
+                        ? CustomCachedImage(
+                            imagePath: backgroundImage,
+                            fit: BoxFit.cover,
+                            errorImage: AppImages.exercisesBack,
+                          )
+                        : Image.asset(
+                            backgroundImage,
                             fit: BoxFit.cover,
                             alignment: Alignment.topCenter,
-                          ),
-                        )
-                      : Image.asset(
-                          backgroundImage,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
-                          errorBuilder: (context, error, stackTrace) => Image.asset(
-                            AppImages.exercisesBack,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                          ),
-                        ))
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                                  AppImages.exercisesBack,
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.topCenter,
+                                ),
+                          ))
                   : Image.asset(
                       AppImages.exercisesBack,
                       fit: BoxFit.cover,
@@ -135,18 +160,154 @@ class _ExerciseModulePageContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ExerciseModuleTopSection(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10.h),
+                      // Back Button
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: EdgeInsets.all(8.r),
+                          decoration: const BoxDecoration(
+                            color: AppColors.orangePrimary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.zero,
+                            child: Icon(
+                              Icons.keyboard_arrow_left,
+                              color: AppColors.whiteFF,
+                              size: 24.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 180.h,
+                      ), // Spacing to match the top area of the image
+
+                      BlocBuilder<
+                        ExerciseModuleCubit,
+                        BaseState<ExerciseModuleUIModel>
+                      >(
+                        buildWhen: (previous, current) {
+                          return previous.data?.pageTitle !=
+                                  current.data?.pageTitle ||
+                              previous.data?.pageDescription !=
+                                  current.data?.pageDescription;
+                        },
+                        builder: (context, state) {
+                          final data = state.data ?? const ExerciseModuleUIModel();
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  data.pageTitle.isNotEmpty
+                                      ? data.pageTitle
+                                      : LocaleKeys.exercise_chest_exercise.tr(),
+                                  style: 28.bold.copyWith(
+                                    color: AppColors.whiteFF,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15.h),
+                              Text(
+                                data.pageDescription.isNotEmpty
+                                    ? data.pageDescription
+                                    : LocaleKeys.exercise_chest_exercise_desc
+                                          .tr(),
+                                textAlign: TextAlign.left,
+                                style: 14.regular.copyWith(
+                                  color: AppColors.grayCF,
+                                  height: 1.5,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      SizedBox(height: 20.h),
+                      BlocBuilder<
+                        ExerciseModuleCubit,
+                        BaseState<ExerciseModuleUIModel>
+                      >(
+                        buildWhen: (previous, current) {
+                          return previous.data?.exercises !=
+                              current.data?.exercises;
+                        },
+                        builder: (context, state) {
+                          final exercises = state.data?.exercises ?? [];
+                          int totalMins = exercises.fold(
+                            0,
+                            (sum, item) => sum + (int.tryParse(item.time) ?? 0),
+                          );
+                          int totalCals = exercises.fold(
+                            0,
+                            (sum, item) =>
+                                sum + (int.tryParse(item.calories) ?? 0),
+                          );
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildChip(
+                                '$totalMins ${LocaleKeys.exercise_min.tr()}',
+                              ),
+                              _buildChip(
+                                '$totalCals ${LocaleKeys.exercise_cal.tr()}',
+                                isOrangeText: true,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
 
                 SizedBox(height: 30.h),
 
-                const ExerciseModuleTabs(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child:
+                      BlocBuilder<
+                        ExerciseModuleCubit,
+                        BaseState<ExerciseModuleUIModel>
+                      >(
+                        buildWhen: (previous, current) {
+                          final prevData = previous.data;
+                          final currData = current.data;
+                          return prevData?.difficultyLevels !=
+                                  currData?.difficultyLevels ||
+                              prevData?.selectedDifficultyIndex !=
+                                  currData?.selectedDifficultyIndex;
+                        },
+                        builder: (context, state) {
+                          final data = state.data ?? const ExerciseModuleUIModel();
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: data.difficultyLevels.asMap().entries.map(
+                              (entry) {
+                                return _buildTab(
+                                  context,
+                                  entry.value.name,
+                                  entry.key,
+                                  data.selectedDifficultyIndex == entry.key,
+                                );
+                              },
+                            ).toList(),
+                          );
+                        },
+                      ),
+                ),
 
                 SizedBox(height: 25.h),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                    ), 
+                    margin: EdgeInsets.symmetric(horizontal: 10.w),
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.r),
@@ -159,19 +320,20 @@ class _ExerciseModulePageContent extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 25.h,
-                            ), 
+                            SizedBox(height: 25.h),
                             BlocBuilder<
                               ExerciseModuleCubit,
-                              BaseState<ExerciseModuleData>
+                              BaseState<ExerciseModuleUIModel>
                             >(
                               builder: (context, state) {
                                 Widget buildSkeleton() {
                                   final dummyExercise = ExerciseEntity(
                                     id: '',
-                                    title: LocaleKeys.exercise_skeleton_title.tr(),
-                                    description: LocaleKeys.exercise_skeleton_desc.tr(),
+                                    title: LocaleKeys.exercise_skeleton_title
+                                        .tr(),
+                                    description: LocaleKeys
+                                        .exercise_skeleton_desc
+                                        .tr(),
                                     videoUrl: '',
                                     thumbnailUrl: '',
                                     time: '10',
@@ -213,7 +375,12 @@ class _ExerciseModulePageContent extends StatelessWidget {
                                       child: Center(
                                         child: Text(
                                           LocaleKeys.exercise_failed_to_load.tr(
-                                            args: [exception.toString().replaceAll('Exception: ', '')],
+                                            args: [
+                                              exception.toString().replaceAll(
+                                                'Exception: ',
+                                                '',
+                                              ),
+                                            ],
                                           ),
                                           style: 16.medium.copyWith(
                                             color: AppColors.whiteFF,
@@ -223,13 +390,15 @@ class _ExerciseModulePageContent extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  success: (data) {
-                                    if (data.exercises.isEmpty) {
+                                  success: (ExerciseModuleUIModel? data) {
+                                    if (data == null || data.exercises.isEmpty) {
                                       return Padding(
                                         padding: EdgeInsets.only(top: 50.h),
                                         child: Center(
                                           child: Text(
-                                            LocaleKeys.exercise_no_exercises_found.tr(),
+                                            LocaleKeys
+                                                .exercise_no_exercises_found
+                                                .tr(),
                                             style: 16.regular.copyWith(
                                               color: AppColors.grayCF,
                                             ),
@@ -245,8 +414,11 @@ class _ExerciseModulePageContent extends StatelessWidget {
                                           bottom: 20.h,
                                         ),
                                         itemBuilder: (context, index) {
-                                          final exercise = data.exercises[index];
-                                          return ExerciseCard(exercise: exercise);
+                                          final exercise =
+                                              data.exercises[index];
+                                          return ExerciseCard(
+                                            exercise: exercise,
+                                          );
                                         },
                                         separatorBuilder: (context, index) =>
                                             SizedBox(height: 15.h),

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness/features/exercise_module/domain/entities/difficulty_level_entity.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 
-class ExerciseModuleData extends Equatable {
+class ExerciseModuleUIModel extends Equatable {
   final List<ExerciseEntity> exercises;
   final int selectedDifficultyIndex;
   final List<DifficultyLevelEntity> difficultyLevels;
@@ -10,7 +10,7 @@ class ExerciseModuleData extends Equatable {
   final String pageTitle;
   final String pageDescription;
 
-  const ExerciseModuleData({
+  const ExerciseModuleUIModel({
     this.exercises = const [],
     this.selectedDifficultyIndex = 0,
     this.difficultyLevels = const [],
@@ -19,7 +19,7 @@ class ExerciseModuleData extends Equatable {
     this.pageDescription = '',
   });
 
-  ExerciseModuleData copyWith({
+  ExerciseModuleUIModel copyWith({
     List<ExerciseEntity>? exercises,
     int? selectedDifficultyIndex,
     List<DifficultyLevelEntity>? difficultyLevels,
@@ -27,7 +27,7 @@ class ExerciseModuleData extends Equatable {
     String? pageTitle,
     String? pageDescription,
   }) {
-    return ExerciseModuleData(
+    return ExerciseModuleUIModel(
       exercises: exercises ?? this.exercises,
       selectedDifficultyIndex: selectedDifficultyIndex ?? this.selectedDifficultyIndex,
       difficultyLevels: difficultyLevels ?? this.difficultyLevels,

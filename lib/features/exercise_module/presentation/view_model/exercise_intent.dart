@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ExerciseIntent extends Equatable {
+sealed class ExerciseIntent extends Equatable {
   const ExerciseIntent();
 
   @override

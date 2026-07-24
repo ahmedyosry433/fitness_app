@@ -9,7 +9,7 @@ import 'package:fitness/features/exercise_module/presentation/view/pages/exercis
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:bloc_test/bloc_test.dart';
 
-class MockExerciseModuleCubit extends MockCubit<BaseState<ExerciseModuleData>> implements ExerciseModuleCubit {}
+class MockExerciseModuleCubit extends MockCubit<BaseState<ExerciseModuleUIModel>> implements ExerciseModuleCubit {}
 
 void main() {
   late MockExerciseModuleCubit mockCubit;
