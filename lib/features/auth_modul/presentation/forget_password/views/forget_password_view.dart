@@ -5,6 +5,7 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_button.dart';
 import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_validators.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
@@ -52,20 +53,18 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             children: [
               Text(
                 LocaleKeys.forget_password_enter_your_email.tr(),
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: AppColors.blackCE,
-                  fontSize: 14,
                   fontFamily: 'RobotoEnglish',
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 LocaleKeys.forget_password,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: AppColors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 25),
@@ -91,20 +90,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           hintText: LocaleKeys.forget_password_email.tr(),
                           prefixIcon: SvgPicture.asset(Assets.icons.mail),
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return LocaleKeys.forget_password_enter_your_email
-                                  .tr();
-                            }
-                            if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                            ).hasMatch(value)) {
-                              return LocaleKeys
-                                  .forget_password_please_enter_valid_email
-                                  .tr();
-                            }
-                            return null;
-                          },
+                          validator: AppValidators.validateEmail,
                         ),
                         const SizedBox(height: 24),
                         BlocSelector<
@@ -116,12 +102,14 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           builder: (context, stateType) {
                             return CustomButton(
                               title: "Sent OTP",
-                              titleStyle: TextStyle(
-                                color: AppColors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'RobotoEnglish',
-                              ),
+                              titleStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    color: AppColors.white,
+                                    fontFamily: 'RobotoEnglish',
+                                    fontWeight: FontWeight.w900,
+                                  ),
                               isLoading: stateType == StateType.loading,
                               onTap: () {
                                 if (_forgetFormKey.currentState!.validate()) {

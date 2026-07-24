@@ -5,6 +5,7 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_button.dart';
 import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_validators.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
@@ -37,9 +38,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: const TextStyle(
-        fontSize: 22,
+      textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
         color: AppColors.white,
+        fontFamily: 'RobotoEnglish',
         fontWeight: FontWeight.bold,
       ),
       decoration: BoxDecoration(
@@ -80,22 +81,21 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "OTP CODE",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: AppColors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 LocaleKeys.forget_password_enter_otp_check_email.tr(),
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: AppColors.white.withValues(alpha: 0.5),
-                  fontSize: 13,
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 40),
@@ -137,10 +137,14 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                     errorText: LocaleKeys
                                         .forget_password_invalid_otp_code
                                         .tr(),
-                                    errorTextStyle: const TextStyle(
-                                      color: AppColors.onErrorLight,
-                                      fontSize: 12,
-                                    ),
+                                    errorTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          color: AppColors.onErrorLight,
+                                          fontFamily: 'RobotoEnglish',
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                     onChanged: (value) {
                                       if (isOtpInvalid) {
                                         WidgetsBinding.instance
@@ -153,12 +157,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                             });
                                       }
                                     },
-                                    validator: (value) {
-                                      if (value == null || value.length < 4) {
-                                        return "Please enter the complete 4-digit code";
-                                      }
-                                      return null;
-                                    },
+                                    validator:AppValidators.validateOtp
                                   );
                                 },
                               ),
