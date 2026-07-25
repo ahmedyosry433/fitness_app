@@ -32,6 +32,15 @@ import '../../features/exercise_module/domain/use_cases/get_exercises_use_case.d
     as _i692;
 import '../../features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart'
     as _i215;
+import '../../features/food/api/api_client/food_api_client.dart' as _i310;
+import '../../features/food/api/datasource/food_remote_data_source_impl.dart'
+    as _i521;
+import '../../features/food/data/datasources/food_remote_data_source_contract.dart'
+    as _i329;
+import '../../features/food/data/repositories/food_repository_impl.dart'
+    as _i860;
+import '../../features/food/domain/repositories/food_repository_contract.dart'
+    as _i966;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -57,6 +66,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i329.FoodRemoteDataSourceContract>(
+      () => _i521.FoodRemoteDataSourceImpl(
+        foodRemoteDataSourceImpl: gh<_i521.FoodRemoteDataSourceImpl>(),
+      ),
+    );
+    gh.lazySingleton<_i310.FoodApiClient>(
+      () => _i310.FoodApiClient(gh<_i361.Dio>()),
+    );
     gh.factory<_i723.ExerciseModuleApiClient>(
       () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
     );
@@ -65,6 +82,9 @@ extension GetItInjectableX on _i174.GetIt {
         dio: gh<_i361.Dio>(),
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.factory<_i966.FoodRepositoryContract>(
+      () => _i860.FoodRepositoryImpl(gh<_i329.FoodRemoteDataSourceContract>()),
     );
     gh.factory<_i868.ExerciseRemoteDataSource>(
       () => _i868.ExerciseRemoteDataSourceImpl(
