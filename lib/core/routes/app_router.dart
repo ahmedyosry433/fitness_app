@@ -7,7 +7,7 @@ import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
-import 'package:fitness/features/workout/presentation/view/pages/workout_page.dart';
+import 'package:fitness/features/exercise_module/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -71,7 +71,16 @@ final GoRouter router = GoRouter(
           routes: [
             _customAnimatedGoRoute(
               route: Routes.workout,
-              page: (state, context) => const WorkoutPage(),
+              page: (state, context) {
+                final extra = state.extra;
+                final categoryId = extra is String
+                    ? extra
+                    : (extra is Map ? extra['categoryId'] as String? : null);
+                final queryId = state.uri.queryParameters['categoryId'];
+                final initialCategoryId = categoryId ?? queryId;
+
+                return WorkoutPage(initialCategoryId: initialCategoryId);
+              },
             ),
           ],
         ),
