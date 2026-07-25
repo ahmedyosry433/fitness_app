@@ -33,35 +33,89 @@ class ExerciseModulePage extends StatelessWidget {
     this.backgroundImage = '',
   });
 
-  Widget _buildTab(
+  Widget _buildTabChip(
     BuildContext context,
     String label,
     int index,
     bool isSelected,
   ) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          context.read<ExerciseModuleCubit>().processIntent(
-            LoadExercisesIntent(index),
-          );
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 4.w),
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: Text(
-            label,
-            style: 13.bold.copyWith(color: AppColors.whiteFF),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+    return GestureDetector(
+      onTap: () {
+        context.read<ExerciseModuleCubit>().processIntent(
+          LoadExercisesIntent(index),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Text(
+          label,
+          style: 13.bold.copyWith(color: AppColors.whiteFF),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
+    );
+  }
+
+  Widget _buildDifficultyTabsBar(
+    BuildContext context,
+    ExerciseModuleUIModel data,
+  ) {
+    final levels = data.difficultyLevels;
+    if (levels.isEmpty) return const SizedBox.shrink();
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        final estimatedChipWidth = 96.w;
+        final spacing = 8.w;
+        final totalWidth =
+            (levels.length * estimatedChipWidth) +
+            ((levels.length - 1) * spacing);
+        final shouldExpand = totalWidth <= maxWidth;
+
+        if (shouldExpand) {
+          return Row(
+            children: levels.asMap().entries.map((entry) {
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w),
+                  child: _buildTabChip(
+                    context,
+                    entry.value.name,
+                    entry.key,
+                    data.selectedDifficultyIndex == entry.key,
+                  ),
+                ),
+              );
+            }).toList(),
+          );
+        }
+
+        return SizedBox(
+          height: 44.h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: levels.length,
+            separatorBuilder: (context, index) => SizedBox(width: spacing),
+            itemBuilder: (context, index) {
+              final level = levels[index];
+              return _buildTabChip(
+                context,
+                level.name,
+                index,
+                data.selectedDifficultyIndex == index,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -201,7 +255,8 @@ class ExerciseModulePage extends StatelessWidget {
                                   current.data?.pageDescription;
                         },
                         builder: (context, state) {
-                          final data = state.data ?? const ExerciseModuleUIModel();
+                          final data =
+                              state.data ?? const ExerciseModuleUIModel();
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -287,20 +342,9 @@ class ExerciseModulePage extends StatelessWidget {
                                   currData?.selectedDifficultyIndex;
                         },
                         builder: (context, state) {
-                          final data = state.data ?? const ExerciseModuleUIModel();
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: data.difficultyLevels.asMap().entries.map(
-                              (entry) {
-                                return _buildTab(
-                                  context,
-                                  entry.value.name,
-                                  entry.key,
-                                  data.selectedDifficultyIndex == entry.key,
-                                );
-                              },
-                            ).toList(),
-                          );
+                          final data =
+                              state.data ?? const ExerciseModuleUIModel();
+                          return _buildDifficultyTabsBar(context, data);
                         },
                       ),
                 ),
@@ -392,7 +436,8 @@ class ExerciseModulePage extends StatelessWidget {
                                     );
                                   },
                                   success: (ExerciseModuleUIModel? data) {
-                                    if (data == null || data.exercises.isEmpty) {
+                                    if (data == null ||
+                                        data.exercises.isEmpty) {
                                       return Padding(
                                         padding: EdgeInsets.only(top: 50.h),
                                         child: Center(
