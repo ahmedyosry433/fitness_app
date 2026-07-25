@@ -6,7 +6,7 @@ class GlobalTextFieldTheme {
   GlobalTextFieldTheme._();
 
   static const double fieldWidth = 311;
-  static const double pillRadius = 20;
+  static const double pillRadius = 26;
   static const double horizontalPadding = 16;
   static const double fieldIconSize = 20;
   static const double fieldIconGap = 8;
@@ -36,7 +36,7 @@ class GlobalTextFieldTheme {
       isDense: true,
       contentPadding: const EdgeInsetsDirectional.symmetric(
         horizontal: horizontalPadding,
-        vertical: 8,
+        vertical: 16,
       ),
       prefixIcon: prefixIcon,
       prefixIconConstraints: const BoxConstraints(

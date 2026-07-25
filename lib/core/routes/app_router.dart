@@ -1,5 +1,7 @@
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:fitness/features/auth/presentation/view/pages/forget_password_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
