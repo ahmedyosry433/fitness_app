@@ -30,8 +30,26 @@ import '../../features/exercise_module/domain/use_cases/get_difficulty_levels_us
     as _i198;
 import '../../features/exercise_module/domain/use_cases/get_exercises_use_case.dart'
     as _i692;
+import '../../features/exercise_module/domain/use_cases/get_muscle_groups_use_case.dart'
+    as _i487;
+import '../../features/exercise_module/domain/use_cases/get_muscles_by_group_use_case.dart'
+    as _i735;
+import '../../features/exercise_module/domain/use_cases/get_random_muscles_use_case.dart'
+    as _i467;
 import '../../features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart'
     as _i215;
+import '../../features/exercise_module/presentation/view_model/cubit/workout_cubit.dart'
+    as _i355;
+import '../../features/food/api/datasource/food_remote_data_source_impl.dart'
+    as _i521;
+import '../../features/food/data/datasources/food_remote_data_source_contract.dart'
+    as _i329;
+import '../../features/food/data/repositories/food_repository_impl.dart'
+    as _i860;
+import '../../features/food/domain/repositories/food_repository_contract.dart'
+    as _i966;
+import '../../features/home/presentation/view_model/cubit/home_cubit.dart'
+    as _i1039;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -57,6 +75,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.factory<_i329.FoodRemoteDataSourceContract>(
+      () => _i521.FoodRemoteDataSourceImpl(
+        foodRemoteDataSourceImpl: gh<_i521.FoodRemoteDataSourceImpl>(),
+      ),
+    );
     gh.factory<_i723.ExerciseModuleApiClient>(
       () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
     );
@@ -65,6 +88,9 @@ extension GetItInjectableX on _i174.GetIt {
         dio: gh<_i361.Dio>(),
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.factory<_i966.FoodRepositoryContract>(
+      () => _i860.FoodRepositoryImpl(gh<_i329.FoodRemoteDataSourceContract>()),
     );
     gh.factory<_i868.ExerciseRemoteDataSource>(
       () => _i868.ExerciseRemoteDataSourceImpl(
@@ -86,10 +112,34 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i692.GetExercisesUseCase>(
       () => _i692.GetExercisesUseCase(gh<_i112.ExerciseRepository>()),
     );
+    gh.factory<_i487.GetMuscleGroupsUseCase>(
+      () => _i487.GetMuscleGroupsUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i735.GetMusclesByGroupUseCase>(
+      () => _i735.GetMusclesByGroupUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i467.GetRandomMusclesUseCase>(
+      () => _i467.GetRandomMusclesUseCase(gh<_i112.ExerciseRepository>()),
+    );
     gh.factory<_i215.ExerciseModuleCubit>(
       () => _i215.ExerciseModuleCubit(
         gh<_i692.GetExercisesUseCase>(),
         gh<_i198.GetDifficultyLevelsUseCase>(),
+      ),
+    );
+    gh.factory<_i355.WorkoutCubit>(
+      () => _i355.WorkoutCubit(
+        gh<_i487.GetMuscleGroupsUseCase>(),
+        gh<_i735.GetMusclesByGroupUseCase>(),
+        gh<_i692.GetExercisesUseCase>(),
+        gh<_i467.GetRandomMusclesUseCase>(),
+      ),
+    );
+    gh.factory<_i1039.HomeCubit>(
+      () => _i1039.HomeCubit(
+        gh<_i487.GetMuscleGroupsUseCase>(),
+        gh<_i467.GetRandomMusclesUseCase>(),
+        gh<_i735.GetMusclesByGroupUseCase>(),
       ),
     );
     return this;

@@ -34,6 +34,12 @@ class BaseState<T> extends Equatable {
     required this.state,
   });
 
+  bool get isInitial => state == StateType.initial;
+  bool get isLoading => state == StateType.loading;
+  bool get isMoreLoading => state == StateType.moreLoading;
+  bool get isSuccess => state == StateType.success;
+  bool get isError => state == StateType.error;
+
   // added when method to make the code more readable in the UI
   R when<R>({
     required R Function(T data) success,
