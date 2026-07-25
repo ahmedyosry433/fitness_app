@@ -8,6 +8,9 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/views/f
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 
+import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
+import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
@@ -18,7 +21,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
+import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
@@ -28,6 +34,11 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+
+    _customAnimatedGoRoute(
+      route: Routes.onBoard,
+      page: (state, context) => const OnboardPage(),
     ),
     _customAnimatedGoRoute(
       route: Routes.login,
@@ -69,6 +80,10 @@ final GoRouter router = GoRouter(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
     ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => const CompleteRegisterPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return MainScaffold(navigationShell: navigationShell);
@@ -107,6 +122,32 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.exercise,
+      page: (state, context) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final primeMoverMuscleId = extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
+        final pageTitle = extra?['pageTitle'] ?? '';
+        final pageDescription = extra?['pageDescription'] ?? '';
+        final backgroundImage = extra?['backgroundImage'] ?? '';
+
+        return BlocProvider(
+          create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
+            InitExerciseModuleIntent(
+              primeMoverMuscleId: primeMoverMuscleId,
+              pageTitle: pageTitle,
+              pageDescription: pageDescription,
+            )
+          ),
+          child: ExerciseModulePage(
+            primeMoverMuscleId: primeMoverMuscleId,
+            pageTitle: pageTitle,
+            pageDescription: pageDescription,
+            backgroundImage: backgroundImage,
+          ),
+        );
+      },
     ),
   ],
 );

@@ -8,6 +8,7 @@ import 'widgets/blurred_background_wrapper.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/enums/gender.dart';
+import 'package:fitness/core/values/app_images.dart';
 
 class CompleteRegisterPage extends StatefulWidget {
   const CompleteRegisterPage({super.key});
@@ -58,7 +59,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return BlurredBackgroundWrapper(
-      imagePath: 'assets/images/singup_back.png',
+      imagePath: AppImages.signupBack,
       child: SafeArea(
         child: Column(
           children: [

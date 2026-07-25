@@ -160,6 +160,32 @@
         "page3_title": "لا مزيد من الأعذار\nافعلها الآن",
         "page3_subtitle": "لوريم إيبسوم دولور سيت أميت كونسيكتيتور. يورنا أوت جراڤيدا كويس إد بريتيوم بوروس. ماوريس ماسا"
     },
+    "onboarding": {
+        "page1_title": "ثمن التميز\nهو الانضباط",
+        "page2_title": "اللياقة لم تكن\nممتعة هكذا من قبل",
+        "page3_title": "لا مزيد من الأعذار\nافعلها الآن",
+        "subtitle": "هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى",
+        "skip": "تخطي",
+        "next": "التالي",
+        "back": "السابق",
+        "do_it": "ابدأ الآن"
+    },
+    "login": {
+        "title": "صفحة تسجيل الدخول"
+    },
+    "complete_register": {
+        "tell_us_about_yourself": "أخبرنا عن نفسك!",
+        "we_need_to_know_your_gender": "نحتاج لمعرفة جنسك",
+        "how_old_are_you": "كم عمرك ؟",
+        "this_helps_us_create_your_personalized_plan": "هذا يساعدنا في إنشاء خطتك المخصصة",
+        "what_is_your_weight": "ما هو وزنك ؟",
+        "what_is_your_height": "ما هو طولك ؟",
+        "year": "سنة",
+        "kg": "كجم",
+        "cm": "سم",
+        "gender_male": "ذكر",
+        "gender_female": "أنثى"
+    },
     "home": {
         "hi_name": "أهلاً {} ،",
         "lets_start_your_day": "دعنا نبدأ يومك",
@@ -167,6 +193,23 @@
         "smart_coach": "المدرب الذكي",
         "workout": "تمرين",
         "profile": "حسابي"
+    },
+    "exercise": {
+        "chest_exercise": "تمرين الصدر",
+        "chest_exercise_desc": "هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى",
+        "beginner": "مبتدئ",
+        "intermediate": "متوسط",
+        "advanced": "متقدم",
+        "failed_to_load": "فشل في تحميل التمارين:\n{}",
+        "no_exercises_found": "لم يتم العثور على تمارين لهذا المستوى.",
+        "min": "دقيقة",
+        "cal": "سعرة",
+        "close": "إغلاق",
+        "groups_times": "3 مجموعات * 15 تكرار",
+        "skeleton_title": "عنوان الهيكل",
+        "skeleton_desc": "نص وصف الهيكل يكتب هنا...",
+        "lorem_ipsum": "هذا النص هو مثال لنص يمكن أن يستبدل\nفي نفس المساحة، لقد تم توليد هذا النص",
+        "invalid_video_url": "رابط الفيديو غير صالح"
     },
     "onboarding": {
         "page1_title": "ثمن التميز\nهو الانضباط",

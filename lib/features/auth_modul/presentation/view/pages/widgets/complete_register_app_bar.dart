@@ -1,4 +1,5 @@
 import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
 
 class CompleteRegisterAppBar extends StatelessWidget {
@@ -29,7 +30,7 @@ class CompleteRegisterAppBar extends StatelessWidget {
             ),
           ),
           Image.asset(
-            'assets/images/ic_launcher.png',
+            AppImages.imagesIcLauncher,
             height: 40,
             errorBuilder: (context, error, stackTrace) => const SizedBox(width: 40),
           ),

@@ -11,4 +11,12 @@ extension GenderExtension on Gender {
   }
 
   String get localizedName => name;
+  String get localizedName {
+    switch (this) {
+      case Gender.male:
+        return LocaleKeys.complete_register_gender_male.tr();
+      case Gender.female:
+        return LocaleKeys.complete_register_gender_female.tr();
+    }
+  }
 }

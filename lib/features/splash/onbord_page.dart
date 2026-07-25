@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/core/values/app_images.dart';
 
 class OnboardPage extends StatefulWidget {
   const OnboardPage({super.key});
@@ -19,17 +20,17 @@ class _OnboardPageState extends State<OnboardPage> {
 
   final List<Map<String, String>> _pages = [
     {
-      'image': 'assets/images/human_gym.png',
+      'image': AppImages.humanGym,
       'title': LocaleKeys.onboarding_page1_title.tr(),
       'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
     {
-      'image': 'assets/images/human_gym2.png',
+      'image': AppImages.humanGym2,
       'title': LocaleKeys.onboarding_page2_title.tr(),
       'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
     {
-      'image': 'assets/images/human_gym3.png',
+      'image': AppImages.humanGym3,
       'title': LocaleKeys.onboarding_page3_title.tr(),
       'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
@@ -46,7 +47,7 @@ class _OnboardPageState extends State<OnboardPage> {
               scale: 1.1,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-                child: Image.asset('assets/images/back.jpg', fit: BoxFit.cover),
+                child: Image.asset(AppImages.back, fit: BoxFit.cover),
               ),
             ),
           ),
