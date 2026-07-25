@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -38,9 +39,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   late Animation<double> _shimmerAnimation;
 
+  Timer? _timer;
+  bool _hasNavigated = false;
+
   @override
   void initState() {
     super.initState();
+
+    FlutterNativeSplash.remove();
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -56,12 +62,12 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void _setupAnimations() {
     _mainController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
     );
 
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 1500),
     );
 
     _shimmerController = AnimationController(
@@ -135,26 +141,32 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
+  void _navigateToNext() {
+    if (_hasNavigated || !mounted) return;
+    _hasNavigated = true;
+    _timer?.cancel();
+    context.go(Routes.onBoard);
+  }
+
   void _startSequence() {
     _mainController.forward();
 
-    Future.delayed(const Duration(milliseconds: 900), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) _pulseController.repeat(reverse: true);
     });
 
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       if (mounted) _shimmerController.repeat();
     });
 
-    Timer(const Duration(milliseconds: 3600), () {
-      if (mounted) {
-        context.go(Routes.onBoard);
-      }
+    _timer = Timer(const Duration(milliseconds: 2500), () {
+      _navigateToNext();
     });
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _mainController.dispose();
     _pulseController.dispose();
     _shimmerController.dispose();
@@ -164,7 +176,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedBuilder(
+      body: GestureDetector(
+        onTap: _navigateToNext,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedBuilder(
         animation: Listenable.merge([
           _mainController,
           _pulseController,
@@ -209,7 +224,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           );
         },
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildGlowRing() {
