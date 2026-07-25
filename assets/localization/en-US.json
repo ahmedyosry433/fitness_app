@@ -184,7 +184,19 @@
         "page2_title": "Fitness Has Never Been So\nMuch Fun",
         "page2_subtitle": "Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna Ut Gravida Quis Id Pretium Purus. Mauris Massa",
         "page3_title": "NO MORE EXCUSES\nDo It Now",
-        "page3_subtitle": "Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna Ut Gravida Quis Id Pretium Purus. Mauris Massa"
+        "page3_subtitle": "Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna Ut Gravida Quis Id Pretium Purus. Mauris Massa",
+        "make_sure_8_characters_or_more": "Make sure it's 8 characters or more",
+        "create_new_password": "Create New Password",
+        "password_at_least_8_characters": "Password must be at least 8 characters long",
+        "enter_your_email": "Enter Your Email",
+        "forget_password": "Forget Password",
+        "email": "Email",
+        "please_enter_your_email": "Please enter your email",
+        "please_enter_valid_email": "Please enter a valid email address",
+        "enter_otp_check_email": "Enter your OTP, check your email",
+        "invalid_otp_code": "Invalid OTP code, please try again",
+        "confirm": "Confirm",
+        "didnt_receive_code": "Didn't receive verification code?"
     },
     "home": {
         "hi_name": "Hi {} ,",

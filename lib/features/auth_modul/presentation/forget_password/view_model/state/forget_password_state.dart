@@ -10,14 +10,13 @@ class ForgetPasswordState extends BaseState<AuthCommonResponse> {
   const ForgetPasswordState({
     super.state, // initial, loading, success, error
     super.data,
-    super.exception,
+    super.errorMessage,
     this.email = '',
     this.otp = '',
     this.newPassword = '',
     this.confirmPassword = '',
   });
 
-  
   const ForgetPasswordState.initial()
     : email = '',
       otp = '',
@@ -28,7 +27,7 @@ class ForgetPasswordState extends BaseState<AuthCommonResponse> {
   ForgetPasswordState copyWith({
     StateType? state,
     AuthCommonResponse? data,
-    Exception? exception,
+    String? errorMessage,
     String? email,
     String? otp,
     String? newPassword,
@@ -37,7 +36,7 @@ class ForgetPasswordState extends BaseState<AuthCommonResponse> {
     return ForgetPasswordState(
       state: state ?? this.state,
       data: data ?? this.data,
-      exception: exception ?? this.exception,
+      errorMessage: errorMessage ?? this.errorMessage,
       email: email ?? this.email,
       otp: otp ?? this.otp,
       newPassword: newPassword ?? this.newPassword,

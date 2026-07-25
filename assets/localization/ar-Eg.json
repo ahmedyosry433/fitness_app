@@ -107,7 +107,19 @@
         "confirm_password": "تأكيد كلمة المرور",
         "email_sent_message": "تم إرسال رمز التحقق إلى بريدك الإلكتروني بنجاح",
         "code_correct": "الرمز صحيح ، يرجى إعادة تعيين كلمة المرور",
-        "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى"
+        "password_reset_success": "تم إعادة تعيين كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى",
+        "make_sure_8_characters_or_more": "تأكد أن كلمة السر 8 أحرف أو أكثر",
+        "create_new_password": "إنشاء كلمة سر جديدة",
+        "password_at_least_8_characters": "يجب أن تتكون كلمة السر من 8 أحرف على الأقل",
+        "enter_your_email": "أدخل بريدك الإلكتروني",
+        "forget_password": "نسيت كلمة السر",
+        "email": "البريد الإلكتروني",
+        "please_enter_your_email": "يرجى إدخال البريد الإلكتروني",
+        "please_enter_valid_email": "يرجى إدخال بريد إلكتروني صحيح",
+        "enter_otp_check_email": "أدخل رمز التحقق، تفقد بريدك الإلكتروني",
+        "invalid_otp_code": "رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى",
+        "confirm": "تأكيد",
+        "didnt_receive_code": "لم تتلقَ رمز التحقق؟"
     },
     "splash": {
         "title": "سوبر فيتنس",

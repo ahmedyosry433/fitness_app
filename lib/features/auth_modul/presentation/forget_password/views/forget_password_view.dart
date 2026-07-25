@@ -1,14 +1,20 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:fitness/core/shared/widgets/custom_button.dart';
+import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_validators.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/auth_background.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/custom_auth_button.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/custom_auth_text_field.dart';
+import 'package:fitness/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class ForgetPasswordView extends StatefulWidget {
@@ -20,7 +26,7 @@ class ForgetPasswordView extends StatefulWidget {
 
 class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   final emailController = TextEditingController();
-
+  final GlobalKey<FormState> _forgetFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
     emailController.dispose();
@@ -30,7 +36,6 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ForgetPasswordCubit>();
-    final forgetFormKey = GlobalKey<FormState>();
 
     return AuthBackground(
       child: BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
@@ -41,27 +46,25 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
         },
 
         child: Form(
-          key: forgetFormKey,
+          key: _forgetFormKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Enter Your Email",
-                style: TextStyle(
-                  color: Colors.white60,
-                  fontSize: 14,
+              Text(
+                LocaleKeys.forget_password_enter_your_email.tr(),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: AppColors.blackCE,
                   fontFamily: 'RobotoEnglish',
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                "Forget Password",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              Text(
+                LocaleKeys.forget_password,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: AppColors.white,
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 25),
@@ -72,10 +75,10 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   child: Container(
                     padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.04),
+                      color: AppColors.white.withValues(alpha: 0.04),
                       borderRadius: BorderRadius.circular(24.0),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: AppColors.white.withValues(alpha: 0.08),
                         width: 1.0,
                       ),
                     ),
@@ -84,35 +87,49 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                       children: [
                         CustomAuthTextField(
                           controller: emailController,
-                          hintText: "Email",
-                          prefixIcon: Icons.email_outlined,
+                          hintText: LocaleKeys.forget_password_email.tr(),
+                          prefixIcon: SvgPicture.asset(Assets.icons.mail),
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Please enter your email";
-                            }
-                            if (!RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-                            ).hasMatch(value)) {
-                              return "Please enter a valid email address";
-                            }
-                            return null;
-                          },
+                          validator: AppValidators.validateEmail,
                         ),
                         const SizedBox(height: 24),
-                        BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
-                          builder: (context, state) {
-                            return CustomAuthButton(
+                        BlocSelector<
+                          ForgetPasswordCubit,
+                          ForgetPasswordState,
+                          StateType?
+                        >(
+                          selector: (state) => state.state,
+                          builder: (context, stateType) {
+                            return CustomButton(
                               title: "Sent OTP",
-                              isLoading: state.state == StateType.loading,
-                              onPressed: () {
-                                if (forgetFormKey.currentState!.validate()) {
+                              titleStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    color: AppColors.white,
+                                    fontFamily: 'RobotoEnglish',
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                              isLoading: stateType == StateType.loading,
+                              onTap: () {
+                                if (_forgetFormKey.currentState!.validate()) {
                                   cubit.doAction(
                                     SendOtpIntent(emailController.text),
                                   );
                                 }
                               },
                             );
+                            // return CustomAuthButton(
+                            //   title: "Sent OTP",
+                            //   isLoading: stateType == StateType.loading,
+                            //   onPressed: () {
+                            //     if (_forgetFormKey.currentState!.validate()) {
+                            //       cubit.doAction(
+                            //         SendOtpIntent(emailController.text),
+                            //       );
+                            //     }
+                            //   },
+                            // );
                           },
                         ),
                       ],

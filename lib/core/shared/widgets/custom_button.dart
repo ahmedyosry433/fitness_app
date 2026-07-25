@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
     this.onTap,
     this.title,
     this.leading,
-    this.backGroundColor = AppColors.primaryLight,
+    this.backGroundColor = AppColors.prime,
     this.isFilled = true,
     this.borderColor,
     this.titleStyle,

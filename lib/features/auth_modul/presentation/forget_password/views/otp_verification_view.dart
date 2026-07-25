@@ -1,11 +1,15 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:fitness/core/shared/widgets/custom_button.dart';
+import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_validators.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/intent/forget_password_intent.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/auth_background.dart';
-import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/custom_auth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -34,27 +38,27 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: const TextStyle(
-        fontSize: 22,
-        color: Colors.white,
+      textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+        color: AppColors.white,
+        fontFamily: 'RobotoEnglish',
         fontWeight: FontWeight.bold,
       ),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColors.white.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+        border: Border.all(color: AppColors.white.withValues(alpha: 0.15)),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: const Color(0xFFFF5722), width: 1.5),
+        border: Border.all(color: AppColors.prime, width: 1.5),
       ),
     );
 
     final errorPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: Colors.redAccent, width: 1.5),
+        border: Border.all(color: AppColors.onErrorLight, width: 1.5),
       ),
     );
 
@@ -77,22 +81,21 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "OTP CODE",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: AppColors.white,
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                "Enter Your OTP Check Your Email",
-                style: TextStyle(
-                  color: Colors.white60,
-                  fontSize: 13,
+              Text(
+                LocaleKeys.forget_password_enter_otp_check_email.tr(),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: AppColors.white.withValues(alpha: 0.5),
                   fontFamily: 'RobotoEnglish',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 40),
@@ -104,10 +107,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                   child: Container(
                     padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.04),
+                      color: AppColors.white.withValues(alpha: 0.04),
                       borderRadius: BorderRadius.circular(24.0),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: AppColors.white.withValues(alpha: 0.08),
                         width: 1.0,
                       ),
                     ),
@@ -131,23 +134,30 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                     focusedPinTheme: focusedPinTheme,
                                     errorPinTheme: errorPinTheme,
                                     forceErrorState: isOtpInvalid,
-                                    errorText:
-                                        "Invalid OTP code, please try again",
-                                    errorTextStyle: const TextStyle(
-                                      color: Colors.redAccent,
-                                      fontSize: 12,
-                                    ),
+                                    errorText: LocaleKeys
+                                        .forget_password_invalid_otp_code
+                                        .tr(),
+                                    errorTextStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          color: AppColors.onErrorLight,
+                                          fontFamily: 'RobotoEnglish',
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                     onChanged: (value) {
                                       if (isOtpInvalid) {
-                                        setState(() => isOtpInvalid = false);
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                              if (mounted) {
+                                                setState(() {
+                                                  isOtpInvalid = false;
+                                                });
+                                              }
+                                            });
                                       }
                                     },
-                                    validator: (value) {
-                                      if (value == null || value.length < 4) {
-                                        return "Please enter the complete 4-digit code";
-                                      }
-                                      return null;
-                                    },
+                                    validator:AppValidators.validateOtp
                                   );
                                 },
                               ),
@@ -155,10 +165,16 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                         const SizedBox(height: 40),
                         BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
                           builder: (context, state) {
-                            return CustomAuthButton(
-                              title: "Confirm",
+                            return CustomButton(
+                              title: LocaleKeys.forget_password_confirm.tr(),
+                              titleStyle: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'RobotoEnglish',
+                              ),
                               isLoading: state.state == StateType.loading,
-                              onPressed: () {
+                              onTap: () {
                                 if (otpFormKey.currentState!.validate()) {
                                   cubit.doAction(
                                     VerifyOtpIntent(otpController.text),
@@ -166,6 +182,17 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 }
                               },
                             );
+                            // return CustomAuthButton(
+                            //   title: LocaleKeys.forget_password_confirm.tr(),
+                            //   isLoading: state.state == StateType.loading,
+                            //   onPressed: () {
+                            //     if (otpFormKey.currentState!.validate()) {
+                            //       cubit.doAction(
+                            //         VerifyOtpIntent(otpController.text),
+                            //       );
+                            //     }
+                            //   },
+                            // );
                           },
                         ),
                         const SizedBox(height: 30),
@@ -173,10 +200,11 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text(
-                                "Didn't Receive Verification Code?",
+                              Text(
+                                LocaleKeys.forget_password_didnt_receive_code
+                                    .tr(),
                                 style: TextStyle(
-                                  color: Colors.white60,
+                                  color: AppColors.white.withValues(alpha: 0.5),
                                   fontSize: 12,
                                   fontFamily: 'RobotoEnglish',
                                 ),
@@ -185,10 +213,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 onPressed: () {
                                   cubit.doAction(ResendOtpIntent());
                                 },
-                                child: const Text(
-                                  "Resend Code?",
+                                child: Text(
+                                  LocaleKeys.forget_password_resend_code.tr(),
                                   style: TextStyle(
-                                    color: Color(0xFFFF5722),
+                                    color: AppColors.prime,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
                                     fontFamily: 'RobotoEnglish',

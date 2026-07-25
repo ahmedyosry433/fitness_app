@@ -1,3 +1,4 @@
+import 'package:fitness/features/auth_modul/data/models/request/verify_otp_request.dart';
 import 'package:fitness/features/auth_modul/domain/repositories/auth_modul_repository.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../config/base_response/base_response.dart';
@@ -9,7 +10,7 @@ class VerifyOtpUseCase {
 
   VerifyOtpUseCase(this._repository);
 
-  Future<Result<AuthCommonResponse>> call(String email, String otp) async {
-    return await _repository.verifyOtp(email, otp);
+  Future<Result<AuthCommonResponse>> call(VerifyOtpRequest request) async {
+    return await _repository.verifyOtp(request);
   }
 }
