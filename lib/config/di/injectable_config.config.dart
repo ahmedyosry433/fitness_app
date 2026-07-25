@@ -69,6 +69,43 @@ import '../../features/auth_modul/presentation/forget_password/view_model/cubit/
     as _i667;
 import '../../features/auth_modul/presentation/signup/view_model/cubit/signup_cubit.dart'
     as _i76;
+import '../../features/exercise_module/api/api_client/exercise_module_api_client.dart'
+    as _i723;
+import '../../features/exercise_module/data/datasources/exercise_remote_data_source.dart'
+    as _i868;
+import '../../features/exercise_module/data/repositories/exercise_repository_impl.dart'
+    as _i1072;
+import '../../features/exercise_module/domain/repositories/exercise_repository.dart'
+    as _i112;
+import '../../features/exercise_module/domain/use_cases/get_difficulty_levels_use_case.dart'
+    as _i198;
+import '../../features/exercise_module/domain/use_cases/get_exercises_use_case.dart'
+    as _i692;
+import '../../features/exercise_module/domain/use_cases/get_muscle_groups_use_case.dart'
+    as _i487;
+import '../../features/exercise_module/domain/use_cases/get_muscles_by_group_use_case.dart'
+    as _i735;
+import '../../features/exercise_module/domain/use_cases/get_random_muscles_use_case.dart'
+    as _i467;
+import '../../features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart'
+    as _i215;
+import '../../features/exercise_module/presentation/view_model/cubit/workout_cubit.dart'
+    as _i355;
+import '../../features/food/api/api_client/food_api_client.dart' as _i310;
+import '../../features/food/api/datasource/food_remote_data_source_impl.dart'
+    as _i521;
+import '../../features/food/data/datasources/food_remote_data_source_contract.dart'
+    as _i329;
+import '../../features/food/data/repositories/food_repository_impl.dart'
+    as _i860;
+import '../../features/food/domain/repositories/food_repository_contract.dart'
+    as _i966;
+import '../../features/food/domain/use_case/get_meal_details_use_case.dart'
+    as _i201;
+import '../../features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart'
+    as _i1072;
+import '../../features/home/presentation/view_model/cubit/home_cubit.dart'
+    as _i1039;
 import '../../features/login/api/api_client/login_api_client.dart' as _i395;
 import '../../features/login/api/datasources/login_local_data_source_impl.dart'
     as _i438;
@@ -130,8 +167,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i824.AuthApiClient>(
       () => authInjectableModule.authApiClient(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i310.FoodApiClient>(
+      () => _i310.FoodApiClient(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i395.LoginApiClient>(
       () => loginInjectableModule.loginApiClient(gh<_i361.Dio>()),
+    );
+    gh.factory<_i723.ExerciseModuleApiClient>(
+      () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
+    );
+    gh.factory<_i329.FoodRemoteDataSourceContract>(
+      () => _i521.FoodRemoteDataSourceImpl(gh<_i310.FoodApiClient>()),
     );
     gh.lazySingleton<_i325.LoginLocalDataSourceContract>(
       () => _i438.LoginLocalDataSourceImpl(
@@ -151,11 +197,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i736.LoginRemoteDataSourceContract>(
       () => _i904.LoginRemoteDataSourceImpl(gh<_i395.LoginApiClient>()),
     );
+    gh.factory<_i966.FoodRepositoryContract>(
+      () => _i860.FoodRepositoryImpl(gh<_i329.FoodRemoteDataSourceContract>()),
+    );
     gh.lazySingleton<_i453.AuthRemoteDataSourceContract>(
       () => _i723.AuthRemoteDataSourceImpl(gh<_i824.AuthApiClient>()),
     );
     gh.lazySingleton<_i104.UserFirestoreService>(
       () => _i104.UserFirestoreService(gh<_i974.FirebaseFirestore>()),
+    );
+    gh.factory<_i868.ExerciseRemoteDataSource>(
+      () => _i868.ExerciseRemoteDataSourceImpl(
+        gh<_i723.ExerciseModuleApiClient>(),
+      ),
     );
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
@@ -183,11 +237,35 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i104.UserFirestoreService>(),
       ),
     );
+    gh.factory<_i201.GetMealDetailsUseCase>(
+      () => _i201.GetMealDetailsUseCase(gh<_i966.FoodRepositoryContract>()),
+    );
     gh.factory<_i566.AuthModulRepository>(
       () => _i515.AuthModulRepositoryImpl(
         remoteDataSource: gh<_i94.AuthModulRemoteDataSource>(),
         socialAuthDataSource: gh<_i801.SocialAuthDataSourceContract>(),
       ),
+    );
+    gh.factory<_i112.ExerciseRepository>(
+      () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
+    );
+    gh.factory<_i198.GetDifficultyLevelsUseCase>(
+      () => _i198.GetDifficultyLevelsUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i692.GetExercisesUseCase>(
+      () => _i692.GetExercisesUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i487.GetMuscleGroupsUseCase>(
+      () => _i487.GetMuscleGroupsUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i735.GetMusclesByGroupUseCase>(
+      () => _i735.GetMusclesByGroupUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i467.GetRandomMusclesUseCase>(
+      () => _i467.GetRandomMusclesUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i1072.DetailsFoodCubit>(
+      () => _i1072.DetailsFoodCubit(gh<_i201.GetMealDetailsUseCase>()),
     );
     gh.factory<_i391.ForgetPasswordCubit>(
       () => _i391.ForgetPasswordCubit(gh<_i787.AuthRepository>()),
@@ -200,6 +278,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i753.LoginCubit>(
       () => _i753.LoginCubit(gh<_i787.AuthRepository>()),
+    );
+    gh.factory<_i215.ExerciseModuleCubit>(
+      () => _i215.ExerciseModuleCubit(
+        gh<_i692.GetExercisesUseCase>(),
+        gh<_i198.GetDifficultyLevelsUseCase>(),
+      ),
     );
     gh.factory<_i42.ForgetPasswordUseCase>(
       () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
@@ -215,6 +299,21 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i215.VerifyOtpUseCase>(
       () => _i215.VerifyOtpUseCase(gh<_i566.AuthModulRepository>()),
+    );
+    gh.factory<_i355.WorkoutCubit>(
+      () => _i355.WorkoutCubit(
+        gh<_i487.GetMuscleGroupsUseCase>(),
+        gh<_i735.GetMusclesByGroupUseCase>(),
+        gh<_i692.GetExercisesUseCase>(),
+        gh<_i467.GetRandomMusclesUseCase>(),
+      ),
+    );
+    gh.factory<_i1039.HomeCubit>(
+      () => _i1039.HomeCubit(
+        gh<_i487.GetMuscleGroupsUseCase>(),
+        gh<_i467.GetRandomMusclesUseCase>(),
+        gh<_i735.GetMusclesByGroupUseCase>(),
+      ),
     );
     gh.factory<_i667.ForgetPasswordCubit>(
       () => _i667.ForgetPasswordCubit(

@@ -36,12 +36,23 @@ class $AssetsIconsGen {
   String get mail => 'assets/icons/mail.svg';
 
   /// List of all assets
-  List<String> get values => [calendar, vector1, clock, closeEye];
-  List<String> get values => [calendar, clock, closeEye, eye, lock, mail];
+  List<String> get values => [
+    calendar,
+    vector1,
+    clock,
+    closeEye,
+    eye,
+    lock,
+    mail,
+  ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/Exercises_back.jpg
+  AssetGenImage get exercisesBack =>
+      const AssetGenImage('assets/images/Exercises_back.jpg');
 
   /// Directory path: assets/images/auth
   $AssetsImagesAuthGen get auth => const $AssetsImagesAuthGen();
@@ -79,6 +90,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    exercisesBack,
     back,
     fullShotMan,
     homeBack,
@@ -93,9 +105,6 @@ class $AssetsImagesGen {
 class $AssetsLocalizationGen {
   const $AssetsLocalizationGen();
 
-  /// File path: assets/localization/ar-EG.json
-  String get arEG => 'assets/localization/ar-EG.json';
-
   /// File path: assets/localization/ar-Eg.json
   String get arEg => 'assets/localization/ar-Eg.json';
 
@@ -103,7 +112,7 @@ class $AssetsLocalizationGen {
   String get enUS => 'assets/localization/en-US.json';
 
   /// List of all assets
-  List<String> get values => [arEG, arEg, enUS];
+  List<String> get values => [arEg, enUS];
 }
 
 class $AssetsImagesAuthGen {
@@ -154,7 +163,6 @@ class $AssetsImagesAuthGen {
     loginBackground,
     loginLogo,
   ];
-  List<String> get values => [arEg, enUS];
 }
 
 abstract final class Assets {

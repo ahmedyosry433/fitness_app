@@ -23,65 +23,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              AppImages.homeBack,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(color: Colors.black.withValues(alpha: 0.5)),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 20.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            LocaleKeys.home_hi_name.tr(args: ['Ahmed']),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            LocaleKeys.home_lets_start_your_day.tr(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.grey[800],
-                        backgroundImage: const AssetImage(
-                          'assets/images/human_gym.png',
-                        ),
-                        backgroundImage: const AssetImage(AppImages.humanGym),
-                      ),
-                    ],
     return BlocProvider(
       create: (_) =>
           getIt<HomeCubit>()..processIntent(const LoadHomeIntent()),
@@ -142,13 +83,6 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-
-                const Expanded(child: SizedBox(width: double.infinity)),
-              ],
-            ),
-          ),
-        ],
                   Expanded(
                     child: BlocBuilder<HomeCubit, BaseState<HomeUIModel>>(
                       builder: (context, state) {
@@ -163,7 +97,7 @@ class HomePage extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 24.w),
                               child: Text(
-                                state.exception?.toString() ??
+                                state.errorMessage ??
                                     LocaleKeys.exercise_failed_to_load.tr(
                                       args: [''],
                                     ),

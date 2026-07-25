@@ -14,7 +14,8 @@ class AppEndPoints {
   static const String exercisesByMuscleAndDifficultyEndpoint =
       '$baseUrl/exercises/by-muscle-difficulty';
   static const String exercises = '/exercises';
-  static const String exercisesByMuscleAndDifficulty = '/exercises/by-muscle-difficulty';
+  static const String exercisesByMuscleAndDifficulty =
+      '/exercises/by-muscle-difficulty';
   static const String difficultyLevels = '/levels';
   static const String muscles = '/muscles';
   static const String musclesRandom = '/muscles/random';

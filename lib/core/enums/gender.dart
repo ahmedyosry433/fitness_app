@@ -1,3 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
+
 enum Gender { male, female }
 
 extension GenderExtension on Gender {
@@ -10,7 +13,6 @@ extension GenderExtension on Gender {
     }
   }
 
-  String get localizedName => name;
   String get localizedName {
     switch (this) {
       case Gender.male:

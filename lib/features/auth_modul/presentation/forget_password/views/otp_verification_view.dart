@@ -157,7 +157,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                             });
                                       }
                                     },
-                                    validator:AppValidators.validateOtp
+                                    validator: AppValidators.validateOtp,
                                   );
                                 },
                               ),

@@ -74,11 +74,6 @@ class AppTheme {
     ),
     useMaterial3: true,
     textTheme: const TextTheme(
-        titleLarge: TextStyle(
-        color: AppColors.black0C,
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
-      ),
       titleLarge: TextStyle(
         color: AppColors.black0C,
         fontSize: 20,

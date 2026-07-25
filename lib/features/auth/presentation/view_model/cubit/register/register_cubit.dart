@@ -13,7 +13,7 @@ part 'register_states.dart';
 
 @injectable
 class RegisterCubit
-    extends BaseCubit<RegisterState, RegisterEvent, RegisterNavigation> {
+    extends BaseCubit<RegisterState, RegisterNavigation> {
   RegisterCubit(this._authRepository) : super(const RegisterState());
 
   final AuthRepository _authRepository;

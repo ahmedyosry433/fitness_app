@@ -1,7 +1,5 @@
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/routes/routes.dart';
-import 'package:fitness/features/auth/presentation/view/pages/forget_password_page.dart';
-import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
@@ -10,7 +8,6 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/views/f
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 
-import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
@@ -26,14 +23,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.detailsFood, // Open home directly to test bottom nav
   initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
   routes: [
@@ -83,11 +78,7 @@ final GoRouter router = GoRouter(
       },
     ),
     _customAnimatedGoRoute(
-      route: Routes.onBoard,
-      page: (state, context) => const OnboardPage(),
-    ),
-    _customAnimatedGoRoute(
-      route: Routes.register,
+      route: Routes.completeRegister,
       page: (state, context) => const CompleteRegisterPage(),
     ),
     _customAnimatedGoRoute(
@@ -155,19 +146,21 @@ final GoRouter router = GoRouter(
       route: Routes.exercise,
       page: (state, context) {
         final extra = state.extra as Map<String, dynamic>?;
-        final primeMoverMuscleId = extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
+        final primeMoverMuscleId =
+            extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
         final pageTitle = extra?['pageTitle'] ?? '';
         final pageDescription = extra?['pageDescription'] ?? '';
         final backgroundImage = extra?['backgroundImage'] ?? '';
 
         return BlocProvider(
-          create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
-            InitExerciseModuleIntent(
-              primeMoverMuscleId: primeMoverMuscleId,
-              pageTitle: pageTitle,
-              pageDescription: pageDescription,
-            )
-          ),
+          create: (context) => getIt<ExerciseModuleCubit>()
+            ..processIntent(
+              InitExerciseModuleIntent(
+                primeMoverMuscleId: primeMoverMuscleId,
+                pageTitle: pageTitle,
+                pageDescription: pageDescription,
+              ),
+            ),
           child: ExerciseModulePage(
             primeMoverMuscleId: primeMoverMuscleId,
             pageTitle: pageTitle,

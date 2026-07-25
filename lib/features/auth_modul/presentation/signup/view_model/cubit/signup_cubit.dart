@@ -15,7 +15,7 @@ part 'signup_states.dart';
 
 @injectable
 class SignUpCubit
-    extends BaseCubit<SignUpState, SignUpEvent, SignUpNavigation> {
+    extends BaseCubit<SignUpState, SignUpNavigation> {
   SignUpCubit(
     this._signUpUseCase,
     this._socialSignInUseCase,

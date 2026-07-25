@@ -12,7 +12,7 @@ part 'login_navigation.dart';
 part 'login_states.dart';
 
 @injectable
-class LoginCubit extends BaseCubit<LoginState, LoginEvent, LoginNavigation> {
+class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
   LoginCubit(this._authRepository) : super(const LoginState());
 
   final AuthRepository _authRepository;

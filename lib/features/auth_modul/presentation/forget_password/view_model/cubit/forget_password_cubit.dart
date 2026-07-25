@@ -14,7 +14,7 @@ import '../../../../../../config/base_state/base_state.dart';
 
 @injectable
 class ForgetPasswordCubit
-    extends BaseCubit<ForgetPasswordState, ForgetPasswordIntent, BaseEvent> {
+    extends BaseCubit<ForgetPasswordState, BaseEvent> {
   final ForgetPasswordUseCase _forgetPasswordUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;

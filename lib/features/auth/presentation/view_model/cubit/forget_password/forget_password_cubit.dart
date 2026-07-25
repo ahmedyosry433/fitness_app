@@ -11,7 +11,7 @@ part 'forget_password_states.dart';
 
 @injectable
 class ForgetPasswordCubit extends BaseCubit<ForgetPasswordState,
-    ForgetPasswordEvent, ForgetPasswordNavigation> {
+    ForgetPasswordNavigation> {
   ForgetPasswordCubit(this._authRepository) : super(const ForgetPasswordState());
 
   final AuthRepository _authRepository;

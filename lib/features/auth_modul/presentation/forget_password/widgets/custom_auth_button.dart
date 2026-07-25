@@ -22,10 +22,6 @@ class CustomAuthButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFF5722), // البرتقالي المميز
-          disabledBackgroundColor: const Color(
-            0xFFFF5722,
-          ).withValues(alpha: 0.5),
           backgroundColor: AppColors.prime,
           disabledBackgroundColor: AppColors.prime.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
