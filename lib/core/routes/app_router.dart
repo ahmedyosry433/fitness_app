@@ -13,6 +13,9 @@ import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
+import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
+import 'package:fitness/features/food/presentation/details_food/view_model/intent/details_food_intent.dart';
+import 'package:fitness/features/food/presentation/details_food/views/details_food_view.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
@@ -30,6 +33,7 @@ import 'package:fitness/features/exercise_module/presentation/view_model/exercis
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
+  initialLocation: Routes.detailsFood, // Open home directly to test bottom nav
   initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
   routes: [
@@ -85,6 +89,19 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.register,
       page: (state, context) => const CompleteRegisterPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.detailsFood,
+      page: (state, context) {
+        final mealId = (state.extra as String?) ?? '52959';
+
+        return BlocProvider(
+          create: (context) =>
+              getIt<DetailsFoodCubit>()
+                ..doIntent(FetchMealDetailsIntent(mealId)),
+          child: DetailsFoodView(mealId: mealId),
+        );
+      },
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

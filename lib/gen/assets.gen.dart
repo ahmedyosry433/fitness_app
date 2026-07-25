@@ -17,6 +17,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Calendar.svg
   String get calendar => 'assets/icons/Calendar.svg';
 
+  /// File path: assets/icons/Vector (1).svg
+  String get vector1 => 'assets/icons/Vector (1).svg';
+
   /// File path: assets/icons/clock.svg
   String get clock => 'assets/icons/clock.svg';
 
@@ -33,6 +36,7 @@ class $AssetsIconsGen {
   String get mail => 'assets/icons/mail.svg';
 
   /// List of all assets
+  List<String> get values => [calendar, vector1, clock, closeEye];
   List<String> get values => [calendar, clock, closeEye, eye, lock, mail];
 }
 
@@ -150,6 +154,7 @@ class $AssetsImagesAuthGen {
     loginBackground,
     loginLogo,
   ];
+  List<String> get values => [arEg, enUS];
 }
 
 abstract final class Assets {
