@@ -40,15 +40,22 @@ class _LoginViewState extends State<_LoginView> {
   @override
   void initState() {
     super.initState();
-    _navigationSub = context
-        .read<LoginCubit>()
-        .navigationStream
-        .listen(_handleNavigation);
+    _navigationSub = context.read<LoginCubit>().navigationStream.listen(
+      _handleNavigation,
+    );
   }
 
   void _handleNavigation(LoginNavigation navigation) {
     switch (navigation) {
       case LoginSuccessNavigation():
+        CustomToast(
+          context: context,
+          header: LocaleKeys.auth_login_success.tr(),
+        ).showToast();
+        context.go(Routes.home);
+      case LoginSocialProfileRequiredNavigation(:final socialData):
+        context.push(Routes.completeRegister, extra: socialData);
+      case LoginSocialSignedInNavigation():
         CustomToast(
           context: context,
           header: LocaleKeys.auth_login_success.tr(),
@@ -66,11 +73,11 @@ class _LoginViewState extends State<_LoginView> {
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     context.read<LoginCubit>().doAction(
-          LoginSubmittedEvent(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          ),
-        );
+      LoginSubmittedEvent(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      ),
+    );
   }
 
   @override

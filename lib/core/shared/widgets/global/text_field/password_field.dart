@@ -33,6 +33,7 @@ class PasswordField extends StatelessWidget {
       isObscure: isObscure,
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
+      prefixIcon: Icons.lock_outline,
       prefixIconAsset: FieldAssets.iconLock,
       suffixIcon: IconButton(
         onPressed: onToggleVisibility,

@@ -65,8 +65,8 @@ class _ForgetPasswordViewState extends State<_ForgetPasswordView> {
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     context.read<ForgetPasswordCubit>().doAction(
-          ForgetPasswordSubmittedEvent(email: _emailController.text.trim()),
-        );
+      ForgetPasswordSubmittedEvent(email: _emailController.text.trim()),
+    );
   }
 
   @override

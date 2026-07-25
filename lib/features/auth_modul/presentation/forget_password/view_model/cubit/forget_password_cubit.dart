@@ -13,8 +13,7 @@ import '../state/forget_password_state.dart';
 import '../../../../../../config/base_state/base_state.dart';
 
 @injectable
-class ForgetPasswordCubit
-    extends BaseCubit<ForgetPasswordState, BaseEvent> {
+class ForgetPasswordCubit extends BaseCubit<ForgetPasswordState, BaseEvent> {
   final ForgetPasswordUseCase _forgetPasswordUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;
@@ -62,7 +61,9 @@ class ForgetPasswordCubit
       },
       error: (exception) {
         final errorMessage = exception.toString();
-        emit(state.copyWith(state: StateType.error, errorMessage: errorMessage));
+        emit(
+          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+        );
         doNavigationAction(ShowErrorToastEvent(errorMessage));
       },
     );

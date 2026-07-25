@@ -66,10 +66,13 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 5.h),
-                            Text(
-                              LocaleKeys.home_lets_start_your_day.tr(),
-                              style: 20.bold.copyWith(
-                                color: AppColors.whiteFF,
+                            GestureDetector(
+                              onTap: () => context.push(Routes.detailsFood),
+                              child: Text(
+                                LocaleKeys.home_lets_start_your_day.tr(),
+                                style: 20.bold.copyWith(
+                                  color: AppColors.whiteFF,
+                                ),
                               ),
                             ),
                           ],
@@ -116,9 +119,11 @@ class HomePage extends StatelessWidget {
                               (muscle) => RecommendationItem(
                                 title: muscle.name,
                                 imagePath: muscle.imageUrl,
-                                onTap: () => context.go(
-                                  Routes.workout,
-                                  extra: muscle.name,
+                                onTap: () => _openExerciseModule(
+                                  context,
+                                  muscleId: muscle.id,
+                                  title: muscle.name,
+                                  imageUrl: muscle.imageUrl,
                                 ),
                               ),
                             )
@@ -139,9 +144,11 @@ class HomePage extends StatelessWidget {
                                 id: muscle.id,
                                 title: muscle.name,
                                 imagePath: muscle.imageUrl,
-                                onTap: () => context.go(
-                                  Routes.workout,
-                                  extra: data.selectedMuscleGroupId,
+                                onTap: () => _openExerciseModule(
+                                  context,
+                                  muscleId: muscle.id,
+                                  title: muscle.name,
+                                  imageUrl: muscle.imageUrl,
                                 ),
                               ),
                             )
@@ -190,4 +197,21 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+}
+
+void _openExerciseModule(
+  BuildContext context, {
+  required String muscleId,
+  required String title,
+  required String imageUrl,
+}) {
+  context.push(
+    Routes.exercise,
+    extra: {
+      'primeMoverMuscleId': muscleId,
+      'pageTitle': title,
+      'pageDescription': '',
+      'backgroundImage': imageUrl,
+    },
+  );
 }

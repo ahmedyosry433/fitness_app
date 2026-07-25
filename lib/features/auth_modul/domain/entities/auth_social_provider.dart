@@ -1,6 +1,1 @@
-enum AuthSocialProvider {
-  facebook,
-  google,
-  apple,
-  metaHorizon,
-}
+enum AuthSocialProvider { facebook, google, apple, metaHorizon }

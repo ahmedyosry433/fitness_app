@@ -10,16 +10,17 @@ part 'forget_password_navigation.dart';
 part 'forget_password_states.dart';
 
 @injectable
-class ForgetPasswordCubit extends BaseCubit<ForgetPasswordState,
-    ForgetPasswordNavigation> {
-  ForgetPasswordCubit(this._authRepository) : super(const ForgetPasswordState());
+class ForgetPasswordCubit
+    extends BaseCubit<ForgetPasswordState, ForgetPasswordNavigation> {
+  ForgetPasswordCubit(this._authRepository)
+    : super(const ForgetPasswordState());
 
   final AuthRepository _authRepository;
 
   @override
   Future<void> doAction(ForgetPasswordEvent event) async => switch (event) {
-        ForgetPasswordSubmittedEvent() => _submit(event),
-      };
+    ForgetPasswordSubmittedEvent() => _submit(event),
+  };
 
   Future<void> _submit(ForgetPasswordSubmittedEvent event) async {
     if (state.submitState.state == StateType.loading) return;

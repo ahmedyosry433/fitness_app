@@ -142,6 +142,9 @@ class $AssetsImagesAuthGen {
   /// File path: assets/images/auth/icon_mail.svg
   String get iconMail => 'assets/images/auth/icon_mail.svg';
 
+  /// File path: assets/images/auth/icon_user.svg
+  String get iconUser => 'assets/images/auth/icon_user.svg';
+
   /// File path: assets/images/auth/login_background.png
   AssetGenImage get loginBackground =>
       const AssetGenImage('assets/images/auth/login_background.png');
@@ -160,6 +163,7 @@ class $AssetsImagesAuthGen {
     iconGoogle,
     iconLock,
     iconMail,
+    iconUser,
     loginBackground,
     loginLogo,
   ];

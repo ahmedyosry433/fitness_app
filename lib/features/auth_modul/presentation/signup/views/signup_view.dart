@@ -124,7 +124,10 @@ class _SignUpViewState extends State<SignUpView> {
                       CustomAuthTextField(
                         controller: _nameController,
                         hintText: "Full Name",
-                        prefixIcon: const Icon(Icons.person_outline, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.person_outline,
+                          color: Colors.white70,
+                        ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return "Please enter your name";
@@ -136,7 +139,10 @@ class _SignUpViewState extends State<SignUpView> {
                       CustomAuthTextField(
                         controller: _emailController,
                         hintText: "Email",
-                        prefixIcon: const Icon(Icons.email_outlined, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.email_outlined,
+                          color: Colors.white70,
+                        ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -154,7 +160,10 @@ class _SignUpViewState extends State<SignUpView> {
                       CustomAuthTextField(
                         controller: _phoneController,
                         hintText: "Phone Number",
-                        prefixIcon: const Icon(Icons.phone_outlined, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.phone_outlined,
+                          color: Colors.white70,
+                        ),
                         keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -167,7 +176,10 @@ class _SignUpViewState extends State<SignUpView> {
                       CustomAuthTextField(
                         controller: _passwordController,
                         hintText: "Password",
-                        prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
+                          color: Colors.white70,
+                        ),
                         isPassword: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -183,7 +195,10 @@ class _SignUpViewState extends State<SignUpView> {
                       CustomAuthTextField(
                         controller: _confirmPasswordController,
                         hintText: "Confirm Password",
-                        prefixIcon: const Icon(Icons.lock_outline, color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
+                          color: Colors.white70,
+                        ),
                         isPassword: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {

@@ -4,8 +4,8 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/email_field.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/global_text_field.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/password_field.dart';
-import 'package:fitness/core/shared/widgets/global/text_field/phone_field.dart';
 import 'package:fitness/core/values/auth_ui_config.dart';
+import 'package:fitness/core/values/field_assets.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/shared/auth_footer_link_widget.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/shared/auth_glass_card_widget.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/shared/auth_greeting_header_widget.dart';
@@ -23,33 +23,29 @@ class RegisterBodyWidget extends StatelessWidget {
   const RegisterBodyWidget({
     super.key,
     required this.formKey,
-    required this.nameController,
+    required this.firstNameController,
+    required this.lastNameController,
     required this.emailController,
-    required this.phoneController,
     required this.passwordController,
-    required this.confirmPasswordController,
     required this.onRegister,
     required this.onLogin,
-    this.nameValidator,
+    this.firstNameValidator,
+    this.lastNameValidator,
     this.emailValidator,
-    this.phoneValidator,
     this.passwordValidator,
-    this.confirmPasswordValidator,
   });
 
   final GlobalKey<FormState> formKey;
-  final TextEditingController nameController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
   final TextEditingController emailController;
-  final TextEditingController phoneController;
   final TextEditingController passwordController;
-  final TextEditingController confirmPasswordController;
   final VoidCallback onRegister;
   final VoidCallback onLogin;
-  final String? Function(String?)? nameValidator;
+  final String? Function(String?)? firstNameValidator;
+  final String? Function(String?)? lastNameValidator;
   final String? Function(String?)? emailValidator;
-  final String? Function(String?)? phoneValidator;
   final String? Function(String?)? passwordValidator;
-  final String? Function(String?)? confirmPasswordValidator;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +64,7 @@ class RegisterBodyWidget extends StatelessWidget {
               const SizedBox(height: 20),
               AuthGreetingHeaderWidget(
                 greeting: LocaleKeys.auth_hey_there.tr(),
-                headline: LocaleKeys.auth_register_title.tr(),
+                headline: LocaleKeys.auth_create_an_account.tr(),
               ),
               const SizedBox(height: 16),
               AuthGlassCardWidget(
@@ -84,22 +80,25 @@ class RegisterBodyWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: AuthUiConfig.sectionSpacing),
                       GlobalTextField(
-                        controller: nameController,
-                        hintText: LocaleKeys.auth_name.tr(),
+                        controller: firstNameController,
+                        hintText: LocaleKeys.auth_first_name.tr(),
+                        prefixIconAsset: FieldAssets.iconUser,
                         prefixIcon: Icons.person_outline_rounded,
-                        validator: nameValidator,
+                        validator: firstNameValidator,
+                      ),
+                      const SizedBox(height: AuthUiConfig.fieldSpacing),
+                      GlobalTextField(
+                        controller: lastNameController,
+                        hintText: LocaleKeys.auth_last_name.tr(),
+                        prefixIconAsset: FieldAssets.iconUser,
+                        prefixIcon: Icons.person_outline_rounded,
+                        validator: lastNameValidator,
                       ),
                       const SizedBox(height: AuthUiConfig.fieldSpacing),
                       EmailField(
                         controller: emailController,
                         hintText: LocaleKeys.auth_email.tr(),
                         validator: emailValidator,
-                      ),
-                      const SizedBox(height: AuthUiConfig.fieldSpacing),
-                      PhoneField(
-                        controller: phoneController,
-                        hintText: LocaleKeys.auth_phone.tr(),
-                        validator: phoneValidator,
                       ),
                       const SizedBox(height: AuthUiConfig.fieldSpacing),
                       BlocSelector<RegisterCubit, RegisterState, bool>(
@@ -109,27 +108,11 @@ class RegisterBodyWidget extends StatelessWidget {
                             controller: passwordController,
                             hintText: LocaleKeys.auth_password.tr(),
                             isObscure: isPasswordHidden,
-                            onToggleVisibility: () => context
-                                .read<RegisterCubit>()
-                                .doAction(const TogglePasswordVisibilityEvent()),
-                            validator: passwordValidator,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: AuthUiConfig.fieldSpacing),
-                      BlocSelector<RegisterCubit, RegisterState, bool>(
-                        selector: (state) => state.isConfirmPasswordHidden,
-                        builder: (context, isConfirmPasswordHidden) {
-                          return PasswordField(
-                            controller: confirmPasswordController,
-                            hintText: LocaleKeys.auth_confirm_password.tr(),
-                            isObscure: isConfirmPasswordHidden,
-                            onToggleVisibility: () => context
-                                .read<RegisterCubit>()
-                                .doAction(
-                                  const ToggleConfirmPasswordVisibilityEvent(),
+                            onToggleVisibility: () =>
+                                context.read<RegisterCubit>().doAction(
+                                  const TogglePasswordVisibilityEvent(),
                                 ),
-                            validator: confirmPasswordValidator,
+                            validator: passwordValidator,
                           );
                         },
                       ),
@@ -141,23 +124,20 @@ class RegisterBodyWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: AuthUiConfig.sectionSpacing),
                       AuthSocialLoginRowWidget(
-                        onFacebookTap: () => context
-                            .read<RegisterCubit>()
-                            .doAction(
+                        onFacebookTap: () =>
+                            context.read<RegisterCubit>().doAction(
                               const SocialRegisterEvent(
                                 AuthSocialProvider.facebook,
                               ),
                             ),
-                        onGoogleTap: () => context
-                            .read<RegisterCubit>()
-                            .doAction(
+                        onGoogleTap: () =>
+                            context.read<RegisterCubit>().doAction(
                               const SocialRegisterEvent(
                                 AuthSocialProvider.google,
                               ),
                             ),
-                        onAppleTap: () => context
-                            .read<RegisterCubit>()
-                            .doAction(
+                        onAppleTap: () =>
+                            context.read<RegisterCubit>().doAction(
                               const SocialRegisterEvent(
                                 AuthSocialProvider.apple,
                               ),
@@ -193,4 +173,3 @@ class RegisterBodyWidget extends StatelessWidget {
     );
   }
 }
-

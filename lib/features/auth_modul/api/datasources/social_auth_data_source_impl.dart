@@ -63,6 +63,7 @@ class AuthModulSocialAuthDataSourceImpl
       name: user.displayName ?? '',
       email: user.email ?? '',
       photoUrl: user.photoURL ?? '',
+      isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false,
     );
   }
 
@@ -96,6 +97,7 @@ class AuthModulSocialAuthDataSourceImpl
         name: user.displayName ?? account.displayName ?? '',
         email: user.email ?? account.email,
         photoUrl: user.photoURL ?? account.photoUrl ?? '',
+        isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false,
       );
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {

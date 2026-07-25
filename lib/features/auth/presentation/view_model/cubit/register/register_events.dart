@@ -33,4 +33,3 @@ class SocialRegisterEvent extends RegisterEvent {
 
   const SocialRegisterEvent(this.provider);
 }
-

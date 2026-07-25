@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
@@ -168,7 +169,7 @@ class ExerciseModulePage extends StatelessWidget {
                       SizedBox(height: 10.h),
                       // Back Button
                       InkWell(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => context.pop(),
                         child: Container(
                           padding: EdgeInsets.all(8.r),
                           decoration: const BoxDecoration(

@@ -8,6 +8,8 @@ class AuthUserModel {
   @JsonKey(name: '_id')
   final String? id;
   final String? name;
+  final String? firstName;
+  final String? lastName;
   final String? email;
   final String? phone;
   final String? token;
@@ -16,6 +18,8 @@ class AuthUserModel {
   const AuthUserModel({
     this.id,
     this.name,
+    this.firstName,
+    this.lastName,
     this.email,
     this.phone,
     this.token,
@@ -27,13 +31,18 @@ class AuthUserModel {
 
   Map<String, dynamic> toJson() => _$AuthUserModelToJson(this);
 
-  AuthUserEntity toEntity({String? tokenOverride}) => AuthUserEntity(
-        id: id ?? '',
-        name: name ?? '',
-        email: email ?? '',
-        phone: phone ?? '',
-        token: tokenOverride ?? token ?? '',
-      );
+  AuthUserEntity toEntity({String? tokenOverride}) {
+    final computedName = (name != null && name!.isNotEmpty)
+        ? name!
+        : '${firstName ?? ''} ${lastName ?? ''}'.trim();
+    return AuthUserEntity(
+      id: id ?? '',
+      name: computedName,
+      email: email ?? '',
+      phone: phone ?? '',
+      token: tokenOverride ?? token ?? '',
+    );
+  }
 }
 
 @JsonSerializable()
@@ -42,11 +51,7 @@ class AuthResponseModel {
   final String? token;
   final AuthUserModel? user;
 
-  const AuthResponseModel({
-    this.message,
-    this.token,
-    this.user,
-  });
+  const AuthResponseModel({this.message, this.token, this.user});
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) =>
       _$AuthResponseModelFromJson(json);

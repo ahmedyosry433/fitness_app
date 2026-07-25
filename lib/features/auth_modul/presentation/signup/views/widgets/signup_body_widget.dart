@@ -105,9 +105,10 @@ class SignUpBodyWidget extends StatelessWidget {
                             controller: passwordController,
                             hintText: LocaleKeys.auth_password.tr(),
                             isObscure: isPasswordHidden,
-                            onToggleVisibility: () => context
-                                .read<SignUpCubit>()
-                                .doAction(const TogglePasswordVisibilityEvent()),
+                            onToggleVisibility: () =>
+                                context.read<SignUpCubit>().doAction(
+                                  const TogglePasswordVisibilityEvent(),
+                                ),
                             validator: passwordValidator,
                           );
                         },
@@ -120,9 +121,8 @@ class SignUpBodyWidget extends StatelessWidget {
                             controller: confirmPasswordController,
                             hintText: LocaleKeys.auth_confirm_password.tr(),
                             isObscure: isConfirmPasswordHidden,
-                            onToggleVisibility: () => context
-                                .read<SignUpCubit>()
-                                .doAction(
+                            onToggleVisibility: () =>
+                                context.read<SignUpCubit>().doAction(
                                   const ToggleConfirmPasswordVisibilityEvent(),
                                 ),
                             validator: confirmPasswordValidator,

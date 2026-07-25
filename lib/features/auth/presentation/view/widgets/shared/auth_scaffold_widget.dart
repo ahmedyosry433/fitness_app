@@ -58,10 +58,7 @@ class AuthScaffoldWidget extends StatelessWidget {
 }
 
 class AuthBackgroundImageWidget extends StatelessWidget {
-  const AuthBackgroundImageWidget({
-    super.key,
-    required this.imagePath,
-  });
+  const AuthBackgroundImageWidget({super.key, required this.imagePath});
 
   final String imagePath;
 

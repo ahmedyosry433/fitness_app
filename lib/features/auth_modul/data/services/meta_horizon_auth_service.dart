@@ -19,20 +19,21 @@ class MetaHorizonAuthService {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '${MetaHorizonConfig.apiBaseUrl}/user/me',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
       );
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Failed to retrieve Meta Horizon profile: empty response.');
+        throw Exception(
+          'Failed to retrieve Meta Horizon profile: empty response.',
+        );
       }
 
       final id = data['id']?.toString() ?? '';
-      final alias = data['alias']?.toString() ?? data['display_name']?.toString() ?? 'Meta Horizon User';
+      final alias =
+          data['alias']?.toString() ??
+          data['display_name']?.toString() ??
+          'Meta Horizon User';
       final photoUrl = data['profile_url']?.toString() ?? '';
       final email = data['email']?.toString() ?? '';
 

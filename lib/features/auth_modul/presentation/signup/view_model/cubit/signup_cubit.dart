@@ -14,8 +14,7 @@ part 'signup_navigation.dart';
 part 'signup_states.dart';
 
 @injectable
-class SignUpCubit
-    extends BaseCubit<SignUpState, SignUpNavigation> {
+class SignUpCubit extends BaseCubit<SignUpState, SignUpNavigation> {
   SignUpCubit(
     this._signUpUseCase,
     this._socialSignInUseCase,
@@ -69,7 +68,6 @@ class SignUpCubit
       },
     );
   }
-
 
   Future<void> _signUp(SignUpSubmittedEvent event) async {
     if (state.signUpState.state == StateType.loading) return;

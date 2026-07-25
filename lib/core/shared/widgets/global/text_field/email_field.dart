@@ -27,6 +27,7 @@ class EmailField extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       textInputAction: textInputAction,
       onFieldSubmitted: onFieldSubmitted,
+      prefixIcon: Icons.email_outlined,
       prefixIconAsset: FieldAssets.iconMail,
     );
   }

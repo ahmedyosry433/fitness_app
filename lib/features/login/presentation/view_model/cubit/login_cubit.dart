@@ -59,8 +59,8 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
     final result = await _authRepository.socialLogin(provider: provider);
 
     result.when(
-      success: (user) {
-        emit(state.copyWith(loginState: BaseState.success(user)));
+      success: (socialResult) {
+        emit(state.copyWith(loginState: BaseState.success(socialResult?.user)));
         doNavigationAction(const LoginSuccessNavigation());
       },
       error: (exception) {

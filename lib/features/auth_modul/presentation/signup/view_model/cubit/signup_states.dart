@@ -15,15 +15,17 @@ class SignUpState extends Equatable {
     BaseState<AuthCommonResponse>? signUpState,
     bool? isPasswordHidden,
     bool? isConfirmPasswordHidden,
-  }) =>
-      SignUpState(
-        signUpState: signUpState ?? this.signUpState,
-        isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
-        isConfirmPasswordHidden:
-            isConfirmPasswordHidden ?? this.isConfirmPasswordHidden,
-      );
+  }) => SignUpState(
+    signUpState: signUpState ?? this.signUpState,
+    isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
+    isConfirmPasswordHidden:
+        isConfirmPasswordHidden ?? this.isConfirmPasswordHidden,
+  );
 
   @override
-  List<Object?> get props =>
-      [signUpState, isPasswordHidden, isConfirmPasswordHidden];
+  List<Object?> get props => [
+    signUpState,
+    isPasswordHidden,
+    isConfirmPasswordHidden,
+  ];
 }

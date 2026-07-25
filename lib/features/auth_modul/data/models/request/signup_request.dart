@@ -14,10 +14,10 @@ class SignUpRequest {
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'email': email,
-        'password': password,
-        'rePassword': rePassword,
-        'phone': phone,
-      };
+    'name': name,
+    'email': email,
+    'password': password,
+    'rePassword': rePassword,
+    'phone': phone,
+  };
 }

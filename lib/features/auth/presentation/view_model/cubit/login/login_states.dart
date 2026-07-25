@@ -12,11 +12,10 @@ class LoginState extends Equatable {
   LoginState copyWith({
     BaseState<AuthUserEntity>? loginState,
     bool? isPasswordHidden,
-  }) =>
-      LoginState(
-        loginState: loginState ?? this.loginState,
-        isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
-      );
+  }) => LoginState(
+    loginState: loginState ?? this.loginState,
+    isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
+  );
 
   @override
   List<Object?> get props => [loginState, isPasswordHidden];

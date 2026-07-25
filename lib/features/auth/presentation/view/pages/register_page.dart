@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
-
+import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_toast.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/register_body_widget.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
@@ -33,20 +33,18 @@ class _RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<_RegisterView> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
   StreamSubscription<RegisterNavigation>? _navigationSub;
 
   @override
   void initState() {
     super.initState();
-    _navigationSub = context
-        .read<RegisterCubit>()
-        .navigationStream
-        .listen(_handleNavigation);
+    _navigationSub = context.read<RegisterCubit>().navigationStream.listen(
+      _handleNavigation,
+    );
   }
 
   void _handleNavigation(RegisterNavigation navigation) {
@@ -57,6 +55,14 @@ class _RegisterViewState extends State<_RegisterView> {
           header: LocaleKeys.auth_register_success.tr(),
         ).showToast();
         context.pop();
+      case RegisterSocialProfileRequiredNavigation(:final socialData):
+        context.push(Routes.completeRegister, extra: socialData);
+      case RegisterSocialSignedInNavigation():
+        CustomToast(
+          context: context,
+          header: LocaleKeys.auth_login_success.tr(),
+        ).showToast();
+        context.go(Routes.home);
       case RegisterShowErrorNavigation(:final message):
         CustomToast(
           context: context,
@@ -68,25 +74,29 @@ class _RegisterViewState extends State<_RegisterView> {
 
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    context.read<RegisterCubit>().doAction(
-          RegisterSubmittedEvent(
-            name: _nameController.text.trim(),
-            email: _emailController.text.trim(),
-            phone: _phoneController.text.trim(),
-            password: _passwordController.text,
-            confirmPassword: _confirmPasswordController.text,
-          ),
-        );
+
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+
+    context.push(
+      Routes.completeRegister,
+      extra: {
+        'firstName': firstName,
+        'lastName': lastName.isEmpty ? 'Tech' : lastName,
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text,
+        'rePassword': _passwordController.text,
+      },
+    );
   }
 
   @override
   void dispose() {
     _navigationSub?.cancel();
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -94,16 +104,21 @@ class _RegisterViewState extends State<_RegisterView> {
   Widget build(BuildContext context) {
     return RegisterBodyWidget(
       formKey: _formKey,
-      nameController: _nameController,
+      firstNameController: _firstNameController,
+      lastNameController: _lastNameController,
       emailController: _emailController,
-      phoneController: _phoneController,
       passwordController: _passwordController,
-      confirmPasswordController: _confirmPasswordController,
       onRegister: _submit,
       onLogin: () => context.pop(),
-      nameValidator: (value) {
+      firstNameValidator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return LocaleKeys.validations_name_required.tr();
+          return LocaleKeys.validations_first_name_required.tr();
+        }
+        return null;
+      },
+      lastNameValidator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return LocaleKeys.validations_last_name_required.tr();
         }
         return null;
       },
@@ -116,24 +131,9 @@ class _RegisterViewState extends State<_RegisterView> {
         }
         return null;
       },
-      phoneValidator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return LocaleKeys.validations_phone_required.tr();
-        }
-        return null;
-      },
       passwordValidator: (value) {
         if (value == null || value.isEmpty) {
           return LocaleKeys.validations_password_required.tr();
-        }
-        return null;
-      },
-      confirmPasswordValidator: (value) {
-        if (value == null || value.isEmpty) {
-          return LocaleKeys.validations_confirm_password.tr();
-        }
-        if (value != _passwordController.text) {
-          return LocaleKeys.validations_confirm_password_invalid.tr();
         }
         return null;
       },

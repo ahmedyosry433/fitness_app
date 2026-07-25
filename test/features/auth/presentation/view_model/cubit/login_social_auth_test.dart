@@ -1,5 +1,6 @@
 import 'package:fitness/config/base_response/base_response.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/features/auth/domain/entities/auth_social_result.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
 
@@ -11,19 +12,22 @@ import 'package:fitness/features/auth/data/models/register_params.dart';
 import 'package:fitness/features/auth/data/models/forgot_password_params.dart';
 
 class MockAuthRepository implements AuthRepository {
-  Result<AuthUserEntity>? socialLoginResult;
+  Result<AuthSocialResult>? socialLoginResult;
 
   @override
-  Future<Result<AuthUserEntity>> socialLogin({
+  Future<Result<AuthSocialResult>> socialLogin({
     required AuthSocialProvider provider,
   }) async {
     return socialLoginResult ??
         Success(
-          data: AuthUserEntity(
-            id: 'google-user-123',
-            name: 'Google User',
-            email: 'google@user.com',
-            token: 'token-123',
+          data: AuthSocialResult(
+            user: AuthUserEntity(
+              id: 'google-user-123',
+              name: 'Google User',
+              email: 'google@user.com',
+              token: 'token-123',
+            ),
+            isNewUser: false,
           ),
         );
   }
@@ -35,14 +39,12 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<Result<AuthUserEntity>> register({
     required RegisterParams params,
-  }) async =>
-      const Success(data: AuthUserEntity());
+  }) async => const Success(data: AuthUserEntity());
 
   @override
   Future<Result<void>> forgotPassword({
     required ForgotPasswordParams params,
-  }) async =>
-      const Success(data: null);
+  }) async => const Success(data: null);
 
   @override
   Future<Result<void>> logout() async => const Success(data: null);
@@ -63,11 +65,14 @@ void main() {
 
   test('Google social login emits loading and success states', () async {
     mockRepository.socialLoginResult = Success(
-      data: AuthUserEntity(
-        id: 'google-uid-1',
-        name: 'Google User',
-        email: 'google@test.com',
-        token: 'token-google',
+      data: AuthSocialResult(
+        user: AuthUserEntity(
+          id: 'google-uid-1',
+          name: 'Google User',
+          email: 'google@test.com',
+          token: 'token-google',
+        ),
+        isNewUser: false,
       ),
     );
 
@@ -95,24 +100,67 @@ void main() {
     await cubit.doAction(const SocialLoginEvent(AuthSocialProvider.google));
   });
 
-  test('Facebook social login emits loading and error when login fails', () async {
-    mockRepository.socialLoginResult = Error(
-      exception: Exception('Facebook login cancelled'),
-    );
-
-    expectLater(
-      cubit.stream,
-      emitsInOrder([
-        predicate<LoginState>(
-          (state) => state.loginState.state == StateType.loading,
+  test(
+    'new social user is not reported as signed in and is sent to complete register',
+    () async {
+      mockRepository.socialLoginResult = Success(
+        data: AuthSocialResult(
+          user: AuthUserEntity(
+            id: 'google-uid-new',
+            name: 'New Google User',
+            email: 'new@test.com',
+            token: 'google-uid-new',
+          ),
+          isNewUser: true,
         ),
-        predicate<LoginState>(
-          (state) => state.loginState.state == StateType.error,
-        ),
-      ]),
-    );
+      );
 
-    await cubit.doAction(const SocialLoginEvent(AuthSocialProvider.facebook));
-  });
+      final navigation = expectLater(
+        cubit.navigationStream,
+        emits(
+          predicate<LoginNavigation>(
+            (event) =>
+                event is LoginSocialProfileRequiredNavigation &&
+                event.socialData['email'] == 'new@test.com' &&
+                event.socialData['isSocial'] == true,
+          ),
+        ),
+      );
+
+      final states = expectLater(
+        cubit.stream,
+        emitsInOrder([
+          predicate<LoginState>((state) => state.loginState.isLoading),
+          predicate<LoginState>((state) => state.loginState.isInitial),
+        ]),
+      );
+
+      await cubit.doAction(const SocialLoginEvent(AuthSocialProvider.google));
+      await navigation;
+      await states;
+    },
+  );
+
+  test(
+    'Facebook social login emits loading and error when login fails',
+    () async {
+      mockRepository.socialLoginResult = Error(
+        exception: Exception('Facebook login cancelled'),
+      );
+
+      expectLater(
+        cubit.stream,
+        emitsInOrder([
+          predicate<LoginState>(
+            (state) => state.loginState.state == StateType.loading,
+          ),
+          predicate<LoginState>(
+            (state) => state.loginState.state == StateType.error,
+          ),
+        ]),
+      );
+
+      await cubit.doAction(const SocialLoginEvent(AuthSocialProvider.facebook));
+    },
+  );
 }
-
