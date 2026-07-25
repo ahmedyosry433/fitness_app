@@ -1,9 +1,10 @@
 import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../theme/app_colors.dart';
 
 class CustomCachedImage extends StatelessWidget {
   const CustomCachedImage({
@@ -25,38 +26,48 @@ class CustomCachedImage extends StatelessWidget {
   final BoxFit? fit;
   final Color? color;
 
-  @override
-  Widget build(BuildContext context) {
-    final imageUrl = imagePath.isEmpty ? '' : imagePath;
-    //  EndPoints.baseImageUrl}$imagePath";
+  static bool _isRasterAsset(String path) {
+    final lower = path.toLowerCase();
+    return lower.endsWith('.png') ||
+        lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.webp') ||
+        lower.endsWith('.gif');
+  }
 
-    if (imagePath.isEmpty) {
-      return AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+  Widget _fallbackImage() {
+    final fallback = errorImage ?? AppIcons.iconsNoProfile;
+    if (_isRasterAsset(fallback)) {
+      return Image.asset(
+        fallback,
         width: width,
         height: height,
-        padding: errorImage != null && errorImage!.endsWith(".png")
-            ? EdgeInsets.zero
-            : const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 12),
-          color: color ?? AppColors.transparent,
-        ),
-        child: Center(
-          child: errorImage != null && errorImage!.endsWith(".png")
-              ? Image.asset(
-                  errorImage!,
-                  width: width,
-                  height: height,
-                  fit: fit ?? BoxFit.contain,
-                )
-              : SvgPicture.asset(
-                  fit: BoxFit.scaleDown,
-                  width: 100,
-                  height: 100,
-                  errorImage ?? AppIcons.iconsNoProfile,
-                ),
+        fit: fit ?? BoxFit.cover,
+      );
+    }
+
+    return SvgPicture.asset(
+      fallback,
+      fit: BoxFit.contain,
+      width: width ?? 100,
+      height: height ?? 100,
+      colorFilter: emptyColorFilter ??
+          ColorFilter.mode(AppColors.gray5F, BlendMode.srcIn),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (imagePath.isEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 12),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: ColoredBox(
+            color: color ?? AppColors.black22.withValues(alpha: 0.35),
+            child: _fallbackImage(),
+          ),
         ),
       );
     }
@@ -65,37 +76,20 @@ class CustomCachedImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit ?? BoxFit.cover,
-      imageUrl: imageUrl,
-
+      imageUrl: imagePath,
       fadeInDuration: const Duration(milliseconds: 300),
       errorListener: (value) {
-        log('Error loading image: $value|| $imageUrl');
+        log('Error loading image: $value|| $imagePath');
       },
-      errorWidget: (context, url, error) => Container(
-        width: width,
-        height: height,
-        padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 12),
-          color: AppColors.primaryLight.withValues(alpha: 0.08),
-        ),
-        child: Center(
-          child: errorImage != null && errorImage!.endsWith(".png")
-              ? Image.asset(
-                  errorImage!,
-                  width: width,
-                  height: height,
-                  fit: fit ?? BoxFit.contain,
-                )
-              : SvgPicture.asset(
-                  fit: BoxFit.contain,
-                  width: width,
-                  height: height,
-                  errorImage ?? AppIcons.iconsNoProfile,
-                  colorFilter:
-                      emptyColorFilter ??
-                      ColorFilter.mode(AppColors.gray5F, BlendMode.srcIn),
-                ),
+      errorWidget: (context, url, error) => ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 12),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: ColoredBox(
+            color: AppColors.black22.withValues(alpha: 0.35),
+            child: _fallbackImage(),
+          ),
         ),
       ),
       progressIndicatorBuilder: (context, url, progress) => Container(
@@ -103,17 +97,17 @@ class CustomCachedImage extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 12),
-          color: AppColors.primaryLight.withValues(alpha: 0.08),
+          color: AppColors.black22.withValues(alpha: 0.25),
         ),
-        child: SizedBox(
-          width: 30,
-          height: 30,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
+        child: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
             child: CircularProgressIndicator(
               value: progress.progress,
-              color: AppColors.backgroundLight,
+              color: AppColors.primaryOrangeDark,
               strokeCap: StrokeCap.round,
+              strokeWidth: 2,
             ),
           ),
         ),
