@@ -147,5 +147,14 @@
         "smart_coach": "Smart coach",
         "workout": "Workout",
         "profile": "Profile"
+    },
+    "details": {
+        "no_meal_found": "No meal found",
+        "no_meal_details_found": "No meal details found",
+        "ingredients": "Ingredients",
+        "energy": "Energy",
+        "protein": "Protein",
+        "carbs": "Carbs",
+        "fat": "Fat"
     }
 }

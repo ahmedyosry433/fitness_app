@@ -1,23 +1,31 @@
+import 'package:equatable/equatable.dart';
 import 'package:fitness/features/food/data/models/response/meal_dto.dart';
 
-sealed class DetailsFoodState {
-  const DetailsFoodState();
-}
+enum DetailsFoodStatus { initial, loading, success, error }
 
-class DetailsFoodInitialState extends DetailsFoodState {
-  const DetailsFoodInitialState();
-}
+class DetailsFoodState extends Equatable {
+  final DetailsFoodStatus status;
+  final MealDto? meal;
+  final String? errorMessage;
 
-class DetailsFoodLoadingState extends DetailsFoodState {
-  const DetailsFoodLoadingState();
-}
+  const DetailsFoodState({
+    this.status = DetailsFoodStatus.initial,
+    this.meal,
+    this.errorMessage,
+  });
 
-class DetailsFoodSuccessState extends DetailsFoodState {
-  final MealDto meal;
-  const DetailsFoodSuccessState(this.meal);
-}
+  DetailsFoodState copyWith({
+    DetailsFoodStatus? status,
+    MealDto? meal,
+    String? errorMessage,
+  }) {
+    return DetailsFoodState(
+      status: status ?? this.status,
+      meal: meal ?? this.meal,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
-class DetailsFoodErrorState extends DetailsFoodState {
-  final String errorMessage;
-  const DetailsFoodErrorState(this.errorMessage);
+  @override
+  List<Object?> get props => [status, meal, errorMessage];
 }

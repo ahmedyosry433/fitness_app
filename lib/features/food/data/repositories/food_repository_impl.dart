@@ -12,6 +12,6 @@ class FoodRepositoryImpl implements FoodRepositoryContract {
 
   @override
   Future<Result<MealDto>> getMealDetails(String mealId) async {
-    return await foodRemoteDataSourceContract.getMealDetails(mealId);
+    return foodRemoteDataSourceContract.getMealDetails(mealId);
   }
 }
