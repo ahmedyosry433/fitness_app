@@ -2,10 +2,7 @@ import 'package:fitness/core/values/auth_ui_config.dart';
 import 'package:flutter/material.dart';
 
 class AuthGlassCardWidget extends StatelessWidget {
-  const AuthGlassCardWidget({
-    super.key,
-    required this.child,
-  });
+  const AuthGlassCardWidget({super.key, required this.child});
 
   final Widget child;
 

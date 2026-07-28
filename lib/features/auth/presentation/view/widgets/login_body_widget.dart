@@ -47,9 +47,7 @@ class LoginBodyWidget extends StatelessWidget {
           builder: (context, constraints) {
             return SingleChildScrollView(
               padding: EdgeInsetsDirectional.only(
-                top: AuthUiConfig.logoTopOffset +
-                    AuthUiConfig.logoHeight +
-                    24,
+                top: AuthUiConfig.logoTopOffset + AuthUiConfig.logoHeight + 24,
                 bottom: 24,
               ),
               child: ConstrainedBox(
@@ -86,7 +84,9 @@ class LoginBodyWidget extends StatelessWidget {
                                   hintText: LocaleKeys.auth_email.tr(),
                                   validator: emailValidator,
                                 ),
-                                const SizedBox(height: AuthUiConfig.fieldSpacing),
+                                const SizedBox(
+                                  height: AuthUiConfig.fieldSpacing,
+                                ),
                                 BlocSelector<LoginCubit, LoginState, bool>(
                                   selector: (state) => state.isPasswordHidden,
                                   builder: (context, isPasswordHidden) {
@@ -94,9 +94,8 @@ class LoginBodyWidget extends StatelessWidget {
                                       controller: passwordController,
                                       hintText: LocaleKeys.auth_password.tr(),
                                       isObscure: isPasswordHidden,
-                                      onToggleVisibility: () => context
-                                          .read<LoginCubit>()
-                                          .doAction(
+                                      onToggleVisibility: () =>
+                                          context.read<LoginCubit>().doAction(
                                             const TogglePasswordVisibilityEvent(),
                                           ),
                                       validator: passwordValidator,
@@ -107,7 +106,8 @@ class LoginBodyWidget extends StatelessWidget {
                                   height: AuthUiConfig.innerSectionSpacing,
                                 ),
                                 AuthTextLinkWidget(
-                                  label: LocaleKeys.auth_forget_password_question
+                                  label: LocaleKeys
+                                      .auth_forget_password_question
                                       .tr(),
                                   onTap: onForgetPassword,
                                 ),
@@ -121,23 +121,20 @@ class LoginBodyWidget extends StatelessWidget {
                             ),
                             const SizedBox(height: AuthUiConfig.sectionSpacing),
                             AuthSocialLoginRowWidget(
-                              onFacebookTap: () => context
-                                  .read<LoginCubit>()
-                                  .doAction(
+                              onFacebookTap: () =>
+                                  context.read<LoginCubit>().doAction(
                                     const SocialLoginEvent(
                                       AuthSocialProvider.facebook,
                                     ),
                                   ),
-                              onGoogleTap: () => context
-                                  .read<LoginCubit>()
-                                  .doAction(
+                              onGoogleTap: () =>
+                                  context.read<LoginCubit>().doAction(
                                     const SocialLoginEvent(
                                       AuthSocialProvider.google,
                                     ),
                                   ),
-                              onAppleTap: () => context
-                                  .read<LoginCubit>()
-                                  .doAction(
+                              onAppleTap: () =>
+                                  context.read<LoginCubit>().doAction(
                                     const SocialLoginEvent(
                                       AuthSocialProvider.apple,
                                     ),
@@ -157,7 +154,8 @@ class LoginBodyWidget extends StatelessWidget {
                             ),
                             const SizedBox(height: AuthUiConfig.sectionSpacing),
                             AuthFooterLinkWidget(
-                              prefix: LocaleKeys.auth_dont_have_account_yet.tr(),
+                              prefix: LocaleKeys.auth_dont_have_account_yet
+                                  .tr(),
                               actionLabel: LocaleKeys.auth_register.tr(),
                               onTap: onRegister,
                             ),

@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.5
+  sdk: ^3.8.1
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,7 +39,6 @@ dependencies:
   internet_connection_checker_plus: ^3.1.1
   flutter_secure_storage: ^10.3.1
   injectable: ^3.0.0
-  get_it: ^8.0.3
   flutter_bloc: ^9.1.1
   equatable: ^2.1.0
   pretty_dio_logger: ^1.4.0
@@ -55,25 +54,35 @@ dependencies:
   flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
   firebase_core: ^4.12.1
-  retrofit: 4.9.2
+  firebase_auth: ^6.1.0
+  cloud_firestore: ^6.0.1
+  google_sign_in: ^7.2.0
+  flutter_facebook_auth: ^7.1.1
+  get_it: ^8.0.3
+  retrofit: ^4.9.2
   json_annotation: ^4.9.0
   shared_preferences: ^2.5.3
   flutter_cache_manager: ^3.4.1
 
+  youtube_player_flutter: ^10.0.1
+  skeletonizer: ^2.1.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_gen_runner: null
+  injectable_generator: 3.0.2
+  json_serializable: ^6.10.0
+  build_runner: null
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  build_runner: ^2.4.15
-  retrofit_generator: ^10.2.7
-  json_serializable: ^6.9.4
-  injectable_generator: ^3.0.2
+  mocktail: ^1.0.5
+  bloc_test: ^10.0.0
+  retrofit_generator: ^10.2.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,8 +101,8 @@ flutter:
     - assets/images/
     - assets/images/auth/
     - assets/icons/
+    - assets/localization/ar-Eg.json
     - assets/localization/en-US.json
-    - assets/localization/ar-EG.json
   fonts:
     - family: RobotoEnglish
       fonts:
@@ -119,3 +128,14 @@ flutter:
           weight: 600
         - asset: assets/fonts/arabic/Roboto-Bold.ttf
           weight: 700
+
+flutter_native_splash:
+  color: "#181818"
+  image: assets/images/ic_launcher.png
+  color_dark: "#181818"
+  image_dark: assets/images/ic_launcher.png
+  android_12:
+    image: assets/images/ic_launcher.png
+    icon_background_color: "#181818"
+    color: "#181818"
+  web: false

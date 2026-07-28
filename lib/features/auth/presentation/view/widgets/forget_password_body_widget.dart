@@ -32,6 +32,7 @@ class ForgetPasswordBodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthScaffoldWidget(
       showBackButton: true,
+      onBack: onBackToLogin,
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsetsDirectional.symmetric(
@@ -71,8 +72,11 @@ class ForgetPasswordBodyWidget extends StatelessWidget {
                         validator: emailValidator,
                       ),
                       const SizedBox(height: AuthUiConfig.sectionSpacing),
-                      BlocSelector<ForgetPasswordCubit, ForgetPasswordState,
-                          bool>(
+                      BlocSelector<
+                        ForgetPasswordCubit,
+                        ForgetPasswordState,
+                        bool
+                      >(
                         selector: (state) =>
                             state.submitState.state == StateType.loading,
                         builder: (context, isLoading) {

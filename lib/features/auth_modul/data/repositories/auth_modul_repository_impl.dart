@@ -1,0 +1,80 @@
+import 'package:fitness/config/base_response/base_response.dart';
+import 'package:fitness/features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart';
+import 'package:fitness/features/auth_modul/data/datasources/social_auth_data_source_contract.dart';
+import 'package:fitness/features/auth_modul/data/models/social_account_model.dart';
+import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
+import 'package:fitness/features/auth_modul/data/models/request/verify_otp_request.dart';
+import 'package:fitness/features/auth_modul/domain/repositories/auth_modul_repository.dart';
+import 'package:injectable/injectable.dart';
+
+import '../models/request/forget_password_request.dart';
+import '../models/request/reset_password_request.dart';
+import '../models/request/signup_request.dart';
+import '../models/response/auth_common_response.dart';
+
+@Injectable(as: AuthModulRepository)
+class AuthModulRepositoryImpl implements AuthModulRepository {
+  final AuthModulRemoteDataSource remoteDataSource;
+  final SocialAuthDataSourceContract socialAuthDataSource;
+
+  AuthModulRepositoryImpl({
+    required this.remoteDataSource,
+    required this.socialAuthDataSource,
+  });
+
+  @override
+  Future<Result<AuthCommonResponse>> forgetPassword(
+    ForgetPasswordRequest request,
+  ) async {
+    try {
+      final response = await remoteDataSource.forgetPassword(request);
+      return Success(data: response);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<AuthCommonResponse>> verifyOtp(VerifyOtpRequest request) async {
+    try {
+      final response = await remoteDataSource.verifyOtp(request);
+      return Success(data: response);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<AuthCommonResponse>> resetPassword(
+    ResetPasswordRequest request,
+  ) async {
+    try {
+      final response = await remoteDataSource.resetPassword(request);
+      return Success(data: response);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<AuthCommonResponse>> signUp(SignUpRequest request) async {
+    try {
+      final response = await remoteDataSource.signUp(request);
+      return Success(data: response);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<SocialAccountModel>> socialSignIn(
+    AuthSocialProvider provider,
+  ) async {
+    try {
+      final account = await socialAuthDataSource.signIn(provider);
+      return Success(data: account);
+    } catch (e) {
+      return Error(exception: Exception(e.toString()));
+    }
+  }
+}

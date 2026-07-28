@@ -8,10 +8,7 @@ class LoginSubmittedEvent extends LoginEvent {
   final String email;
   final String password;
 
-  const LoginSubmittedEvent({
-    required this.email,
-    required this.password,
-  });
+  const LoginSubmittedEvent({required this.email, required this.password});
 }
 
 class TogglePasswordVisibilityEvent extends LoginEvent {

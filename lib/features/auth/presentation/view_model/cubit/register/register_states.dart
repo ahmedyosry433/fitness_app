@@ -15,15 +15,17 @@ class RegisterState extends Equatable {
     BaseState<AuthUserEntity>? registerState,
     bool? isPasswordHidden,
     bool? isConfirmPasswordHidden,
-  }) =>
-      RegisterState(
-        registerState: registerState ?? this.registerState,
-        isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
-        isConfirmPasswordHidden:
-            isConfirmPasswordHidden ?? this.isConfirmPasswordHidden,
-      );
+  }) => RegisterState(
+    registerState: registerState ?? this.registerState,
+    isPasswordHidden: isPasswordHidden ?? this.isPasswordHidden,
+    isConfirmPasswordHidden:
+        isConfirmPasswordHidden ?? this.isConfirmPasswordHidden,
+  );
 
   @override
-  List<Object?> get props =>
-      [registerState, isPasswordHidden, isConfirmPasswordHidden];
+  List<Object?> get props => [
+    registerState,
+    isPasswordHidden,
+    isConfirmPasswordHidden,
+  ];
 }

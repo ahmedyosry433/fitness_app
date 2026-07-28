@@ -36,6 +36,7 @@ class AuthScaffoldWidget extends StatelessWidget {
           children: [
             AuthBackgroundImageWidget(imagePath: backgroundImage),
             if (showTopLogo) const AuthTopLogoOverlayWidget(),
+            child,
             if (showBackButton)
               SafeArea(
                 child: Align(
@@ -49,7 +50,6 @@ class AuthScaffoldWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            child,
           ],
         ),
       ),
@@ -58,10 +58,7 @@ class AuthScaffoldWidget extends StatelessWidget {
 }
 
 class AuthBackgroundImageWidget extends StatelessWidget {
-  const AuthBackgroundImageWidget({
-    super.key,
-    required this.imagePath,
-  });
+  const AuthBackgroundImageWidget({super.key, required this.imagePath});
 
   final String imagePath;
 

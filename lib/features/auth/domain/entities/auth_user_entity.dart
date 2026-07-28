@@ -16,10 +16,10 @@ class AuthUserEntity {
   factory AuthUserEntity.empty() => const AuthUserEntity();
 
   factory AuthUserEntity.fake() => const AuthUserEntity(
-        id: 'fake-id',
-        name: 'John Doe',
-        email: 'john@example.com',
-        phone: '01234567890',
-        token: 'fake-token',
-      );
+    id: 'fake-id',
+    name: 'John Doe',
+    email: 'john@example.com',
+    phone: '01234567890',
+    token: 'fake-token',
+  );
 }

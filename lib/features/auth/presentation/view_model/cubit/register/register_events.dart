@@ -27,3 +27,9 @@ class TogglePasswordVisibilityEvent extends RegisterEvent {
 class ToggleConfirmPasswordVisibilityEvent extends RegisterEvent {
   const ToggleConfirmPasswordVisibilityEvent();
 }
+
+class SocialRegisterEvent extends RegisterEvent {
+  final AuthSocialProvider provider;
+
+  const SocialRegisterEvent(this.provider);
+}

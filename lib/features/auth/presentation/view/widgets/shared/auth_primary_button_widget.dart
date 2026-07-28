@@ -24,8 +24,9 @@ class AuthPrimaryButtonWidget extends StatelessWidget {
           onPressed: isLoading ? null : onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.fitnessOrange,
-            disabledBackgroundColor:
-                AppColors.fitnessOrange.withValues(alpha: 0.6),
+            disabledBackgroundColor: AppColors.fitnessOrange.withValues(
+              alpha: 0.6,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AuthUiConfig.pillRadius),

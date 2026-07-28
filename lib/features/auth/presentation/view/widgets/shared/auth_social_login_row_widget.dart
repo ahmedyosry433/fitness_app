@@ -55,11 +55,7 @@ class AuthSocialLoginRowWidget extends StatelessWidget {
                   width: AuthUiConfig.socialIconSize,
                   height: AuthUiConfig.socialIconSize,
                 ),
-                SvgPicture.asset(
-                  AuthAssets.iconApple,
-                  width: 13,
-                  height: 16,
-                ),
+                SvgPicture.asset(AuthAssets.iconApple, width: 13, height: 16),
               ],
             ),
           ),
