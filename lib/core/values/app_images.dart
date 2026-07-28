@@ -17,4 +17,8 @@ class AppImages {
   static const String back = "assets/images/back.jpg";
   static const String homeBack = "assets/images/home_back.jpg";
   static const String exercisesBack = "assets/images/Exercises_back.jpg";
+  static const String chatBg = "assets/images/chat_bg.png";
+  static const String robotSkipping = "assets/images/robot_skipping.png";
+  static const String botAvatar = "assets/images/bot_avatar.png";
+  static const String userAvatar = "assets/images/user_avatar.png";
 }

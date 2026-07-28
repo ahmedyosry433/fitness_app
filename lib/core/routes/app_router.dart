@@ -1,5 +1,6 @@
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
+import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_chat_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
@@ -18,7 +19,7 @@ import 'package:fitness/features/exercise_module/presentation/view_model/exercis
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.home, // Open home directly to test bottom nav
+  initialLocation: Routes.aiAgent, // Open home directly to test bottom nav
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
@@ -102,6 +103,14 @@ final GoRouter router = GoRouter(
           ),
         );
       },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.aiAgentChat,
+      page: (state, context) => AiAgentChatPage(
+        conversationId: int.tryParse(
+          state.uri.queryParameters['conversationId'] ?? '',
+        ),
+      ),
     ),
   ],
 );

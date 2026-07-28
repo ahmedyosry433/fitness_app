@@ -32,4 +32,6 @@ class AppIcons {
   static const String iconsResults = "assets/icons/results.svg";
 
   static const String iconsSearch = "assets/icons/search.svg";
+  static const String iconsBackOrange = "assets/icons/ic_back_orange.svg";
+  static const String iconsMenuOrange = "assets/icons/ic_menu_orange.svg";
 }
