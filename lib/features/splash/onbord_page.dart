@@ -1,7 +1,11 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/core/values/app_images.dart';
 
 class OnboardPage extends StatefulWidget {
   const OnboardPage({super.key});
@@ -16,42 +20,38 @@ class _OnboardPageState extends State<OnboardPage> {
 
   final List<Map<String, String>> _pages = [
     {
-      'image': 'assets/images/human_gym.png',
-      'title': 'The Price Of Excellence\nIs Discipline',
-      'subtitle':
-          'Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna\nUt Gravida Quis Id Pretium Purus. Mauris Massa',
+      'image': AppImages.humanGym,
+      'title': LocaleKeys.onboarding_page1_title.tr(),
+      'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
     {
-      'image': 'assets/images/human_gym2.png',
-      'title': 'Fitness Has Never Been So\nMuch Fun',
-      'subtitle':
-          'Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna\nUt Gravida Quis Id Pretium Purus. Mauris Massa',
+      'image': AppImages.humanGym2,
+      'title': LocaleKeys.onboarding_page2_title.tr(),
+      'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
     {
-      'image': 'assets/images/human_gym3.png',
-      'title': 'NO MORE EXCUSES\nDo It Now',
-      'subtitle':
-          'Lorem Ipsum Dolor Sit Amet Consectetur. Eu Urna\nUt Gravida Quis Id Pretium Purus. Mauris Massa',
+      'image': AppImages.humanGym3,
+      'title': LocaleKeys.onboarding_page3_title.tr(),
+      'subtitle': LocaleKeys.onboarding_subtitle.tr(),
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background Image
           Positioned.fill(
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-              child: Image.asset(
-                'assets/images/back.jpg',
-                fit: BoxFit.cover,
+            child: Transform.scale(
+              scale: 1.1,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                child: Image.asset(AppImages.back, fit: BoxFit.cover),
               ),
             ),
           ),
 
-          // Page View for Characters
           PageView.builder(
             controller: _pageController,
             onPageChanged: (index) {
@@ -62,7 +62,7 @@ class _OnboardPageState extends State<OnboardPage> {
             itemCount: _pages.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 220.0), 
+                padding: const EdgeInsets.only(bottom: 220.0),
                 child: Center(
                   child: Image.asset(
                     _pages[index]['image']!,
@@ -73,7 +73,6 @@ class _OnboardPageState extends State<OnboardPage> {
             },
           ),
 
-          // Skip Button
           if (_currentIndex < 2)
             Positioned(
               top: 50,
@@ -82,12 +81,9 @@ class _OnboardPageState extends State<OnboardPage> {
                 onPressed: () {
                   context.go(Routes.login);
                 },
-                child: const Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
+                child: Text(
+                  LocaleKeys.onboarding_skip.tr(),
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                 ),
               ),
             ),
@@ -97,11 +93,16 @@ class _OnboardPageState extends State<OnboardPage> {
             right: 0,
             bottom: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(40),
+              ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 32,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.3),
                     gradient: LinearGradient(
@@ -158,15 +159,15 @@ class _OnboardPageState extends State<OnboardPage> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFF4500),
+                              backgroundColor: AppColors.primaryOrange,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                            child: const Text(
-                              'Next',
-                              style: TextStyle(
+                            child: Text(
+                              LocaleKeys.onboarding_next.tr(),
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -187,14 +188,17 @@ class _OnboardPageState extends State<OnboardPage> {
                               },
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(color: Colors.white54),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
-                              child: const Text(
-                                'Back',
-                                style: TextStyle(
+                              child: Text(
+                                LocaleKeys.onboarding_back.tr(),
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                 ),
@@ -213,14 +217,19 @@ class _OnboardPageState extends State<OnboardPage> {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFF4500),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                backgroundColor: AppColors.primaryOrange,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               child: Text(
-                                _currentIndex == 2 ? 'Do IT' : 'Next',
+                                _currentIndex == 2
+                                    ? LocaleKeys.onboarding_do_it.tr()
+                                    : LocaleKeys.onboarding_next.tr(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -249,7 +258,7 @@ class _OnboardPageState extends State<OnboardPage> {
       height: 6,
       width: isActive ? 24 : 6,
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xFFFF4500) : Colors.white54,
+        color: isActive ? AppColors.primaryOrange : Colors.white54,
         borderRadius: BorderRadius.circular(3),
       ),
     );

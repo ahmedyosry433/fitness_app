@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class CompleteRegisterAppBar extends StatelessWidget {
   final VoidCallback onBack;
 
-  const CompleteRegisterAppBar({super.key, required this.onBack});
+  const CompleteRegisterAppBar({
+    super.key,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +26,13 @@ class CompleteRegisterAppBar extends StatelessWidget {
                 color: AppColors.primaryOrange,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-                size: 20,
-              ),
+              child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
             ),
           ),
           Image.asset(
             AppImages.imagesIcLauncher,
             height: 40,
-            errorBuilder: (context, error, stackTrace) =>
-                const SizedBox(width: 40),
+            errorBuilder: (context, error, stackTrace) => const SizedBox(width: 40),
           ),
           const SizedBox(width: 40),
         ],

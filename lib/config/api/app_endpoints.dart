@@ -23,4 +23,13 @@ class AppEndPoints {
   static const String primeMoverMuscleIdParam = 'primeMoverMuscleId';
   static const String difficultyLevelIdParam = 'difficultyLevelId';
   static const String mealDetailsEndpoint = '$baseUrlFood/lookup.php';
+  static const String exercisesEndpoint = '$baseUrl/exercises';
+  static const String getRandomExercisesEndpoint = '$baseUrl/exercises/random';
+  static const String exercisesByMuscleAndDifficultyEndpoint =
+      '$baseUrl/exercises/by-muscle-difficulty';
+  static const String exercises = '/exercises';
+  static const String exercisesByMuscleAndDifficulty = '/exercises/by-muscle-difficulty';
+  static const String difficultyLevels = '/levels';
+  static const String primeMoverMuscleIdParam = 'primeMoverMuscleId';
+  static const String difficultyLevelIdParam = 'difficultyLevelId';
 }

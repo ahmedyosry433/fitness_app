@@ -1,3 +1,4 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -21,33 +22,26 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _shimmerController;
 
-  // Phase 1: Logo entrance (scale + fade)
   late Animation<double> _logoScale;
   late Animation<double> _logoFade;
 
-  // Phase 2: Glow ring
   late Animation<double> _glowOpacity;
   late Animation<double> _glowScale;
 
-  // Phase 3: Text reveal
   late Animation<double> _textFade;
   late Animation<Offset> _textSlide;
 
-  // Phase 4: Loading bar
   late Animation<double> _loadingProgress;
   late Animation<double> _loadingFade;
 
-  // Pulse (continuous)
   late Animation<double> _pulseAnimation;
 
-  // Shimmer (continuous)
   late Animation<double> _shimmerAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    // Set status bar to transparent for immersive feel
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -60,25 +54,21 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   void _setupAnimations() {
-    // Main orchestrator: 3 seconds total
     _mainController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
     );
 
-    // Pulse controller: loops continuously
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     );
 
-    // Shimmer controller: loops continuously
     _shimmerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
 
-    // --- Phase 1: Logo entrance (0% → 35%) ---
     _logoScale = Tween<double>(begin: 0.3, end: 1.0).animate(
       CurvedAnimation(
         parent: _mainController,
@@ -93,7 +83,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       ),
     );
 
-    // --- Phase 2: Glow ring (20% → 55%) ---
     _glowOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _mainController,
@@ -108,7 +97,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       ),
     );
 
-    // --- Phase 3: Text reveal (45% → 70%) ---
     _textFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _mainController,
@@ -124,7 +112,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           ),
         );
 
-    // --- Phase 4: Loading bar (60% → 100%) ---
     _loadingProgress = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _mainController,
@@ -139,12 +126,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       ),
     );
 
-    // Continuous pulse
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
 
-    // Shimmer sweep
     _shimmerAnimation = Tween<double>(begin: -1.0, end: 2.0).animate(
       CurvedAnimation(parent: _shimmerController, curve: Curves.linear),
     );
@@ -153,17 +138,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void _startSequence() {
     _mainController.forward();
 
-    // Start pulse loop after logo lands
     Future.delayed(const Duration(milliseconds: 900), () {
       if (mounted) _pulseController.repeat(reverse: true);
     });
 
-    // Start shimmer after text appears
     Future.delayed(const Duration(milliseconds: 1500), () {
       if (mounted) _shimmerController.repeat();
     });
 
-    // Navigate after animation completes + brief pause
     Timer(const Duration(milliseconds: 3600), () {
       if (mounted) {
         context.go(Routes.onBoard);
@@ -195,34 +177,29 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFF181818), // deep charcoal
-                  Color(0xFF242424), // main charcoal
-                  Color(0xFF2D2D2D), // lighter charcoal
+                  Color(0xFF181818),
+                  Color(0xFF242424),
+                  Color(0xFF2D2D2D),
                 ],
                 stops: [0.0, 0.5, 1.0],
               ),
             ),
             child: Stack(
               children: [
-                // Animated background particles
                 ..._buildParticles(),
 
-                // Main content
                 Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Glow ring behind logo
                       _buildGlowRing(),
 
                       const SizedBox(height: 32),
 
-                      // Brand text
                       _buildBrandText(),
 
                       const SizedBox(height: 48),
 
-                      // Loading bar
                       _buildLoadingBar(),
                     ],
                   ),
@@ -235,7 +212,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
-  /// Builds the logo with glow ring behind it
   Widget _buildGlowRing() {
     return SizedBox(
       width: 200,
@@ -243,7 +219,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Outer glow ring
           Transform.scale(
             scale: _glowScale.value * _pulseAnimation.value,
             child: Opacity(
@@ -255,8 +230,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFFFF4100).withValues(alpha: 0.3),
-                      const Color(0xFFFF4100).withValues(alpha: 0.15),
+                      AppColors.primaryOrangeDark.withValues(alpha: 0.3),
+                      AppColors.primaryOrangeDark.withValues(alpha: 0.15),
                       Colors.transparent,
                     ],
                     stops: const [0.0, 0.5, 1.0],
@@ -266,7 +241,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ),
           ),
 
-          // Inner glowing border
           Transform.scale(
             scale: _glowScale.value,
             child: Opacity(
@@ -277,17 +251,17 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xFFFF4100).withValues(alpha: 0.4),
+                    color: AppColors.primaryOrangeDark.withValues(alpha: 0.4),
                     width: 2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF4100).withValues(alpha: 0.2),
+                      color: AppColors.primaryOrangeDark.withValues(alpha: 0.2),
                       blurRadius: 20,
                       spreadRadius: 5,
                     ),
                     BoxShadow(
-                      color: const Color(0xFFFF4100).withValues(alpha: 0.10),
+                      color: AppColors.primaryOrangeDark.withValues(alpha: 0.10),
                       blurRadius: 40,
                       spreadRadius: 10,
                     ),
@@ -297,7 +271,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ),
           ),
 
-          // Logo
           Transform.scale(
             scale: _logoScale.value,
             child: Opacity(
@@ -330,7 +303,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
-  /// Brand text with shimmer effect
   Widget _buildBrandText() {
     return SlideTransition(
       position: _textSlide,
@@ -341,7 +313,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ShaderMask(
               shaderCallback: (bounds) {
                 return LinearGradient(
-                  colors: const [Colors.white, Color(0xFFFF4100), Colors.white],
+                  colors: const [Colors.white, AppColors.primaryOrangeDark, Colors.white],
                   stops: [
                     (_shimmerAnimation.value - 0.3).clamp(0.0, 1.0),
                     _shimmerAnimation.value.clamp(0.0, 1.0),
@@ -375,7 +347,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
-  /// Animated loading bar
   Widget _buildLoadingBar() {
     return FadeTransition(
       opacity: _loadingFade,
@@ -398,11 +369,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       gradient: const LinearGradient(
-                        colors: [Color(0xFFFF7A00), Color(0xFFFF4100)],
+                        colors: [AppColors.primaryOrangeLight, AppColors.primaryOrangeDark],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFFF4100).withValues(alpha: 0.5),
+                          color: AppColors.primaryOrangeDark.withValues(alpha: 0.5),
                           blurRadius: 8,
                           offset: const Offset(0, 0),
                         ),
@@ -418,7 +389,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
-  /// Subtle floating particles in the background
   List<Widget> _buildParticles() {
     final particles = <_ParticleData>[
       _ParticleData(0.15, 0.20, 4, 0.3, 0.0),
@@ -439,7 +409,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       );
       final opacity = adjustedProgress * p.maxOpacity;
 
-      // Subtle floating motion
       final floatY =
           math.sin((_pulseController.value + p.delay) * math.pi * 2) * 8;
 
@@ -456,7 +425,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFF4100).withValues(alpha: 0.3),
+                  color: AppColors.primaryOrangeDark.withValues(alpha: 0.3),
                   blurRadius: p.size * 3,
                 ),
               ],
@@ -468,7 +437,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 }
 
-/// Data class for background particles
 class _ParticleData {
   final double x;
   final double y;

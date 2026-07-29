@@ -118,4 +118,7 @@ class AppColors {
   static const Color authCharcoal = Color(0xFF242424);
   static const Color authCharcoalDeep = Color(0xFF181818);
   static const Color authPanelOverlay = Color(0xCC1A1A1A);
+
+  // custom black
+  static const Color black22 = Color(0xFF222222);
 }

@@ -67,13 +67,9 @@ class _HorizontalNumberPickerState extends State<HorizontalNumberPicker> {
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 200),
                     style: TextStyle(
-                      color: isSelected
-                          ? AppColors.primaryOrange
-                          : Colors.white54,
+                      color: isSelected ? AppColors.primaryOrange : Colors.white54,
                       fontSize: isSelected ? 36 : 24,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                     child: Text(value.toString()),
                   ),
