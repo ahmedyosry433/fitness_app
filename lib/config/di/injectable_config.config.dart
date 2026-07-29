@@ -18,6 +18,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+<<<<<<< HEAD
 import '../../features/exercise_module/api/api_client/exercise_module_api_client.dart'
     as _i723;
 import '../../features/exercise_module/data/datasources/exercise_remote_data_source.dart'
@@ -32,6 +33,8 @@ import '../../features/exercise_module/domain/use_cases/get_exercises_use_case.d
     as _i692;
 import '../../features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart'
     as _i215;
+=======
+>>>>>>> origin/feature/details-food
 import '../../features/food/api/api_client/food_api_client.dart' as _i310;
 import '../../features/food/api/datasource/food_remote_data_source_impl.dart'
     as _i521;
@@ -41,6 +44,13 @@ import '../../features/food/data/repositories/food_repository_impl.dart'
     as _i860;
 import '../../features/food/domain/repositories/food_repository_contract.dart'
     as _i966;
+<<<<<<< HEAD
+=======
+import '../../features/food/domain/use_case/get_meal_details_use_case.dart'
+    as _i201;
+import '../../features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart'
+    as _i1072;
+>>>>>>> origin/feature/details-food
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -66,6 +76,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+<<<<<<< HEAD
     gh.factory<_i329.FoodRemoteDataSourceContract>(
       () => _i521.FoodRemoteDataSourceImpl(
         foodRemoteDataSourceImpl: gh<_i521.FoodRemoteDataSourceImpl>(),
@@ -76,6 +87,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i723.ExerciseModuleApiClient>(
       () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
+=======
+    gh.lazySingleton<_i310.FoodApiClient>(
+      () => _i310.FoodApiClient(gh<_i361.Dio>()),
+    );
+    gh.factory<_i329.FoodRemoteDataSourceContract>(
+      () => _i521.FoodRemoteDataSourceImpl(gh<_i310.FoodApiClient>()),
+>>>>>>> origin/feature/details-food
     );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
@@ -86,17 +104,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i966.FoodRepositoryContract>(
       () => _i860.FoodRepositoryImpl(gh<_i329.FoodRemoteDataSourceContract>()),
     );
+<<<<<<< HEAD
     gh.factory<_i868.ExerciseRemoteDataSource>(
       () => _i868.ExerciseRemoteDataSourceImpl(
         gh<_i723.ExerciseModuleApiClient>(),
       ),
     );
+=======
+>>>>>>> origin/feature/details-food
     gh.factory<_i589.UserHelper>(
       () => _i589.UserHelper(
         gh<_i460.SharedPreferences>(),
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+<<<<<<< HEAD
     gh.factory<_i112.ExerciseRepository>(
       () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
     );
@@ -111,6 +133,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i692.GetExercisesUseCase>(),
         gh<_i198.GetDifficultyLevelsUseCase>(),
       ),
+=======
+    gh.factory<_i201.GetMealDetailsUseCase>(
+      () => _i201.GetMealDetailsUseCase(gh<_i966.FoodRepositoryContract>()),
+    );
+    gh.factory<_i1072.DetailsFoodCubit>(
+      () => _i1072.DetailsFoodCubit(gh<_i201.GetMealDetailsUseCase>()),
+>>>>>>> origin/feature/details-food
     );
     return this;
   }
