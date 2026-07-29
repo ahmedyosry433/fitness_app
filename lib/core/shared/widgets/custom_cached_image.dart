@@ -44,7 +44,7 @@ class CustomCachedImage extends StatelessWidget {
           color: color ?? AppColors.transparent,
         ),
         child: Center(
-          child: errorImage != null && errorImage!.endsWith(".png")
+          child: (errorImage != null && !errorImage!.endsWith(".svg"))
               ? Image.asset(
                   errorImage!,
                   width: width,
@@ -52,10 +52,10 @@ class CustomCachedImage extends StatelessWidget {
                   fit: fit ?? BoxFit.contain,
                 )
               : SvgPicture.asset(
+                  errorImage ?? AppIcons.iconsNoProfile,
                   fit: BoxFit.scaleDown,
                   width: 100,
                   height: 100,
-                  errorImage ?? AppIcons.iconsNoProfile,
                 ),
         ),
       );
@@ -80,7 +80,7 @@ class CustomCachedImage extends StatelessWidget {
           color: AppColors.primaryLight.withValues(alpha: 0.08),
         ),
         child: Center(
-          child: errorImage != null && errorImage!.endsWith(".png")
+          child: (errorImage != null && !errorImage!.endsWith(".svg"))
               ? Image.asset(
                   errorImage!,
                   width: width,
@@ -88,10 +88,10 @@ class CustomCachedImage extends StatelessWidget {
                   fit: fit ?? BoxFit.contain,
                 )
               : SvgPicture.asset(
+                  errorImage ?? AppIcons.iconsNoProfile,
                   fit: BoxFit.contain,
                   width: width,
                   height: height,
-                  errorImage ?? AppIcons.iconsNoProfile,
                   colorFilter:
                       emptyColorFilter ??
                       ColorFilter.mode(AppColors.gray5F, BlendMode.srcIn),

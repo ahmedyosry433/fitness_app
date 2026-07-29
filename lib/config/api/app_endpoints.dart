@@ -9,8 +9,18 @@ class AppEndPoints {
   static const String exercisesByMuscleAndDifficultyEndpoint =
       '$baseUrl/exercises/by-muscle-difficulty';
   static const String exercises = '/exercises';
-  static const String exercisesByMuscleAndDifficulty = '/exercises/by-muscle-difficulty';
+  static const String exercisesByMuscleAndDifficulty =
+      '/exercises/by-muscle-difficulty';
   static const String difficultyLevels = '/levels';
   static const String primeMoverMuscleIdParam = 'primeMoverMuscleId';
   static const String difficultyLevelIdParam = 'difficultyLevelId';
+  static const String resetPassword = '/auth/resetPassword';
+  static const String deleteMe = '/auth/deleteMe';
+  static const String logout = '/auth/logout';
+  static const String editProfile = '/auth/editProfile';
+  static const String nameParam = 'name';
+  static const String photoParam = 'photo';
+  static const String changePassword = '/auth/change-password';
+  static const String uploadPhoto = '/auth/upload-photo';
+  static const String profileData = '/auth/profile-data';
 }

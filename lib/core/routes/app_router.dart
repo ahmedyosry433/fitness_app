@@ -3,22 +3,26 @@ import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/edit_profile_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/change_password_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
 import 'package:fitness/features/workout/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
+import 'package:fitness/core/widgets/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.home, // Open home directly to test bottom nav
+  initialLocation: Routes.home,
   navigatorKey: navigatorKey,
   routes: [
     _customAnimatedGoRoute(
@@ -81,19 +85,21 @@ final GoRouter router = GoRouter(
       route: Routes.exercise,
       page: (state, context) {
         final extra = state.extra as Map<String, dynamic>?;
-        final primeMoverMuscleId = extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
+        final primeMoverMuscleId =
+            extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
         final pageTitle = extra?['pageTitle'] ?? '';
         final pageDescription = extra?['pageDescription'] ?? '';
         final backgroundImage = extra?['backgroundImage'] ?? '';
 
         return BlocProvider(
-          create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
-            InitExerciseModuleIntent(
-              primeMoverMuscleId: primeMoverMuscleId,
-              pageTitle: pageTitle,
-              pageDescription: pageDescription,
-            )
-          ),
+          create: (context) => getIt<ExerciseModuleCubit>()
+            ..processIntent(
+              InitExerciseModuleIntent(
+                primeMoverMuscleId: primeMoverMuscleId,
+                pageTitle: pageTitle,
+                pageDescription: pageDescription,
+              ),
+            ),
           child: ExerciseModulePage(
             primeMoverMuscleId: primeMoverMuscleId,
             pageTitle: pageTitle,
@@ -101,6 +107,25 @@ final GoRouter router = GoRouter(
             backgroundImage: backgroundImage,
           ),
         );
+      },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.editProfile,
+      page: (state, context) => const EditProfilePage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.changePassword,
+      page: (state, context) => const ChangePasswordPage(),
+    ),
+
+    _customAnimatedGoRoute(
+      route: Routes.webView,
+      page: (state, context) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final title = extra?['title'] as String? ?? '';
+        final url = extra?['url'] as String? ?? '';
+
+        return WebViewPage(title: title, url: url);
       },
     ),
   ],

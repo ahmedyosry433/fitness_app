@@ -87,7 +87,8 @@
         "english_name": "يرجى إدخال اسمك باللغة الإنجليزية",
         "email_required": "يرجى إدخال بريدك الإلكتروني",
         "email_invalid": "يرجى إدخال عنوان بريد إلكتروني صالح",
-        "username_required": "يرجى إدخال اسم المستخدم"
+        "username_required": "يرجى إدخال اسم المستخدم",
+        "password_advanced_validation": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة وأرقام ورموز"
     },
     "forget_password": {
         "title": " كلمة المرور",
@@ -163,5 +164,23 @@
         "skeleton_desc": "نص وصف الهيكل يكتب هنا...",
         "lorem_ipsum": "هذا النص هو مثال لنص يمكن أن يستبدل\nفي نفس المساحة، لقد تم توليد هذا النص",
         "invalid_video_url": "رابط الفيديو غير صالح"
+    },
+    "profile": {
+        "profile": "الملف الشخصي",
+        "edit_profile": "تعديل الملف الشخصي",
+        "change_password": "تغيير كلمة المرور",
+        "select_language": "اختر اللغة",
+        "security": "الأمان",
+        "privacy_policy": "سياسة الخصوصية",
+        "help": "المساعدة",
+        "logout": "تسجيل الخروج",
+        "your_weight": "وزنك",
+        "your_goal": "هدفك",
+        "your_activity_level": "مستوى نشاطك",
+        "tap_to_edit": "(اضغط للتعديل)",
+        "rookie": "مبتدئ",
+        "gain_weight": "زيادة الوزن",
+        "english": "الإنجليزية",
+        "old_password": "كلمة المرور القديمة"
     }
 }

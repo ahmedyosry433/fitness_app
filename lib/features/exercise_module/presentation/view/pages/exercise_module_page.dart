@@ -16,6 +16,7 @@ import 'package:fitness/features/exercise_module/presentation/view_model/exercis
 import 'package:fitness/config/base_state/base_state.dart';
 
 import 'package:fitness/core/shared/widgets/custom_cached_image.dart';
+import 'package:fitness/core/widgets/custom_back_button.dart';
 import 'widgets/exercise_card.dart';
 
 class ExerciseModulePage extends StatelessWidget {
@@ -70,7 +71,7 @@ class ExerciseModulePage extends StatelessWidget {
         border: Border.all(
           color: isOrangeText
               ? AppColors.orangePrimary
-              : AppColors.whiteFF.withOpacity(0.3),
+              : AppColors.whiteFF.withValues(alpha: 0.3),
         ),
         borderRadius: BorderRadius.circular(20.r),
       ),
@@ -108,32 +109,29 @@ class ExerciseModulePage extends StatelessWidget {
             left: 0,
             right: 0,
             height: 420.h,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-              child: backgroundImage.isNotEmpty
-                  ? (backgroundImage.startsWith('http')
-                        ? CustomCachedImage(
-                            imagePath: backgroundImage,
-                            fit: BoxFit.cover,
-                            errorImage: AppImages.exercisesBack,
-                          )
-                        : Image.asset(
-                            backgroundImage,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                                  AppImages.exercisesBack,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
-                                ),
-                          ))
-                  : Image.asset(
-                      AppImages.exercisesBack,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                    ),
-            ),
+            child: backgroundImage.isNotEmpty
+                ? (backgroundImage.startsWith('http')
+                      ? CustomCachedImage(
+                          imagePath: backgroundImage,
+                          fit: BoxFit.cover,
+                          errorImage: AppImages.exercisesBack,
+                        )
+                      : Image.asset(
+                          backgroundImage,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
+                                AppImages.exercisesBack,
+                                fit: BoxFit.cover,
+                                alignment: const Alignment(0, -0.5),
+                              ),
+                        ))
+                : Image.asset(
+                    AppImages.exercisesBack,
+                    fit: BoxFit.cover,
+                    alignment: const Alignment(0, -0.5),
+                  ),
           ),
           // Gradient Fade to blend both images
           Positioned.fill(
@@ -143,11 +141,12 @@ class ExerciseModulePage extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.black0C.withOpacity(0.0),
-                    AppColors.black0C.withOpacity(0.6),
+                    AppColors.black0C.withValues(alpha: 0.0),
+                    AppColors.black0C.withValues(alpha: 0.4),
+                    AppColors.black0C.withValues(alpha: 0.9),
                     AppColors.black0C,
                   ],
-                  stops: const [0.4, 0.8, 1.0],
+                  stops: const [0.0, 0.3, 0.6, 1.0],
                 ),
               ),
             ),
@@ -164,277 +163,313 @@ class ExerciseModulePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 10.h),
-                      // Back Button
-                      InkWell(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          padding: EdgeInsets.all(8.r),
-                          decoration: const BoxDecoration(
-                            color: AppColors.orangePrimary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.zero,
-                            child: Icon(
-                              Icons.keyboard_arrow_left,
-                              color: AppColors.whiteFF,
-                              size: 24.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 180.h,
-                      ), // Spacing to match the top area of the image
-
-                      BlocBuilder<
-                        ExerciseModuleCubit,
-                        BaseState<ExerciseModuleUIModel>
-                      >(
-                        buildWhen: (previous, current) {
-                          return previous.data?.pageTitle !=
-                                  current.data?.pageTitle ||
-                              previous.data?.pageDescription !=
-                                  current.data?.pageDescription;
-                        },
-                        builder: (context, state) {
-                          final data =
-                              state.data ?? const ExerciseModuleUIModel();
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Text(
-                                  data.pageTitle.isNotEmpty
-                                      ? data.pageTitle
-                                      : LocaleKeys.exercise_chest_exercise.tr(),
-                                  style: 28.bold.copyWith(
-                                    color: AppColors.whiteFF,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15.h),
-                              Text(
-                                data.pageDescription.isNotEmpty
-                                    ? data.pageDescription
-                                    : LocaleKeys.exercise_chest_exercise_desc
-                                          .tr(),
-                                textAlign: TextAlign.left,
-                                style: 14.regular.copyWith(
-                                  color: AppColors.grayCF,
-                                  height: 1.5,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
+                      CustomBackButton(
+                        backgroundColor: AppColors.orangePrimary,
+                        size: 35.w,
                       ),
                       SizedBox(height: 20.h),
-                      BlocBuilder<
-                        ExerciseModuleCubit,
-                        BaseState<ExerciseModuleUIModel>
-                      >(
-                        buildWhen: (previous, current) {
-                          return previous.data?.exercises !=
-                              current.data?.exercises;
-                        },
-                        builder: (context, state) {
-                          final exercises = state.data?.exercises ?? [];
-                          int totalMins = exercises.fold(
-                            0,
-                            (sum, item) => sum + (int.tryParse(item.time) ?? 0),
-                          );
-                          int totalCals = exercises.fold(
-                            0,
-                            (sum, item) =>
-                                sum + (int.tryParse(item.calories) ?? 0),
-                          );
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildChip(
-                                '$totalMins ${LocaleKeys.exercise_min.tr()}',
-                              ),
-                              _buildChip(
-                                '$totalCals ${LocaleKeys.exercise_cal.tr()}',
-                                isOrangeText: true,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
                     ],
                   ),
                 ),
 
-                SizedBox(height: 30.h),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child:
-                      BlocBuilder<
-                        ExerciseModuleCubit,
-                        BaseState<ExerciseModuleUIModel>
-                      >(
-                        buildWhen: (previous, current) {
-                          final prevData = previous.data;
-                          final currData = current.data;
-                          return prevData?.difficultyLevels !=
-                                  currData?.difficultyLevels ||
-                              prevData?.selectedDifficultyIndex !=
-                                  currData?.selectedDifficultyIndex;
-                        },
-                        builder: (context, state) {
-                          final data =
-                              state.data ?? const ExerciseModuleUIModel();
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: data.difficultyLevels
-                                  .asMap()
-                                  .entries
-                                  .map((entry) {
-                                    return _buildTab(
-                                      context,
-                                      entry.value.name,
-                                      entry.key,
-                                      data.selectedDifficultyIndex == entry.key,
-                                    );
-                                  })
-                                  .toList(),
-                            ),
-                          );
-                        },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 25.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        children: [
+                          BlocBuilder<
+                            ExerciseModuleCubit,
+                            BaseState<ExerciseModuleUIModel>
+                          >(
+                            buildWhen: (previous, current) {
+                              return previous.data?.pageTitle !=
+                                      current.data?.pageTitle ||
+                                  previous.data?.pageDescription !=
+                                      current.data?.pageDescription;
+                            },
+                            builder: (context, state) {
+                              final data =
+                                  state.data ?? const ExerciseModuleUIModel();
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      data.pageTitle.isNotEmpty
+                                          ? data.pageTitle
+                                          : LocaleKeys.exercise_chest_exercise
+                                                .tr(),
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                            color: AppColors.whiteFF,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
+                                          ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    data.pageDescription.isNotEmpty
+                                        ? data.pageDescription
+                                        : LocaleKeys
+                                              .exercise_chest_exercise_desc
+                                              .tr(),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                          color: AppColors.whiteFF.withValues(
+                                            alpha: 0.8,
+                                          ),
+                                          height: 1.4,
+                                          fontSize: 14,
+                                          fontFamily: 'RobotoEnglish',
+                                        ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: 20.h),
+                          BlocBuilder<
+                            ExerciseModuleCubit,
+                            BaseState<ExerciseModuleUIModel>
+                          >(
+                            buildWhen: (previous, current) {
+                              return previous.data?.exercises !=
+                                  current.data?.exercises;
+                            },
+                            builder: (context, state) {
+                              final exercises = state.data?.exercises ?? [];
+                              int totalMins = exercises.fold(
+                                0,
+                                (sum, item) =>
+                                    sum + (int.tryParse(item.time) ?? 0),
+                              );
+                              int totalCals = exercises.fold(
+                                0,
+                                (sum, item) =>
+                                    sum + (int.tryParse(item.calories) ?? 0),
+                              );
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _buildChip(
+                                    '$totalMins ${LocaleKeys.exercise_min.tr()}',
+                                  ),
+                                  _buildChip(
+                                    '$totalCals ${LocaleKeys.exercise_cal.tr()}',
+                                    isOrangeText: true,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
                       ),
+                    ),
+
+                    SizedBox(height: 30.h),
+
+                    BlocBuilder<
+                      ExerciseModuleCubit,
+                      BaseState<ExerciseModuleUIModel>
+                    >(
+                      buildWhen: (previous, current) {
+                        final prevData = previous.data;
+                        final currData = current.data;
+                        return prevData?.difficultyLevels !=
+                                currData?.difficultyLevels ||
+                            prevData?.selectedDifficultyIndex !=
+                                currData?.selectedDifficultyIndex;
+                      },
+                      builder: (context, state) {
+                        final data =
+                            state.data ?? const ExerciseModuleUIModel();
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: data.difficultyLevels.asMap().entries.map(
+                              (entry) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w,
+                                  ),
+                                  child: _buildTab(
+                                    context,
+                                    entry.value.name,
+                                    entry.key,
+                                    data.selectedDifficultyIndex == entry.key,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        );
+                      },
+                    ),
+
+                    SizedBox(height: 25.h),
+                  ],
                 ),
 
-                SizedBox(height: 25.h),
+                SizedBox(height: 10.h),
+
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.w),
+                    margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    width: double.infinity,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.r),
-                        topRight: Radius.circular(30.r),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.black2A.withOpacity(0.5),
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 25.h),
-                            BlocBuilder<
-                              ExerciseModuleCubit,
-                              BaseState<ExerciseModuleUIModel>
-                            >(
-                              builder: (context, state) {
-                                Widget buildSkeleton() {
-                                  final dummyExercise = ExerciseEntity(
-                                    id: '',
-                                    title: LocaleKeys.exercise_skeleton_title
-                                        .tr(),
-                                    description: LocaleKeys
-                                        .exercise_skeleton_desc
-                                        .tr(),
-                                    videoUrl: '',
-                                    thumbnailUrl: '',
-                                    time: '10',
-                                    calories: '100',
-                                    level: LocaleKeys.exercise_beginner.tr(),
-                                  );
-                                  return Expanded(
-                                    child: Skeletonizer(
-                                      enabled: true,
-                                      effect: const ShimmerEffect(
-                                        baseColor: AppColors.gray37,
-                                        highlightColor: AppColors.gray5F,
-                                      ),
-                                      containersColor: AppColors.transparent,
-                                      child: ListView.separated(
-                                        padding: EdgeInsets.only(
-                                          left: 20.w,
-                                          right: 20.w,
-                                          bottom: 20.h,
+                      borderRadius: BorderRadius.circular(20.r),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.black22.withValues(alpha: 0.5),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 20.h),
+                              BlocBuilder<
+                                ExerciseModuleCubit,
+                                BaseState<ExerciseModuleUIModel>
+                              >(
+                                builder: (context, state) {
+                                  Widget buildSkeleton() {
+                                    final dummyExercise = ExerciseEntity(
+                                      id: '',
+                                      title: LocaleKeys.exercise_skeleton_title
+                                          .tr(),
+                                      description: LocaleKeys
+                                          .exercise_skeleton_desc
+                                          .tr(),
+                                      videoUrl: '',
+                                      thumbnailUrl: '',
+                                      time: '10',
+                                      calories: '100',
+                                      level: LocaleKeys.exercise_beginner.tr(),
+                                    );
+                                    return Expanded(
+                                      child: Skeletonizer(
+                                        enabled: true,
+                                        effect: const ShimmerEffect(
+                                          baseColor: AppColors.gray37,
+                                          highlightColor: AppColors.gray5F,
                                         ),
-                                        itemBuilder: (context, index) =>
-                                            ExerciseCard(
-                                              exercise: dummyExercise,
-                                            ),
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: 15.h),
-                                        itemCount: 4,
-                                      ),
-                                    ),
-                                  );
-                                }
-
-                                return state.when(
-                                  initial: () => buildSkeleton(),
-                                  loading: () => buildSkeleton(),
-                                  error: (exception) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(top: 50.h),
-                                      child: Center(
-                                        child: Text(
-                                          LocaleKeys.exercise_failed_to_load.tr(
-                                            args: [
-                                              exception.toString().replaceAll(
-                                                'Exception: ',
-                                                '',
+                                        containersColor: AppColors.transparent,
+                                        child: ListView.separated(
+                                          padding: EdgeInsets.only(
+                                            left: 20.w,
+                                            right: 20.w,
+                                            bottom: 20.h,
+                                          ),
+                                          itemBuilder: (context, index) =>
+                                              ExerciseCard(
+                                                exercise: dummyExercise,
                                               ),
-                                            ],
-                                          ),
-                                          style: 16.medium.copyWith(
-                                            color: AppColors.whiteFF,
-                                          ),
-                                          textAlign: TextAlign.center,
+                                          separatorBuilder: (context, index) =>
+                                              Divider(
+                                                color: AppColors.whiteFF
+                                                    .withValues(alpha: 0.05),
+                                                height: 1,
+                                                thickness: 1,
+                                                indent: 12.w,
+                                                endIndent: 12.w,
+                                              ),
+                                          itemCount: 4,
                                         ),
                                       ),
                                     );
-                                  },
-                                  success: (ExerciseModuleUIModel? data) {
-                                    if (data == null ||
-                                        data.exercises.isEmpty) {
+                                  }
+
+                                  return state.when(
+                                    initial: () => buildSkeleton(),
+                                    loading: () => buildSkeleton(),
+                                    error: (exception) {
                                       return Padding(
                                         padding: EdgeInsets.only(top: 50.h),
                                         child: Center(
                                           child: Text(
-                                            LocaleKeys
-                                                .exercise_no_exercises_found
-                                                .tr(),
-                                            style: 16.regular.copyWith(
-                                              color: AppColors.grayCF,
+                                            LocaleKeys.exercise_failed_to_load
+                                                .tr(
+                                                  args: [
+                                                    exception
+                                                        .toString()
+                                                        .replaceAll(
+                                                          'Exception: ',
+                                                          '',
+                                                        ),
+                                                  ],
+                                                ),
+                                            style: 16.medium.copyWith(
+                                              color: AppColors.whiteFF,
                                             ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       );
-                                    }
-                                    return Expanded(
-                                      child: ListView.separated(
-                                        padding: EdgeInsets.only(
-                                          left: 20.w,
-                                          right: 20.w,
-                                          bottom: 20.h,
+                                    },
+                                    success: (ExerciseModuleUIModel? data) {
+                                      if (data == null ||
+                                          data.exercises.isEmpty) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(top: 50.h),
+                                          child: Center(
+                                            child: Text(
+                                              LocaleKeys
+                                                  .exercise_no_exercises_found
+                                                  .tr(),
+                                              style: 16.regular.copyWith(
+                                                color: AppColors.grayCF,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return Expanded(
+                                        child: ListView.separated(
+                                          padding: EdgeInsets.only(
+                                            left: 20.w,
+                                            right: 20.w,
+                                            bottom: 20.h,
+                                          ),
+                                          itemBuilder: (context, index) {
+                                            final exercise =
+                                                data.exercises[index];
+                                            return ExerciseCard(
+                                              exercise: exercise,
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              Divider(
+                                                color: AppColors.whiteFF
+                                                    .withValues(alpha: 0.05),
+                                                height: 1,
+                                                thickness: 1,
+                                                indent: 12.w,
+                                                endIndent: 12.w,
+                                              ),
+                                          itemCount: data.exercises.length,
                                         ),
-                                        itemBuilder: (context, index) {
-                                          final exercise =
-                                              data.exercises[index];
-                                          return ExerciseCard(
-                                            exercise: exercise,
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(height: 15.h),
-                                        itemCount: data.exercises.length,
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

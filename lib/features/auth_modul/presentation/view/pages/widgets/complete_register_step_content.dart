@@ -3,19 +3,21 @@ import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/comp
 import 'package:flutter/material.dart';
 
 class CompleteRegisterStepContent extends StatelessWidget {
-  final int currentStep;
+  final int? currentStep;
   final String title;
   final String subtitle;
   final Widget child;
   final VoidCallback onNext;
+  final String? buttonText;
 
   const CompleteRegisterStepContent({
     super.key,
-    required this.currentStep,
+    this.currentStep,
     required this.title,
     required this.subtitle,
     required this.child,
     required this.onNext,
+    this.buttonText,
   });
 
   @override
@@ -23,8 +25,10 @@ class CompleteRegisterStepContent extends StatelessWidget {
     return Column(
       children: [
         const Spacer(flex: 1),
-        CompleteRegisterStepIndicator(currentStep: currentStep),
-        const SizedBox(height: 20),
+        if (currentStep != null) ...[
+          CompleteRegisterStepIndicator(currentStep: currentStep!),
+          const SizedBox(height: 20),
+        ],
         Text(
           title,
           textAlign: TextAlign.center,
@@ -39,10 +43,7 @@ class CompleteRegisterStepContent extends StatelessWidget {
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 14,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 14),
         ),
         const Spacer(flex: 1),
         Expanded(
@@ -51,8 +52,10 @@ class CompleteRegisterStepContent extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+              color: Colors.black.withValues(alpha: 0.6),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(40),
+              ),
             ),
             child: Column(
               children: [
@@ -65,11 +68,17 @@ class CompleteRegisterStepContent extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryOrange,
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
                     child: Text(
-                      currentStep == 3 ? 'Done' : 'Next',
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      buttonText ?? (currentStep == 3 ? 'Done' : 'Next'),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

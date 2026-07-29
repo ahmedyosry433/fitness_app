@@ -20,17 +20,14 @@ class ExerciseCard extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
+          barrierColor: Colors.transparent,
           builder: (context) => VideoPlayerPopup(
             videoUrl: exercise.videoUrl,
           ),
         );
       },
       child: Container(
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          color: AppColors.black22,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
         child: Row(
           children: [
             // Image
