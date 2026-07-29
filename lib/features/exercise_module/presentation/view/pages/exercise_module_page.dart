@@ -39,27 +39,25 @@ class ExerciseModulePage extends StatelessWidget {
     int index,
     bool isSelected,
   ) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          context.read<ExerciseModuleCubit>().processIntent(
-            LoadExercisesIntent(index),
-          );
-        },
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 4.w),
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: Text(
-            label,
-            style: 13.bold.copyWith(color: AppColors.whiteFF),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+    return GestureDetector(
+      onTap: () {
+        context.read<ExerciseModuleCubit>().processIntent(
+          LoadExercisesIntent(index),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Text(
+          label,
+          style: 13.bold.copyWith(color: AppColors.whiteFF),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -201,7 +199,8 @@ class ExerciseModulePage extends StatelessWidget {
                                   current.data?.pageDescription;
                         },
                         builder: (context, state) {
-                          final data = state.data ?? const ExerciseModuleUIModel();
+                          final data =
+                              state.data ?? const ExerciseModuleUIModel();
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -287,19 +286,24 @@ class ExerciseModulePage extends StatelessWidget {
                                   currData?.selectedDifficultyIndex;
                         },
                         builder: (context, state) {
-                          final data = state.data ?? const ExerciseModuleUIModel();
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: data.difficultyLevels.asMap().entries.map(
-                              (entry) {
-                                return _buildTab(
-                                  context,
-                                  entry.value.name,
-                                  entry.key,
-                                  data.selectedDifficultyIndex == entry.key,
-                                );
-                              },
-                            ).toList(),
+                          final data =
+                              state.data ?? const ExerciseModuleUIModel();
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: data.difficultyLevels
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                    return _buildTab(
+                                      context,
+                                      entry.value.name,
+                                      entry.key,
+                                      data.selectedDifficultyIndex == entry.key,
+                                    );
+                                  })
+                                  .toList(),
+                            ),
                           );
                         },
                       ),
@@ -392,7 +396,8 @@ class ExerciseModulePage extends StatelessWidget {
                                     );
                                   },
                                   success: (ExerciseModuleUIModel? data) {
-                                    if (data == null || data.exercises.isEmpty) {
+                                    if (data == null ||
+                                        data.exercises.isEmpty) {
                                       return Padding(
                                         padding: EdgeInsets.only(top: 50.h),
                                         child: Center(

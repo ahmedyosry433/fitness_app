@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness/app.dart';
+import 'package:fitness/config/api/ollama_config.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/helper/bloc/bloc_observer.dart';
 import 'package:fitness/core/languages/codegen_loader.g.dart';
@@ -25,11 +26,11 @@ void main() async {
   }
 
   try {
-    await configureDependencies();
+    await OllamaConfig.load();
+  await configureDependencies();
   } catch (e) {
     debugPrint('Dependencies configuration error: $e');
   }
-
   Bloc.observer = MyBlocObserver();
   await ScreenUtil.ensureScreenSize();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

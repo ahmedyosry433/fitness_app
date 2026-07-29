@@ -9,6 +9,7 @@ abstract class Routes {
   static const String createNewPasswordView = '/createNewPasswordView';
   static const String home = '/home';
   static const String aiAgent = '/aiAgent';
+  static const String aiAgentChat = '/aiAgentChat';
   static const String workout = '/workout';
   static const String profile = '/profile';
   static const String exercise = '/exercise';

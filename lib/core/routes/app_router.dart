@@ -8,6 +8,8 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/views/f
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 
+import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_chat_page.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
@@ -169,6 +171,14 @@ final GoRouter router = GoRouter(
           ),
         );
       },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.aiAgentChat,
+      page: (state, context) => AiAgentChatPage(
+        conversationId: int.tryParse(
+          state.uri.queryParameters['conversationId'] ?? '',
+        ),
+      ),
     ),
   ],
 );
