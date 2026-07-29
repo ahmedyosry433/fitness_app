@@ -2,44 +2,66 @@ import 'package:equatable/equatable.dart';
 
 enum StateType { initial, loading, moreLoading, success, error }
 
-// changed from abstract class to class to make it possible to be initialized
 class BaseState<T> extends Equatable {
   final StateType? state;
   final T? data;
-  final Exception? exception;
+  final String? errorMessage;
+  final dynamic _exception;
 
-  const BaseState({this.state = StateType.initial, this.data, this.exception});
+  dynamic get exception => _exception ?? errorMessage;
+
+  const BaseState({
+    this.state = StateType.initial,
+    this.data,
+    this.errorMessage,
+    dynamic exception,
+  }) : _exception = exception;
 
   @override
-  List<Object?> get props => [state, data, exception];
+  List<Object?> get props => [state, data, errorMessage, _exception];
 
   const BaseState.initial()
-    : state = StateType.initial,
-      data = null,
-      exception = null;
+      : state = StateType.initial,
+        data = null,
+        errorMessage = null,
+        _exception = null;
 
   const BaseState.loading()
-    : state = StateType.loading,
-      data = null,
-      exception = null;
+      : state = StateType.loading,
+        data = null,
+        errorMessage = null,
+        _exception = null;
 
   const BaseState.success(this.data)
-    : state = StateType.success,
-      exception = null;
+      : state = StateType.success,
+        errorMessage = null,
+        _exception = null;
 
-  const BaseState.error(this.exception) : state = StateType.error, data = null;
-  const BaseState.all({
-    required this.exception,
-    required this.data,
+  BaseState.error(dynamic error)
+      : state = StateType.error,
+        data = null,
+        errorMessage = error is String ? error : error?.toString(),
+        _exception = error;
+
+  BaseState.all({
     required this.state,
-  });
+    required this.data,
+    String? errorMessage,
+    dynamic exception,
+  })  : errorMessage = errorMessage ?? exception?.toString(),
+        _exception = exception ?? errorMessage;
 
-  // added when method to make the code more readable in the UI
+  bool get isInitial => state == StateType.initial;
+  bool get isLoading => state == StateType.loading;
+  bool get isMoreLoading => state == StateType.moreLoading;
+  bool get isSuccess => state == StateType.success;
+  bool get isError => state == StateType.error;
+
   R when<R>({
     required R Function(T data) success,
     required R Function() loading,
     R Function()? moreLoading,
-    required R Function(Exception exception) error,
+    required R Function(String errorMessage) error,
     required R Function() initial,
   }) {
     return switch (state ?? StateType.initial) {
@@ -47,12 +69,12 @@ class BaseState<T> extends Equatable {
       StateType.loading => loading(),
       StateType.moreLoading => moreLoading != null ? moreLoading() : loading(),
       StateType.success => success(data as T),
-      StateType.error => error(exception!),
+      StateType.error => error(errorMessage ?? "An unexpected error occurred"),
     };
   }
 
   @override
   String toString() {
-    return 'BaseState(state:$state,${data != null ? ',data: $data, ' : ''}${exception != null ? ',exception: $exception' : ''})';
+    return 'BaseState(state:$state,${data != null ? ',data: $data, ' : ''}${errorMessage != null ? ',errorMessage: $errorMessage' : ''}${_exception != null ? ',exception: $_exception' : ''})';
   }
 }
