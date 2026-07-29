@@ -72,11 +72,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final account = await _socialAuthDataSource.signIn(provider);
       final profile = await _findUserProfile(account);
-
-      // A social user is only "already registered" when Firebase already knew
-      // the account AND Firestore holds a finished profile. Anything else means
-      // the sign-up was never completed, so the user must go through the
-      // complete-register step instead of being signed in.
       final needsProfileCompletion =
           account.isNewUser || profile == null || !_isProfileComplete(profile);
 
@@ -130,11 +125,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  /// Looks the stored profile up by Firebase uid first, then by email.
-  ///
-  /// Returns `null` when there is no profile yet, including when Firestore rules
-  /// deny the read — in that case the user is routed to complete registration,
-  /// which re-writes the profile, rather than being logged in with no data.
   Future<Map<String, dynamic>?> _findUserProfile(
     SocialAccountModel account,
   ) async {
@@ -157,17 +147,11 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  /// The complete-register step is what writes these fields, so their presence
-  /// is what separates a finished sign-up from an abandoned one.
   bool _isProfileComplete(Map<String, dynamic> profile) {
     const requiredFields = ['gender', 'age', 'weight', 'height'];
     return requiredFields.every((field) => profile[field] != null);
   }
 
-  /// Exchanges the social email for an Elevate API token.
-  ///
-  /// Falls back to [fallbackToken] (the Firebase uid) when the API has no
-  /// matching account, so a user backed by Firestore can still use the app.
   Future<String> _fetchApiToken({
     required String email,
     required String fallbackToken,

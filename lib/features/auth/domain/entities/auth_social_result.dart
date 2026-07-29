@@ -2,8 +2,6 @@ import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 
 class AuthSocialResult {
   final AuthUserEntity user;
-
-  /// `true` when the social profile still has to go through complete register.
   final bool isNewUser;
   final String photoUrl;
 
@@ -13,7 +11,6 @@ class AuthSocialResult {
     this.photoUrl = '',
   });
 
-  /// Arguments the complete-register screen needs to finish the sign-up.
   Map<String, dynamic> get completeRegisterArgs {
     final nameParts = user.name.trim().split(RegExp(r'\s+'));
     return {

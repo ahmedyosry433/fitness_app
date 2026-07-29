@@ -8,12 +8,10 @@ class RegisterSuccessNavigation extends RegisterNavigation {
   const RegisterSuccessNavigation();
 }
 
-/// The social account was already registered and is now signed in.
 class RegisterSocialSignedInNavigation extends RegisterNavigation {
   const RegisterSocialSignedInNavigation();
 }
 
-/// The social account exists on Firebase but its profile was never completed.
 class RegisterSocialProfileRequiredNavigation extends RegisterNavigation {
   final Map<String, dynamic> socialData;
 

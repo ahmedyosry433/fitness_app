@@ -25,7 +25,6 @@ import '../../features/auth/api/datasources/auth_local_data_source_impl.dart'
     as _i563;
 import '../../features/auth/api/datasources/auth_remote_data_source_impl.dart'
     as _i723;
-import '../../features/auth/auth_di.dart' as _i563;
 import '../../features/auth/data/datasources/auth_local_data_source_contract.dart'
     as _i271;
 import '../../features/auth/data/datasources/auth_remote_data_source_contract.dart'
@@ -81,7 +80,6 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final coreInjectableModule = _$CoreInjectableModule();
-    final authInjectableModule = _$AuthInjectableModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => coreInjectableModule.prefs(),
       preResolve: true,
@@ -107,9 +105,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
         gh<_i558.FlutterSecureStorage>(),
       ),
-    );
-    gh.lazySingleton<_i824.AuthApiClient>(
-      () => authInjectableModule.authApiClient(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i310.FoodApiClient>(
       () => _i310.FoodApiClient(gh<_i361.Dio>()),
@@ -192,5 +187,3 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$CoreInjectableModule extends _i291.CoreInjectableModule {}
-
-class _$AuthInjectableModule extends _i563.AuthInjectableModule {}

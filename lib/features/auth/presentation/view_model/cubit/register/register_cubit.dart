@@ -78,8 +78,6 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
           doNavigationAction(RegisterShowErrorNavigation(message));
           return;
         }
-        // Not registered yet: the profile still has to be completed, so the
-        // state must not report a successful registration.
         if (socialResult.isNewUser) {
           emit(state.copyWith(registerState: const BaseState.initial()));
           doNavigationAction(
