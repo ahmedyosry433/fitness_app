@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/lang.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_button.dart';
@@ -55,28 +56,27 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                 LocaleKeys.forget_password_enter_your_email.tr(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: AppColors.blackCE,
-                  fontFamily: 'RobotoEnglish',
+                  fontFamily: LanguageHelper.englishFontFamily,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
-                LocaleKeys.forget_password,
+                LocaleKeys.forget_password_forget_password.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: AppColors.white,
-                  fontFamily: 'RobotoEnglish',
+                  fontFamily: LanguageHelper.englishFontFamily,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 25),
               ClipRRect(
-                borderRadius: BorderRadius.circular(24.0),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
                   child: Container(
                     padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(50.0),
                       border: Border.all(
                         color: AppColors.white.withValues(alpha: 0.08),
                         width: 1.0,
@@ -107,7 +107,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                                   .titleLarge!
                                   .copyWith(
                                     color: AppColors.white,
-                                    fontFamily: 'RobotoEnglish',
+                                    fontFamily:
+                                        LanguageHelper.englishFontFamily,
                                     fontWeight: FontWeight.w900,
                                   ),
                               isLoading: stateType == StateType.loading,

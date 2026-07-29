@@ -119,7 +119,15 @@
         "enter_otp_check_email": "أدخل رمز التحقق، تفقد بريدك الإلكتروني",
         "invalid_otp_code": "رمز التحقق غير صحيح، يرجى المحاولة مرة أخرى",
         "confirm": "تأكيد",
-        "didnt_receive_code": "لم تتلقَ رمز التحقق؟"
+        "didnt_receive_code": "لم تتلقَ رمز التحقق؟",
+        "verification_code_sent_successfully": "تم إرسال رمز التحقق بنجاح",
+        "oTP_verified_successfully": "تم التحقق من رمز التحقق بنجاح",
+        "a_new_code_has_been_sent_to_your_email": "تم إرسال رمز جديد إلى بريدك الإلكتروني",
+        "passwords_do_not_match": "كلمات المرور غير متطابقة",
+        "password_updated_successfully": "تم تحديث كلمة المرور بنجاح",
+        "password": "كلمة المرور",
+        "otp_code": "رمز التحقق",
+        "please_enter_the_complete4": "الرجاء إدخال الرمز الكامل المكون من 4 أرقام"
     },
     "splash": {
         "title": "سوبر فيتنس",

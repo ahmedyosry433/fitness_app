@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
+import 'package:fitness/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class AuthBackground extends StatelessWidget {
@@ -14,9 +15,9 @@ class AuthBackground extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(AppImages.imagesIcLauncher),
+                image: AssetImage(Assets.images.authBackground1.path),
                 fit: BoxFit.cover,
               ),
             ),

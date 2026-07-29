@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/lang.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_button.dart';
@@ -37,28 +38,32 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
     final otpFormKey = GlobalKey<FormState>();
     final defaultPinTheme = PinTheme(
       width: 56,
-      height: 56,
+      height: 50,
       textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
         color: AppColors.white,
-        fontFamily: 'RobotoEnglish',
+        fontFamily: LanguageHelper.englishFontFamily,
         fontWeight: FontWeight.bold,
       ),
-      decoration: BoxDecoration(
-        color: AppColors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: AppColors.white.withValues(alpha: 0.15)),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.white, width: 2.0)),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyWith(
-      decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: AppColors.prime, width: 1.5),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.prime, width: 2.5)),
       ),
     );
-
+    final submittedPinTheme = defaultPinTheme.copyWith(
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.prime, width: 2.5)),
+      ),
+    );
     final errorPinTheme = defaultPinTheme.copyWith(
-      decoration: defaultPinTheme.decoration!.copyWith(
-        border: Border.all(color: AppColors.onErrorLight, width: 1.5),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.onErrorLight, width: 2.5),
+        ),
       ),
     );
 
@@ -82,10 +87,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "OTP CODE",
+                LocaleKeys.forget_password_otp_code.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                   color: AppColors.white,
-                  fontFamily: 'RobotoEnglish',
+                  fontFamily: LanguageHelper.englishFontFamily,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -94,21 +99,23 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                 LocaleKeys.forget_password_enter_otp_check_email.tr(),
                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: AppColors.white.withValues(alpha: 0.5),
-                  fontFamily: 'RobotoEnglish',
+                  fontFamily: LanguageHelper.englishFontFamily,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 16),
 
               ClipRRect(
-                borderRadius: BorderRadius.circular(24.0),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
                   child: Container(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 15,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(50.0),
                       border: Border.all(
                         color: AppColors.white.withValues(alpha: 0.08),
                         width: 1.0,
@@ -132,6 +139,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                     length: 4,
                                     defaultPinTheme: defaultPinTheme,
                                     focusedPinTheme: focusedPinTheme,
+                                    submittedPinTheme: submittedPinTheme,
                                     errorPinTheme: errorPinTheme,
                                     forceErrorState: isOtpInvalid,
                                     errorText: LocaleKeys
@@ -142,7 +150,8 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                         .bodySmall!
                                         .copyWith(
                                           color: AppColors.onErrorLight,
-                                          fontFamily: 'RobotoEnglish',
+                                          fontFamily:
+                                              LanguageHelper.englishFontFamily,
                                           fontWeight: FontWeight.bold,
                                         ),
                                     onChanged: (value) {
@@ -157,12 +166,12 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                             });
                                       }
                                     },
-                                    validator:AppValidators.validateOtp
+                                    validator: AppValidators.validateOtp,
                                   );
                                 },
                               ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 20),
                         BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
                           builder: (context, state) {
                             return CustomButton(
@@ -171,7 +180,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 color: AppColors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w900,
-                                fontFamily: 'RobotoEnglish',
+                                fontFamily: LanguageHelper.englishFontFamily,
                               ),
                               isLoading: state.state == StateType.loading,
                               onTap: () {
@@ -195,7 +204,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                             // );
                           },
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 8),
                         Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -206,7 +215,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 style: TextStyle(
                                   color: AppColors.white.withValues(alpha: 0.5),
                                   fontSize: 12,
-                                  fontFamily: 'RobotoEnglish',
+                                  fontFamily: LanguageHelper.englishFontFamily,
                                 ),
                               ),
                               TextButton(
@@ -219,7 +228,9 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                     color: AppColors.prime,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
-                                    fontFamily: 'RobotoEnglish',
+                                    decorationColor: AppColors.prime,
+                                    fontFamily:
+                                        LanguageHelper.englishFontFamily,
                                   ),
                                 ),
                               ),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_state/base_state.dart';
+import 'package:fitness/core/languages/lang.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/shared/widgets/custom_button.dart';
 import 'package:fitness/core/theme/app_colors.dart';
@@ -46,7 +47,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
               LocaleKeys.forget_password_make_sure_8_characters_or_more.tr(),
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: AppColors.white.withValues(alpha: 0.5),
-                fontFamily: 'RobotoEnglish',
+                fontFamily: LanguageHelper.englishFontFamily,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -55,20 +56,19 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
               LocaleKeys.forget_password_create_new_password.tr(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: AppColors.white,
-                fontFamily: 'RobotoEnglish',
+                fontFamily: LanguageHelper.englishFontFamily,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 30),
             ClipRRect(
-              borderRadius: BorderRadius.circular(24.0),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
                 child: Container(
                   padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
                     color: AppColors.white.withValues(alpha: 0.04),
-                    borderRadius: BorderRadius.circular(24.0),
+                    borderRadius: BorderRadius.circular(50.0),
                     border: Border.all(
                       color: AppColors.white.withValues(alpha: 0.08),
                       width: 1.0,
@@ -78,7 +78,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                     children: [
                       CustomAuthTextField(
                         controller: passwordController,
-                        hintText: LocaleKeys.forget_password,
+                        hintText: LocaleKeys.forget_password_password.tr(),
                         prefixIcon: SvgPicture.asset(Assets.icons.lock),
                         isPassword: true,
                         validator: AppValidators.validatePassword,
@@ -86,7 +86,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                       const SizedBox(height: 16),
                       CustomAuthTextField(
                         controller: confirmPasswordController,
-                        hintText: LocaleKeys.forget_password,
+                        hintText: LocaleKeys.forget_password_password.tr(),
                         prefixIcon: SvgPicture.asset(Assets.icons.lock),
                         isPassword: true,
                         validator: (value) => AppValidators.confirmPassword(
@@ -102,7 +102,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                             titleStyle: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: AppColors.white,
-                                  fontFamily: 'RobotoEnglish',
+                                  fontFamily: LanguageHelper.englishFontFamily,
                                   fontWeight: FontWeight.w900,
                                 ),
                             isLoading: state.state == StateType.loading,

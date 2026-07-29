@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/config/base_event/base_event.dart';
 import 'package:fitness/config/base_state/base_cubit.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth_modul/data/models/request/verify_otp_request.dart';
 import 'package:injectable/injectable.dart';
@@ -54,7 +56,9 @@ class ForgetPasswordCubit
           ),
         );
         doNavigationAction(
-          const ShowSuccessToastEvent("Verification code sent successfully"),
+          ShowSuccessToastEvent(
+            LocaleKeys.forget_password_verification_code_sent_successfully.tr(),
+          ),
         );
         doNavigationAction(
           const NavigateEvent(routeName: Routes.otpVerificationView),
@@ -62,7 +66,9 @@ class ForgetPasswordCubit
       },
       error: (exception) {
         final errorMessage = exception.toString();
-        emit(state.copyWith(state: StateType.error, errorMessage: errorMessage));
+        emit(
+          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+        );
         doNavigationAction(ShowErrorToastEvent(errorMessage));
       },
     );
@@ -85,7 +91,9 @@ class ForgetPasswordCubit
           ),
         );
         doNavigationAction(
-          const ShowSuccessToastEvent("OTP verified successfully"),
+          ShowSuccessToastEvent(
+            LocaleKeys.forget_password_oTP_verified_successfully.tr(),
+          ),
         );
         doNavigationAction(
           const NavigateEvent(routeName: Routes.createNewPasswordView),
@@ -111,7 +119,10 @@ class ForgetPasswordCubit
       success: (response) {
         emit(state.copyWith(state: StateType.success, data: response));
         doNavigationAction(
-          const ShowSuccessToastEvent("A new code has been sent to your email"),
+          ShowSuccessToastEvent(
+            LocaleKeys.forget_password_a_new_code_has_been_sent_to_your_email
+                .tr(),
+          ),
         );
       },
       error: (exception) {
@@ -129,7 +140,11 @@ class ForgetPasswordCubit
     String confirmPassword,
   ) async {
     if (password != confirmPassword) {
-      doNavigationAction(const ShowErrorToastEvent("Passwords do not match"));
+      doNavigationAction(
+        ShowErrorToastEvent(
+          LocaleKeys.forget_password_passwords_do_not_match.tr(),
+        ),
+      );
       return;
     }
 
@@ -153,7 +168,9 @@ class ForgetPasswordCubit
           ),
         );
         doNavigationAction(
-          const ShowSuccessToastEvent("Password updated successfully"),
+          ShowSuccessToastEvent(
+            LocaleKeys.forget_password_password_updated_successfully.tr(),
+          ),
         );
         doNavigationAction(const NavigateEvent(routeName: Routes.login));
       },
