@@ -51,6 +51,7 @@ ios/build/
 *.freezed.dart
 *.mocks.dart
 *.gr.dart
+*.config.dart
 
 # Firebase configuration files (Contains sensitive API keys)
 /android/app/google-services.json
