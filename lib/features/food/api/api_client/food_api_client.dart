@@ -4,8 +4,6 @@ import 'package:fitness/features/food/data/models/response/meal_details_response
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:retrofit/retrofit.dart';
-
 part 'food_api_client.g.dart';
 
 @lazySingleton

@@ -11,6 +11,19 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsDataGen {
+  const $AssetsDataGen();
+
+  /// File path: assets/data/exercises.db
+  String get exercises => 'assets/data/exercises.db';
+
+  /// File path: assets/data/meals.db
+  String get meals => 'assets/data/meals.db';
+
+  /// List of all assets
+  List<String> get values => [exercises, meals];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -29,6 +42,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/eye.svg
   String get eye => 'assets/icons/eye.svg';
 
+  /// File path: assets/icons/ic_back_orange.svg
+  String get icBackOrange => 'assets/icons/ic_back_orange.svg';
+
+  /// File path: assets/icons/ic_menu_orange.svg
+  String get icMenuOrange => 'assets/icons/ic_menu_orange.svg';
+
   /// File path: assets/icons/lock.svg
   String get lock => 'assets/icons/lock.svg';
 
@@ -42,6 +61,8 @@ class $AssetsIconsGen {
     clock,
     closeEye,
     eye,
+    icBackOrange,
+    icMenuOrange,
     lock,
     mail,
   ];
@@ -59,6 +80,13 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/back.jpg
   AssetGenImage get back => const AssetGenImage('assets/images/back.jpg');
+
+  /// File path: assets/images/bot_avatar.png
+  AssetGenImage get botAvatar =>
+      const AssetGenImage('assets/images/bot_avatar.png');
+
+  /// File path: assets/images/chat_bg.png
+  AssetGenImage get chatBg => const AssetGenImage('assets/images/chat_bg.png');
 
   /// File path: assets/images/full_shot_man.png
   AssetGenImage get fullShotMan =>
@@ -84,21 +112,33 @@ class $AssetsImagesGen {
   AssetGenImage get icLauncher =>
       const AssetGenImage('assets/images/ic_launcher.png');
 
+  /// File path: assets/images/robot_skipping.png
+  AssetGenImage get robotSkipping =>
+      const AssetGenImage('assets/images/robot_skipping.png');
+
   /// File path: assets/images/singup_back.png
   AssetGenImage get singupBack =>
       const AssetGenImage('assets/images/singup_back.png');
+
+  /// File path: assets/images/user_avatar.png
+  AssetGenImage get userAvatar =>
+      const AssetGenImage('assets/images/user_avatar.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
     exercisesBack,
     back,
+    botAvatar,
+    chatBg,
     fullShotMan,
     homeBack,
     humanGym,
     humanGym2,
     humanGym3,
     icLauncher,
+    robotSkipping,
     singupBack,
+    userAvatar,
   ];
 }
 
@@ -170,9 +210,14 @@ class $AssetsImagesAuthGen {
 }
 
 abstract final class Assets {
+  static const String aEnv = '.env';
+  static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLocalizationGen localization = $AssetsLocalizationGen();
+
+  /// List of all assets
+  static List<String> get values => [aEnv];
 }
 
 class AssetGenImage {

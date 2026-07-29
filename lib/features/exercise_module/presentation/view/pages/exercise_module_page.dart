@@ -253,12 +253,16 @@ class ExerciseModulePage extends StatelessWidget {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _buildChip(
-                                '$totalMins ${LocaleKeys.exercise_min.tr()}',
+                              Flexible(
+                                child: _buildChip(
+                                  '$totalMins ${LocaleKeys.exercise_min.tr()}',
+                                ),
                               ),
-                              _buildChip(
-                                '$totalCals ${LocaleKeys.exercise_cal.tr()}',
-                                isOrangeText: true,
+                              Flexible(
+                                child: _buildChip(
+                                  '$totalCals ${LocaleKeys.exercise_cal.tr()}',
+                                  isOrangeText: true,
+                                ),
                               ),
                             ],
                           );
@@ -326,27 +330,28 @@ class ExerciseModulePage extends StatelessWidget {
                         child: Column(
                           children: [
                             SizedBox(height: 25.h),
-                            BlocBuilder<
-                              ExerciseModuleCubit,
-                              BaseState<ExerciseModuleUIModel>
-                            >(
-                              builder: (context, state) {
-                                Widget buildSkeleton() {
-                                  final dummyExercise = ExerciseEntity(
-                                    id: '',
-                                    title: LocaleKeys.exercise_skeleton_title
-                                        .tr(),
-                                    description: LocaleKeys
-                                        .exercise_skeleton_desc
-                                        .tr(),
-                                    videoUrl: '',
-                                    thumbnailUrl: '',
-                                    time: '10',
-                                    calories: '100',
-                                    level: LocaleKeys.exercise_beginner.tr(),
-                                  );
-                                  return Expanded(
-                                    child: Skeletonizer(
+                            Expanded(
+                              child: BlocBuilder<
+                                ExerciseModuleCubit,
+                                BaseState<ExerciseModuleUIModel>
+                              >(
+                                builder: (context, state) {
+                                  Widget buildSkeleton() {
+                                    final dummyExercise = ExerciseEntity(
+                                      id: '',
+                                      title: LocaleKeys.exercise_skeleton_title
+                                          .tr(),
+                                      description: LocaleKeys
+                                          .exercise_skeleton_desc
+                                          .tr(),
+                                      videoUrl: '',
+                                      thumbnailUrl: '',
+                                      time: '10',
+                                      calories: '100',
+                                      level: LocaleKeys.exercise_beginner.tr(),
+                                    );
+                                    return Skeletonizer(
+                                      key: const Key('exercise_skeletonizer'),
                                       enabled: true,
                                       effect: const ShimmerEffect(
                                         baseColor: AppColors.gray37,
@@ -354,6 +359,7 @@ class ExerciseModulePage extends StatelessWidget {
                                       ),
                                       containersColor: AppColors.transparent,
                                       child: ListView.separated(
+                                        key: const Key('exercise_skeleton_list'),
                                         padding: EdgeInsets.only(
                                           left: 20.w,
                                           right: 20.w,
@@ -367,53 +373,51 @@ class ExerciseModulePage extends StatelessWidget {
                                             SizedBox(height: 15.h),
                                         itemCount: 4,
                                       ),
-                                    ),
-                                  );
-                                }
-
-                                return state.when(
-                                  initial: () => buildSkeleton(),
-                                  loading: () => buildSkeleton(),
-                                  error: (exception) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(top: 50.h),
-                                      child: Center(
-                                        child: Text(
-                                          LocaleKeys.exercise_failed_to_load.tr(
-                                            args: [
-                                              exception.toString().replaceAll(
-                                                'Exception: ',
-                                                '',
-                                              ),
-                                            ],
-                                          ),
-                                          style: 16.medium.copyWith(
-                                            color: AppColors.whiteFF,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
                                     );
-                                  },
-                                  success: (ExerciseModuleUIModel? data) {
-                                    if (data == null ||
-                                        data.exercises.isEmpty) {
+                                  }
+
+                                  return state.when(
+                                    initial: () => buildSkeleton(),
+                                    loading: () => buildSkeleton(),
+                                    error: (exception) {
                                       return Padding(
                                         padding: EdgeInsets.only(top: 50.h),
                                         child: Center(
                                           child: Text(
-                                            LocaleKeys
-                                                .exercise_no_exercises_found
-                                                .tr(),
-                                            style: 16.regular.copyWith(
-                                              color: AppColors.grayCF,
+                                            LocaleKeys.exercise_failed_to_load.tr(
+                                              args: [
+                                                exception.toString().replaceAll(
+                                                  'Exception: ',
+                                                  '',
+                                                ),
+                                              ],
                                             ),
+                                            style: 16.medium.copyWith(
+                                              color: AppColors.whiteFF,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                       );
-                                    }
-                                    return Expanded(
-                                      child: ListView.separated(
+                                    },
+                                    success: (ExerciseModuleUIModel? data) {
+                                      if (data == null ||
+                                          data.exercises.isEmpty) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(top: 50.h),
+                                          child: Center(
+                                            child: Text(
+                                              LocaleKeys
+                                                  .exercise_no_exercises_found
+                                                  .tr(),
+                                              style: 16.regular.copyWith(
+                                                color: AppColors.grayCF,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return ListView.separated(
                                         padding: EdgeInsets.only(
                                           left: 20.w,
                                           right: 20.w,
@@ -429,11 +433,11 @@ class ExerciseModulePage extends StatelessWidget {
                                         separatorBuilder: (context, index) =>
                                             SizedBox(height: 15.h),
                                         itemCount: data.exercises.length,
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),

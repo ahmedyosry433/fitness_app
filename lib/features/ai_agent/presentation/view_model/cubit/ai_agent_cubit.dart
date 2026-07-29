@@ -21,8 +21,7 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class AiAgentCubit
-    extends
-        BaseCubit<BaseState<AiAgentUIModel>, AiAgentIntent, AiAgentNavigation> {
+    extends BaseCubit<BaseState<AiAgentUIModel>, AiAgentNavigation> {
   AiAgentCubit(
     this.sendAgentMessageUseCase,
     this.getConversationsUseCase,

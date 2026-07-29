@@ -6,7 +6,6 @@ import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/helper/bloc/bloc_observer.dart';
 import 'package:fitness/core/languages/codegen_loader.g.dart';
 import 'package:fitness/core/languages/lang.dart';
-import 'package:fitness/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +17,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
   } catch (e) {
     debugPrint('Firebase initialization warning: $e');
   }

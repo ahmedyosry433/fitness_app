@@ -20,6 +20,42 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/ai_agent/data/datasource/ai_chat_local_datasource.dart'
+    as _i437;
+import '../../features/ai_agent/data/datasource/knowledge_local_datasource.dart'
+    as _i912;
+import '../../features/ai_agent/data/datasource/ollama_remote_datasource.dart'
+    as _i803;
+import '../../features/ai_agent/data/local/ai_chat_database.dart' as _i581;
+import '../../features/ai_agent/data/local/knowledge_database.dart' as _i16;
+import '../../features/ai_agent/data/repository/ai_chat_history_repository_impl.dart'
+    as _i165;
+import '../../features/ai_agent/data/repository/ollama_repository_impl.dart'
+    as _i508;
+import '../../features/ai_agent/data/tools/ai_tool_registry.dart' as _i969;
+import '../../features/ai_agent/data/tools/fast_path_recognizer.dart' as _i442;
+import '../../features/ai_agent/data/tools/image_attachment_encoder.dart'
+    as _i154;
+import '../../features/ai_agent/domain/repositories/ai_chat_history_repository.dart'
+    as _i487;
+import '../../features/ai_agent/domain/repositories/ollama_repository.dart'
+    as _i646;
+import '../../features/ai_agent/domain/use_cases/delete_conversation_use_case.dart'
+    as _i601;
+import '../../features/ai_agent/domain/use_cases/get_conversation_messages_use_case.dart'
+    as _i61;
+import '../../features/ai_agent/domain/use_cases/get_conversations_use_case.dart'
+    as _i606;
+import '../../features/ai_agent/domain/use_cases/save_chat_message_use_case.dart'
+    as _i219;
+import '../../features/ai_agent/domain/use_cases/send_agent_message_use_case.dart'
+    as _i219;
+import '../../features/ai_agent/domain/use_cases/start_conversation_use_case.dart'
+    as _i1051;
+import '../../features/ai_agent/domain/use_cases/update_chat_message_use_case.dart'
+    as _i1069;
+import '../../features/ai_agent/presentation/view_model/cubit/ai_agent_cubit.dart'
+    as _i599;
 import '../../features/auth/api/api_client/auth_api_client.dart' as _i824;
 import '../../features/auth/api/datasources/auth_local_data_source_impl.dart'
     as _i563;
@@ -155,6 +191,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
+    gh.lazySingleton<_i803.OllamaRemoteDatasource>(
+      () => _i803.OllamaRemoteDatasource(),
+      dispose: (i) => i.dispose(),
+    );
+    gh.lazySingleton<_i581.AiChatDatabase>(() => _i581.AiChatDatabase());
+    gh.lazySingleton<_i16.KnowledgeDatabases>(
+      () => _i16.KnowledgeDatabases(),
+      dispose: (i) => i.close(),
+    );
+    gh.lazySingleton<_i154.ImageAttachmentEncoder>(
+      () => const _i154.ImageAttachmentEncoder(),
+    );
     gh.factory<_i94.AuthModulRemoteDataSource>(
       () => _i306.AuthModulRemoteDataSourceImpl(),
     );
@@ -203,6 +251,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i453.AuthRemoteDataSourceContract>(
       () => _i723.AuthRemoteDataSourceImpl(gh<_i824.AuthApiClient>()),
     );
+    gh.lazySingleton<_i912.KnowledgeLocalDatasource>(
+      () => _i912.KnowledgeLocalDatasource(gh<_i16.KnowledgeDatabases>()),
+    );
+    gh.lazySingleton<_i437.AiChatLocalDatasource>(
+      () => _i437.AiChatLocalDatasource(gh<_i581.AiChatDatabase>()),
+    );
     gh.lazySingleton<_i104.UserFirestoreService>(
       () => _i104.UserFirestoreService(gh<_i974.FirebaseFirestore>()),
     );
@@ -246,8 +300,27 @@ extension GetItInjectableX on _i174.GetIt {
         socialAuthDataSource: gh<_i801.SocialAuthDataSourceContract>(),
       ),
     );
+    gh.lazySingleton<_i969.AiToolRegistry>(
+      () => _i969.AiToolRegistry(gh<_i912.KnowledgeLocalDatasource>()),
+    );
+    gh.lazySingleton<_i442.FastPathRecognizer>(
+      () => _i442.FastPathRecognizer(gh<_i912.KnowledgeLocalDatasource>()),
+    );
     gh.factory<_i112.ExerciseRepository>(
       () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
+    );
+    gh.lazySingleton<_i646.OllamaRepository>(
+      () => _i508.OllamaRepositoryImpl(
+        gh<_i803.OllamaRemoteDatasource>(),
+        gh<_i912.KnowledgeLocalDatasource>(),
+        gh<_i969.AiToolRegistry>(),
+        gh<_i442.FastPathRecognizer>(),
+        gh<_i154.ImageAttachmentEncoder>(),
+      ),
+    );
+    gh.lazySingleton<_i487.AiChatHistoryRepository>(
+      () =>
+          _i165.AiChatHistoryRepositoryImpl(gh<_i437.AiChatLocalDatasource>()),
     );
     gh.factory<_i198.GetDifficultyLevelsUseCase>(
       () => _i198.GetDifficultyLevelsUseCase(gh<_i112.ExerciseRepository>()),
@@ -315,6 +388,29 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i735.GetMusclesByGroupUseCase>(),
       ),
     );
+    gh.factory<_i601.DeleteConversationUseCase>(
+      () =>
+          _i601.DeleteConversationUseCase(gh<_i487.AiChatHistoryRepository>()),
+    );
+    gh.factory<_i61.GetConversationMessagesUseCase>(
+      () => _i61.GetConversationMessagesUseCase(
+        gh<_i487.AiChatHistoryRepository>(),
+      ),
+    );
+    gh.factory<_i606.GetConversationsUseCase>(
+      () => _i606.GetConversationsUseCase(gh<_i487.AiChatHistoryRepository>()),
+    );
+    gh.factory<_i219.SaveChatMessageUseCase>(
+      () => _i219.SaveChatMessageUseCase(gh<_i487.AiChatHistoryRepository>()),
+    );
+    gh.factory<_i1051.StartConversationUseCase>(
+      () =>
+          _i1051.StartConversationUseCase(gh<_i487.AiChatHistoryRepository>()),
+    );
+    gh.factory<_i1069.UpdateChatMessageUseCase>(
+      () =>
+          _i1069.UpdateChatMessageUseCase(gh<_i487.AiChatHistoryRepository>()),
+    );
     gh.factory<_i667.ForgetPasswordCubit>(
       () => _i667.ForgetPasswordCubit(
         gh<_i42.ForgetPasswordUseCase>(),
@@ -322,11 +418,25 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i840.ResetPasswordUseCase>(),
       ),
     );
+    gh.factory<_i219.SendAgentMessageUseCase>(
+      () => _i219.SendAgentMessageUseCase(gh<_i646.OllamaRepository>()),
+    );
     gh.factory<_i76.SignUpCubit>(
       () => _i76.SignUpCubit(
         gh<_i124.SignUpUseCase>(),
         gh<_i123.SocialSignInUseCase>(),
         gh<_i104.UserFirestoreService>(),
+      ),
+    );
+    gh.factory<_i599.AiAgentCubit>(
+      () => _i599.AiAgentCubit(
+        gh<_i219.SendAgentMessageUseCase>(),
+        gh<_i606.GetConversationsUseCase>(),
+        gh<_i61.GetConversationMessagesUseCase>(),
+        gh<_i1051.StartConversationUseCase>(),
+        gh<_i219.SaveChatMessageUseCase>(),
+        gh<_i1069.UpdateChatMessageUseCase>(),
+        gh<_i601.DeleteConversationUseCase>(),
       ),
     );
     return this;

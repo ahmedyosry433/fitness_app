@@ -36,4 +36,11 @@ class AppImages {
   static const String muscleArms = "assets/images/exercise/muscle_arms.jpg";
   static const String muscleLegs = "assets/images/exercise/muscle_legs.jpg";
   static const String muscleShoulder = "assets/images/exercise/muscle_shoulder.jpg";
+
+  // AI Agent
+  static const String botAvatar = "assets/images/bot_avatar.png";
+  static const String userAvatar = "assets/images/user_avatar.png";
+  static const String robotSkipping = "assets/images/robot_skipping.png";
+  static const String chatBg = "assets/images/chat_bg.png";
 }
+
