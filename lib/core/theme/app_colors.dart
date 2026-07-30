@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
   // --- Primary and Brand Colors ---
-  static const Color prime = Color(0xFF02369C); // main brand color
+  static const Color prime = Color(0xFFFF4100); // main brand color
   static const Color primeAccent = Color(0xFF11CE19); // accent/brand green
   static const Color primaryOrange = Color(0xFFFF4500); // main orange
   static const Color primaryOrangeDark = Color(0xFFFF4100); // dark orange
@@ -109,7 +109,13 @@ class AppColors {
 
   // green
   static const Color green0C = Color(0xff0CB359);
-
-  // custom black
   static const Color black22 = Color(0xFF222222);
+
+  // fitness brand accent (from splash / auth screens)
+  static const Color fitnessOrange = Color(0xFFFF4100);
+  static const Color fitnessOrangeAccent = Color(0xFFFF6A00);
+  static const Color fitnessOrangeLight = Color(0xFFFF7A00);
+  static const Color authCharcoal = Color(0xFF242424);
+  static const Color authCharcoalDeep = Color(0xFF181818);
+  static const Color authPanelOverlay = Color(0xCC1A1A1A);
 }

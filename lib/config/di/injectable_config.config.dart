@@ -9,7 +9,9 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:dio/dio.dart' as _i361;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -18,6 +20,14 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
+import '../../features/auth_modul/api/datasources/social_auth_data_source_impl.dart'
+    as _i943;
+import '../../features/auth_modul/data/datasources/social_auth_data_source_contract.dart'
+    as _i801;
+import '../../features/auth_modul/data/services/meta_horizon_auth_service.dart'
+    as _i872;
+import '../../features/auth_modul/data/services/user_firestore_service.dart'
+    as _i104;
 import '../../features/exercise_module/api/api_client/exercise_module_api_client.dart'
     as _i723;
 import '../../features/exercise_module/data/datasources/exercise_remote_data_source.dart'
@@ -40,6 +50,7 @@ import '../../features/exercise_module/presentation/view_model/cubit/exercise_mo
     as _i215;
 import '../../features/exercise_module/presentation/view_model/cubit/workout_cubit.dart'
     as _i355;
+import '../../features/food/api/api_client/food_api_client.dart' as _i310;
 import '../../features/food/api/datasource/food_remote_data_source_impl.dart'
     as _i521;
 import '../../features/food/data/datasources/food_remote_data_source_contract.dart'
@@ -48,6 +59,10 @@ import '../../features/food/data/repositories/food_repository_impl.dart'
     as _i860;
 import '../../features/food/domain/repositories/food_repository_contract.dart'
     as _i966;
+import '../../features/food/domain/use_case/get_meal_details_use_case.dart'
+    as _i201;
+import '../../features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart'
+    as _i1072;
 import '../../features/home/presentation/view_model/cubit/home_cubit.dart'
     as _i1039;
 import '../api/app_interceptors.dart' as _i781;
@@ -66,6 +81,12 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => coreInjectableModule.dio());
+    gh.lazySingleton<_i59.FirebaseAuth>(
+      () => coreInjectableModule.firebaseAuth,
+    );
+    gh.lazySingleton<_i974.FirebaseFirestore>(
+      () => coreInjectableModule.firestore,
+    );
     gh.lazySingleton<_i558.FlutterSecureStorage>(
       () => coreInjectableModule.secureStorage(),
     );
@@ -75,13 +96,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i161.InternetConnection>(
       () => coreInjectableModule.internetConnection(),
     );
-    gh.factory<_i329.FoodRemoteDataSourceContract>(
-      () => _i521.FoodRemoteDataSourceImpl(
-        foodRemoteDataSourceImpl: gh<_i521.FoodRemoteDataSourceImpl>(),
-      ),
+    gh.lazySingleton<_i310.FoodApiClient>(
+      () => _i310.FoodApiClient(gh<_i361.Dio>()),
     );
     gh.factory<_i723.ExerciseModuleApiClient>(
       () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
+    );
+    gh.factory<_i329.FoodRemoteDataSourceContract>(
+      () => _i521.FoodRemoteDataSourceImpl(gh<_i310.FoodApiClient>()),
     );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(
@@ -89,8 +111,14 @@ extension GetItInjectableX on _i174.GetIt {
         fss: gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.lazySingleton<_i872.MetaHorizonAuthService>(
+      () => _i872.MetaHorizonAuthService(gh<_i361.Dio>()),
+    );
     gh.factory<_i966.FoodRepositoryContract>(
       () => _i860.FoodRepositoryImpl(gh<_i329.FoodRemoteDataSourceContract>()),
+    );
+    gh.lazySingleton<_i104.UserFirestoreService>(
+      () => _i104.UserFirestoreService(gh<_i974.FirebaseFirestore>()),
     );
     gh.factory<_i868.ExerciseRemoteDataSource>(
       () => _i868.ExerciseRemoteDataSourceImpl(
@@ -102,6 +130,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
         gh<_i558.FlutterSecureStorage>(),
       ),
+    );
+    gh.lazySingleton<_i801.SocialAuthDataSourceContract>(
+      () => _i943.AuthModulSocialAuthDataSourceImpl(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i872.MetaHorizonAuthService>(),
+      ),
+    );
+    gh.factory<_i201.GetMealDetailsUseCase>(
+      () => _i201.GetMealDetailsUseCase(gh<_i966.FoodRepositoryContract>()),
     );
     gh.factory<_i112.ExerciseRepository>(
       () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
@@ -120,6 +157,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i467.GetRandomMusclesUseCase>(
       () => _i467.GetRandomMusclesUseCase(gh<_i112.ExerciseRepository>()),
+    );
+    gh.factory<_i1072.DetailsFoodCubit>(
+      () => _i1072.DetailsFoodCubit(gh<_i201.GetMealDetailsUseCase>()),
     );
     gh.factory<_i215.ExerciseModuleCubit>(
       () => _i215.ExerciseModuleCubit(
