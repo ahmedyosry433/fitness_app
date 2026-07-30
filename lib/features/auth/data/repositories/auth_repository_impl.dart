@@ -120,12 +120,17 @@ class AuthRepositoryImpl implements AuthRepository {
         ),
       );
     } catch (e, stackTrace) {
-      log(
-        'Social sign in failed.',
-        name: 'AuthRepositoryImpl',
-        error: e,
-        stackTrace: stackTrace,
-      );
+      if (e is SocialAuthCancelledException ||
+          e.toString().toLowerCase().contains('cancelled')) {
+        log('Social sign in cancelled by user.', name: 'AuthRepositoryImpl');
+      } else {
+        log(
+          'Social sign in failed.',
+          name: 'AuthRepositoryImpl',
+          error: e,
+          stackTrace: stackTrace,
+        );
+      }
       return Error(exception: e is Exception ? e : Exception(e.toString()));
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fitness/config/api/api_keys.dart';
 import 'package:fitness/core/routes/app_router.dart';
 import 'package:fitness/core/routes/routes.dart';
@@ -11,9 +13,42 @@ class UserHelper {
   final SharedPreferences _prefs;
   final FlutterSecureStorage _fss;
   UserHelper(this._prefs, this._fss);
-  bool isLogin() => _prefs.getString(Apikeys.userId) != null;
+
+  Future<bool> isLogin() async {
+    final userId = _prefs.getString(Apikeys.userId);
+    final token = await _fss.read(key: Apikeys.accessToken);
+    return userId != null &&
+        userId.isNotEmpty &&
+        token != null &&
+        token.isNotEmpty;
+  }
+
+  Future<String?> getUserName() async {
+    final raw = _prefs.getString('cached_auth_user');
+    if (raw != null) {
+      try {
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        final name = map['name'] as String?;
+        if (name != null && name.isNotEmpty) return name;
+      } catch (_) {}
+    }
+    return null;
+  }
+
+  Future<String?> getUserPhoto() async {
+    final raw = _prefs.getString('cached_auth_user');
+    if (raw != null) {
+      try {
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        final photo = map['photo'] as String?;
+        if (photo != null && photo.isNotEmpty) return photo;
+      } catch (_) {}
+    }
+    return null;
+  }
+
   Future<void> clearUserData() async {
-    _prefs.clear();
+    await _prefs.clear();
     await _fss.deleteAll();
     await DefaultCacheManager().emptyCache();
     router.go(Routes.login);

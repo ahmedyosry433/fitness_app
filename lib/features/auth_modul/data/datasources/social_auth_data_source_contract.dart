@@ -1,6 +1,15 @@
 import 'package:fitness/features/auth_modul/data/models/social_account_model.dart';
 import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 
+/// Thrown when the user intentionally cancels or dismisses a social sign-in prompt.
+class SocialAuthCancelledException implements Exception {
+  final String message;
+  SocialAuthCancelledException([this.message = 'Social sign in was cancelled.']);
+
+  @override
+  String toString() => message;
+}
+
 /// Performs the OAuth handshake with social providers (Google, Meta Horizon, Facebook) inside auth_modul.
 abstract class SocialAuthDataSourceContract {
   /// Runs the provider sign-in flow and authenticates with Firebase / Meta.

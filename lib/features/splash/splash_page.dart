@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/core/user_helper/user_helper.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class SplashPage extends StatefulWidget {
@@ -141,11 +143,19 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     );
   }
 
-  void _navigateToNext() {
+  Future<void> _navigateToNext() async {
     if (_hasNavigated || !mounted) return;
     _hasNavigated = true;
     _timer?.cancel();
-    context.go(Routes.onBoard);
+
+    final isUserLoggedIn = await getIt<UserHelper>().isLogin();
+    if (!mounted) return;
+
+    if (isUserLoggedIn) {
+      context.go(Routes.home);
+    } else {
+      context.go(Routes.onBoard);
+    }
   }
 
   void _startSequence() {

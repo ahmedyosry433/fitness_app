@@ -14,8 +14,8 @@ import 'package:fitness/features/ai_agent/domain/use_cases/save_chat_message_use
 import 'package:fitness/features/ai_agent/domain/use_cases/send_agent_message_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/start_conversation_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/update_chat_message_use_case.dart';
-import 'package:fitness/features/ai_agent/presentation/view_model/ai_agent_intent.dart';
-import 'package:fitness/features/ai_agent/presentation/view_model/ai_agent_navigation.dart';
+import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_intent.dart';
+import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_navigation.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_states.dart';
 import 'package:injectable/injectable.dart';
 

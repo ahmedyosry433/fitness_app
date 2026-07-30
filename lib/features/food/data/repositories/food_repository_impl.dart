@@ -1,5 +1,6 @@
 import 'package:fitness/config/base_response/base_response.dart';
 import 'package:fitness/features/food/data/datasources/food_remote_data_source_contract.dart';
+import 'package:fitness/features/food/data/models/response/category_dto.dart';
 import 'package:fitness/features/food/data/models/response/meal_dto.dart';
 import 'package:fitness/features/food/domain/repositories/food_repository_contract.dart';
 import 'package:injectable/injectable.dart';
@@ -13,5 +14,15 @@ class FoodRepositoryImpl implements FoodRepositoryContract {
   @override
   Future<Result<MealDto>> getMealDetails(String mealId) async {
     return foodRemoteDataSourceContract.getMealDetails(mealId);
+  }
+
+  @override
+  Future<Result<List<MealDto>>> getMealsByCategory(String category) async {
+    return foodRemoteDataSourceContract.getMealsByCategory(category);
+  }
+
+  @override
+  Future<Result<List<CategoryDto>>> getCategories() async {
+    return foodRemoteDataSourceContract.getCategories();
   }
 }

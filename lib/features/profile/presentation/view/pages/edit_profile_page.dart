@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
-import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/widgets/custom_back_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/blurred_background_wrapper.dart';

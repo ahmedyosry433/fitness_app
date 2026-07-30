@@ -92,7 +92,7 @@ void main() {
       },
       act: (cubit) => cubit.doAction(LogoutEvent()),
       expect: () => [
-        const BaseState<ProfileUIModel>.all(state: StateType.loading, data: ProfileUIModel(), exception: null),
+        BaseState<ProfileUIModel>.all(state: StateType.loading, data: const ProfileUIModel(), exception: null),
         const BaseState<ProfileUIModel>.success(ProfileUIModel(isLoggedOut: true)),
       ],
       verify: (_) {

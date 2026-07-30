@@ -11,8 +11,8 @@ import 'package:fitness/features/ai_agent/presentation/view/widgets/chat_image_s
 import 'package:fitness/features/ai_agent/presentation/view/widgets/chat_input_bar.dart';
 import 'package:fitness/features/ai_agent/presentation/view/widgets/chat_message_bubble.dart';
 import 'package:fitness/features/ai_agent/presentation/view/widgets/previous_conversations_drawer.dart';
-import 'package:fitness/features/ai_agent/presentation/view_model/ai_agent_intent.dart';
-import 'package:fitness/features/ai_agent/presentation/view_model/ai_agent_navigation.dart';
+import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_intent.dart';
+import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_navigation.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_cubit.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_states.dart';
 import 'package:flutter/material.dart';

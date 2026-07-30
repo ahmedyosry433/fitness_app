@@ -8,6 +8,8 @@ class HomeUIModel extends Equatable {
   final List<MuscleEntity> groupMuscles;
   final String selectedMuscleGroupId;
   final bool isLoadingGroupMuscles;
+  final String userName;
+  final String? userPhoto;
 
   const HomeUIModel({
     this.randomMuscles = const [],
@@ -15,6 +17,8 @@ class HomeUIModel extends Equatable {
     this.groupMuscles = const [],
     this.selectedMuscleGroupId = '',
     this.isLoadingGroupMuscles = false,
+    this.userName = '',
+    this.userPhoto,
   });
 
   HomeUIModel copyWith({
@@ -23,6 +27,8 @@ class HomeUIModel extends Equatable {
     List<MuscleEntity>? groupMuscles,
     String? selectedMuscleGroupId,
     bool? isLoadingGroupMuscles,
+    String? userName,
+    String? userPhoto,
   }) {
     return HomeUIModel(
       randomMuscles: randomMuscles ?? this.randomMuscles,
@@ -32,6 +38,8 @@ class HomeUIModel extends Equatable {
           selectedMuscleGroupId ?? this.selectedMuscleGroupId,
       isLoadingGroupMuscles:
           isLoadingGroupMuscles ?? this.isLoadingGroupMuscles,
+      userName: userName ?? this.userName,
+      userPhoto: userPhoto ?? this.userPhoto,
     );
   }
 
@@ -42,5 +50,7 @@ class HomeUIModel extends Equatable {
         groupMuscles,
         selectedMuscleGroupId,
         isLoadingGroupMuscles,
+        userName,
+        userPhoto,
       ];
 }

@@ -19,12 +19,20 @@ class LoginLocalDataSourceImpl implements LoginLocalDataSourceContract {
 
   @override
   Future<Result<void>> saveUser(AuthUserEntity user) async {
-    await _prefs.setString(Apikeys.userId, user.id);
-    await _secureStorage.write(key: Apikeys.accessToken, value: user.token);
+    final effectiveUserId = user.id.isNotEmpty
+        ? user.id
+        : (user.email.isNotEmpty
+            ? user.email
+            : 'user_${user.token.hashCode}');
+    await _prefs.setString(Apikeys.userId, effectiveUserId);
+
+    if (user.token.isNotEmpty) {
+      await _secureStorage.write(key: Apikeys.accessToken, value: user.token);
+    }
     await _prefs.setString(
       _userKey,
       jsonEncode({
-        'id': user.id,
+        'id': effectiveUserId,
         'name': user.name,
         'email': user.email,
         'phone': user.phone,

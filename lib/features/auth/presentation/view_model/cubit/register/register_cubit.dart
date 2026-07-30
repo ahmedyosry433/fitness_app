@@ -6,6 +6,7 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/features/auth/data/models/register_params.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
+import 'package:fitness/features/auth_modul/data/datasources/social_auth_data_source_contract.dart';
 import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 import 'package:injectable/injectable.dart';
 
@@ -95,12 +96,16 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
         doNavigationAction(const RegisterSocialSignedInNavigation());
       },
       error: (exception) {
+        final message = exception != null
+            ? exception.toString().replaceFirst(RegExp(r'^Exception:\s*'), '')
+            : '';
+        if (exception is SocialAuthCancelledException ||
+            message.toLowerCase().contains('cancelled')) {
+          emit(state.copyWith(registerState: const BaseState.initial()));
+          return;
+        }
         emit(state.copyWith(registerState: BaseState.error(exception)));
         if (exception != null) {
-          final message = exception.toString().replaceFirst(
-            RegExp(r'^Exception:\s*'),
-            '',
-          );
           doNavigationAction(RegisterShowErrorNavigation(message));
         }
       },

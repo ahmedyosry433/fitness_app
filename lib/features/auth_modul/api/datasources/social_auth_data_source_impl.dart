@@ -101,7 +101,7 @@ class AuthModulSocialAuthDataSourceImpl
       );
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
-        throw Exception('Google sign in was cancelled.');
+        throw SocialAuthCancelledException('Google sign in was cancelled.');
       }
       rethrow;
     }
@@ -128,7 +128,7 @@ class AuthModulSocialAuthDataSourceImpl
         }
         return FacebookAuthProvider.credential(token.tokenString);
       case LoginStatus.cancelled:
-        throw Exception('Facebook sign in was cancelled.');
+        throw SocialAuthCancelledException('Facebook sign in was cancelled.');
       case LoginStatus.failed:
       case LoginStatus.operationInProgress:
         throw Exception(

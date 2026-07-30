@@ -7,6 +7,7 @@ import 'package:fitness/features/auth/data/models/login_params.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/login/auth_social_provider.dart';
+import 'package:fitness/features/auth_modul/data/datasources/social_auth_data_source_contract.dart';
 import 'package:injectable/injectable.dart';
 
 part 'login_events.dart';
@@ -83,12 +84,16 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
         doNavigationAction(const LoginSocialSignedInNavigation());
       },
       error: (exception) {
+        final message = exception != null
+            ? exception.toString().replaceFirst(RegExp(r'^Exception:\s*'), '')
+            : '';
+        if (exception is SocialAuthCancelledException ||
+            message.toLowerCase().contains('cancelled')) {
+          emit(state.copyWith(loginState: const BaseState.initial()));
+          return;
+        }
         emit(state.copyWith(loginState: BaseState.error(exception)));
         if (exception != null) {
-          final message = exception.toString().replaceFirst(
-            RegExp(r'^Exception:\s*'),
-            '',
-          );
           doNavigationAction(LoginShowErrorNavigation(message));
         }
       },

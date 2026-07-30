@@ -11,7 +11,7 @@ import 'package:fitness/features/profile/presentation/view_model/cubit/profile_s
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent, void> {
+class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent> {
   final GetProfileUseCase _getProfileUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
   final UploadPhotoUseCase _uploadPhotoUseCase;

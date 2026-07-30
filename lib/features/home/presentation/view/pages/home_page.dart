@@ -10,6 +10,7 @@ import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/widgets/recommendation_to_day_section.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/widgets/upcoming_workouts_section.dart';
+import 'package:fitness/features/food/presentation/food_recommendation/widgets/food_recommendation_home_section.dart';
 import 'package:fitness/features/home/presentation/view_model/cubit/home_cubit.dart';
 import 'package:fitness/features/home/presentation/view_model/cubit/home_events.dart';
 import 'package:fitness/features/home/presentation/view_model/cubit/home_states.dart';
@@ -45,50 +46,56 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 20.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: BlocBuilder<HomeCubit, BaseState<HomeUIModel>>(
+                builder: (context, state) {
+                  final data = state.data ?? const HomeUIModel();
+                  final displayName =
+                      data.userName.isNotEmpty ? data.userName : 'User';
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 20.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              LocaleKeys.home_hi_name.tr(args: ['Ahmed']),
-                              style: 16.regular.copyWith(
-                                color: AppColors.whiteFF,
-                              ),
-                            ),
-                            SizedBox(height: 5.h),
-                            GestureDetector(
-                              onTap: () => context.push(Routes.detailsFood),
-                              child: Text(
-                                LocaleKeys.home_lets_start_your_day.tr(),
-                                style: 20.bold.copyWith(
-                                  color: AppColors.whiteFF,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  LocaleKeys.home_hi_name.tr(args: [displayName]),
+                                  style: 16.regular.copyWith(
+                                    color: AppColors.whiteFF,
+                                  ),
                                 ),
-                              ),
+                                SizedBox(height: 5.h),
+                                Text(
+                                  LocaleKeys.home_lets_start_your_day.tr(),
+                                  style: 20.bold.copyWith(
+                                    color: AppColors.whiteFF,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CircleAvatar(
+                              radius: 25.r,
+                              backgroundColor: AppColors.gray5F,
+                              backgroundImage: (data.userPhoto != null &&
+                                      data.userPhoto!.isNotEmpty)
+                                  ? NetworkImage(data.userPhoto!)
+                                  : const AssetImage(AppImages.humanGym)
+                                      as ImageProvider,
                             ),
                           ],
                         ),
-                        CircleAvatar(
-                          radius: 25.r,
-                          backgroundColor: AppColors.gray5F,
-                          backgroundImage:
-                              const AssetImage(AppImages.humanGym),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: BlocBuilder<HomeCubit, BaseState<HomeUIModel>>(
-                      builder: (context, state) {
+                      ),
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
                         final data = state.data ?? const HomeUIModel();
                         final isLoading = state.state == StateType.loading ||
                             state.state == StateType.initial;
@@ -164,6 +171,8 @@ class HomePage extends StatelessWidget {
                                 isLoading: isLoading,
                               ),
                               SizedBox(height: 24.h),
+                              const FoodRecommendationHomeSection(),
+                              SizedBox(height: 24.h),
                               UpcomingWorkoutsSection(
                                 filters: filters,
                                 categories: categories,
@@ -190,8 +199,10 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
+              );
+            },
+          ),
+        ),
           ],
         ),
       ),

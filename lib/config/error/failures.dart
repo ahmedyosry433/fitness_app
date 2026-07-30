@@ -65,9 +65,10 @@ class ServerFailure extends Failures {
         statusCode == 409 ||
         statusCode == 424 ||
         statusCode == 404) {
+      final msg = response is Map ? (response['message'] ?? response['error']) : null;
       return ServerFailure(
         errorMessage:
-            response['message'] ?? LocaleKeys.error_api_failure_unknown.tr(),
+            msg ?? LocaleKeys.error_api_failure_unknown.tr(),
       );
     } else if (statusCode == 500) {
       return ServerFailure(

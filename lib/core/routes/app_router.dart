@@ -6,7 +6,6 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/view_mo
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
-import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_chat_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
@@ -15,6 +14,8 @@ import 'package:fitness/features/exercise_module/presentation/view/pages/exercis
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/intent/details_food_intent.dart';
 import 'package:fitness/features/food/presentation/details_food/views/details_food_view.dart';
+import 'package:fitness/features/food/presentation/food_recommendation/view_model/cubit/food_recommendation_cubit.dart';
+import 'package:fitness/features/food/presentation/food_recommendation/views/food_recommendation_view.dart';
 import 'package:fitness/features/profile/presentation/view/pages/edit_profile_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/change_password_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
@@ -58,14 +59,6 @@ final GoRouter router = GoRouter(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
     ),
-    _customAnimatedGoRoute(
-      route: Routes.login,
-      page: (state, context) => const LoginPage(),
-    ),
-    _customAnimatedGoRoute(
-      route: Routes.register,
-      page: (state, context) => const RegisterPage(),
-    ),
 
     _customAnimatedGoRoute(
       route: Routes.forgetPassword,
@@ -95,10 +88,6 @@ final GoRouter router = GoRouter(
       },
     ),
     _customAnimatedGoRoute(
-      route: Routes.completeRegister,
-      page: (state, context) => const CompleteRegisterPage(),
-    ),
-    _customAnimatedGoRoute(
       route: Routes.detailsFood,
       page: (state, context) {
         final mealId = (state.extra as String?) ?? '52959';
@@ -108,6 +97,16 @@ final GoRouter router = GoRouter(
               getIt<DetailsFoodCubit>()
                 ..doIntent(FetchMealDetailsIntent(mealId)),
           child: DetailsFoodView(mealId: mealId),
+        );
+      },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.foodRecommendation,
+      page: (state, context) {
+        final category = state.extra as String?;
+        return BlocProvider(
+          create: (context) => getIt<FoodRecommendationCubit>(),
+          child: FoodRecommendationView(initialCategory: category),
         );
       },
     ),

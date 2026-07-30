@@ -58,6 +58,11 @@ class AuthResponseModel {
 
   Map<String, dynamic> toJson() => _$AuthResponseModelToJson(this);
 
-  AuthUserEntity toEntity() =>
-      user?.toEntity(tokenOverride: token) ?? AuthUserEntity.empty();
+  AuthUserEntity toEntity() {
+    final effectiveToken = (token != null && token!.isNotEmpty)
+        ? token!
+        : (user?.token ?? '');
+    return user?.toEntity(tokenOverride: effectiveToken) ??
+        AuthUserEntity(token: effectiveToken);
+  }
 }

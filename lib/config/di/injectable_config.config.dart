@@ -136,10 +136,16 @@ import '../../features/food/data/repositories/food_repository_impl.dart'
     as _i860;
 import '../../features/food/domain/repositories/food_repository_contract.dart'
     as _i966;
+import '../../features/food/domain/use_case/get_food_categories_use_case.dart'
+    as _i484;
 import '../../features/food/domain/use_case/get_meal_details_use_case.dart'
     as _i201;
+import '../../features/food/domain/use_case/get_meals_by_category_use_case.dart'
+    as _i681;
 import '../../features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart'
     as _i1072;
+import '../../features/food/presentation/food_recommendation/view_model/cubit/food_recommendation_cubit.dart'
+    as _i685;
 import '../../features/home/presentation/view_model/cubit/home_cubit.dart'
     as _i1039;
 import '../../features/login/api/api_client/login_api_client.dart' as _i395;
@@ -158,6 +164,28 @@ import '../../features/login/domain/repositories/login_repository.dart'
 import '../../features/login/login_di.dart' as _i871;
 import '../../features/login/presentation/view_model/cubit/login_cubit.dart'
     as _i753;
+import '../../features/profile/api/api_client/profile_api_client.dart' as _i699;
+import '../../features/profile/api/datasources/profile_remote_data_source_impl.dart'
+    as _i4;
+import '../../features/profile/data/datasources/profile_remote_data_source_contract.dart'
+    as _i961;
+import '../../features/profile/data/repositories/profile_repository_impl.dart'
+    as _i334;
+import '../../features/profile/domain/repositories/profile_repository.dart'
+    as _i894;
+import '../../features/profile/domain/use_cases/change_password_use_case.dart'
+    as _i266;
+import '../../features/profile/domain/use_cases/delete_account_use_case.dart'
+    as _i546;
+import '../../features/profile/domain/use_cases/get_profile_use_case.dart'
+    as _i110;
+import '../../features/profile/domain/use_cases/logout_use_case.dart' as _i332;
+import '../../features/profile/domain/use_cases/update_profile_use_case.dart'
+    as _i186;
+import '../../features/profile/domain/use_cases/upload_photo_use_case.dart'
+    as _i967;
+import '../../features/profile/presentation/view_model/cubit/profile_cubit.dart'
+    as _i967;
 import '../api/app_interceptors.dart' as _i781;
 import 'register_module.dart' as _i291;
 
@@ -221,6 +249,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i395.LoginApiClient>(
       () => loginInjectableModule.loginApiClient(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i699.ProfileApiClient>(
+      () => _i699.ProfileApiClient(gh<_i361.Dio>()),
+    );
     gh.factory<_i723.ExerciseModuleApiClient>(
       () => _i723.ExerciseModuleApiClient(gh<_i361.Dio>()),
     );
@@ -277,6 +308,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i872.MetaHorizonAuthService>(),
       ),
     );
+    gh.lazySingleton<_i961.ProfileRemoteDataSourceContract>(
+      () => _i4.ProfileRemoteDataSourceImpl(gh<_i699.ProfileApiClient>()),
+    );
+    gh.lazySingleton<_i894.ProfileRepository>(
+      () => _i334.ProfileRepositoryImpl(
+        gh<_i961.ProfileRemoteDataSourceContract>(),
+        gh<_i589.UserHelper>(),
+      ),
+    );
     gh.lazySingleton<_i902.LoginRepository>(
       () => _i1066.LoginRepositoryImpl(
         gh<_i736.LoginRemoteDataSourceContract>(),
@@ -291,8 +331,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i104.UserFirestoreService>(),
       ),
     );
+    gh.factory<_i484.GetFoodCategoriesUseCase>(
+      () => _i484.GetFoodCategoriesUseCase(gh<_i966.FoodRepositoryContract>()),
+    );
     gh.factory<_i201.GetMealDetailsUseCase>(
       () => _i201.GetMealDetailsUseCase(gh<_i966.FoodRepositoryContract>()),
+    );
+    gh.factory<_i681.GetMealsByCategoryUseCase>(
+      () => _i681.GetMealsByCategoryUseCase(gh<_i966.FoodRepositoryContract>()),
     );
     gh.factory<_i566.AuthModulRepository>(
       () => _i515.AuthModulRepositoryImpl(
@@ -305,6 +351,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i442.FastPathRecognizer>(
       () => _i442.FastPathRecognizer(gh<_i912.KnowledgeLocalDatasource>()),
+    );
+    gh.factory<_i685.FoodRecommendationCubit>(
+      () =>
+          _i685.FoodRecommendationCubit(gh<_i681.GetMealsByCategoryUseCase>()),
     );
     gh.factory<_i112.ExerciseRepository>(
       () => _i1072.ExerciseRepositoryImpl(gh<_i868.ExerciseRemoteDataSource>()),
@@ -321,6 +371,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i487.AiChatHistoryRepository>(
       () =>
           _i165.AiChatHistoryRepositoryImpl(gh<_i437.AiChatLocalDatasource>()),
+    );
+    gh.lazySingleton<_i967.UploadPhotoUseCase>(
+      () => _i967.UploadPhotoUseCase(gh<_i894.ProfileRepository>()),
     );
     gh.factory<_i198.GetDifficultyLevelsUseCase>(
       () => _i198.GetDifficultyLevelsUseCase(gh<_i112.ExerciseRepository>()),
@@ -340,6 +393,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1072.DetailsFoodCubit>(
       () => _i1072.DetailsFoodCubit(gh<_i201.GetMealDetailsUseCase>()),
     );
+    gh.factory<_i266.ChangePasswordUseCase>(
+      () => _i266.ChangePasswordUseCase(gh<_i894.ProfileRepository>()),
+    );
+    gh.factory<_i546.DeleteAccountUseCase>(
+      () => _i546.DeleteAccountUseCase(gh<_i894.ProfileRepository>()),
+    );
+    gh.factory<_i110.GetProfileUseCase>(
+      () => _i110.GetProfileUseCase(gh<_i894.ProfileRepository>()),
+    );
+    gh.factory<_i332.LogoutUseCase>(
+      () => _i332.LogoutUseCase(gh<_i894.ProfileRepository>()),
+    );
+    gh.factory<_i186.UpdateProfileUseCase>(
+      () => _i186.UpdateProfileUseCase(gh<_i894.ProfileRepository>()),
+    );
     gh.factory<_i391.ForgetPasswordCubit>(
       () => _i391.ForgetPasswordCubit(gh<_i787.AuthRepository>()),
     );
@@ -356,6 +424,15 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i215.ExerciseModuleCubit(
         gh<_i692.GetExercisesUseCase>(),
         gh<_i198.GetDifficultyLevelsUseCase>(),
+      ),
+    );
+    gh.factory<_i1039.HomeCubit>(
+      () => _i1039.HomeCubit(
+        gh<_i487.GetMuscleGroupsUseCase>(),
+        gh<_i467.GetRandomMusclesUseCase>(),
+        gh<_i735.GetMusclesByGroupUseCase>(),
+        gh<_i110.GetProfileUseCase>(),
+        gh<_i589.UserHelper>(),
       ),
     );
     gh.factory<_i42.ForgetPasswordUseCase>(
@@ -379,13 +456,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i735.GetMusclesByGroupUseCase>(),
         gh<_i692.GetExercisesUseCase>(),
         gh<_i467.GetRandomMusclesUseCase>(),
-      ),
-    );
-    gh.factory<_i1039.HomeCubit>(
-      () => _i1039.HomeCubit(
-        gh<_i487.GetMuscleGroupsUseCase>(),
-        gh<_i467.GetRandomMusclesUseCase>(),
-        gh<_i735.GetMusclesByGroupUseCase>(),
       ),
     );
     gh.factory<_i601.DeleteConversationUseCase>(
@@ -426,6 +496,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i124.SignUpUseCase>(),
         gh<_i123.SocialSignInUseCase>(),
         gh<_i104.UserFirestoreService>(),
+      ),
+    );
+    gh.factory<_i967.ProfileCubit>(
+      () => _i967.ProfileCubit(
+        gh<_i110.GetProfileUseCase>(),
+        gh<_i186.UpdateProfileUseCase>(),
+        gh<_i967.UploadPhotoUseCase>(),
+        gh<_i266.ChangePasswordUseCase>(),
+        gh<_i546.DeleteAccountUseCase>(),
+        gh<_i332.LogoutUseCase>(),
       ),
     );
     gh.factory<_i599.AiAgentCubit>(

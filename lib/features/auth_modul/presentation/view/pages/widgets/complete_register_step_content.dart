@@ -33,7 +33,7 @@ class CompleteRegisterStepContent extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 12),
-                  CompleteRegisterStepIndicator(currentStep: currentStep),
+                  CompleteRegisterStepIndicator(currentStep: currentStep ?? 0),
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

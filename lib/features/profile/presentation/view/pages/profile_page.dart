@@ -17,6 +17,8 @@ import 'package:fitness/core/values/app_images.dart';
 import 'package:toastification/toastification.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/profile_menu_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fitness/core/languages/lang.dart';
+import 'package:fitness/features/profile/presentation/view/widgets/language_selection_bottom_sheet.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/logout_confirmation_dialog.dart';
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -103,9 +105,9 @@ class ProfilePage extends StatelessWidget {
                                           value: context.locale.languageCode == 'en',
                                           onChanged: (val) {
                                             if (val) {
-                                              context.setLocale(const Locale('en', 'US'));
+                                              context.setLocale(englishLocale);
                                             } else {
-                                              context.setLocale(const Locale('ar', 'EG'));
+                                              context.setLocale(arabicLocale);
                                             }
                                           },
                                           activeTrackColor: AppColors.primaryOrange,
@@ -115,7 +117,14 @@ class ProfilePage extends StatelessWidget {
                                           trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
                                         ),
                                       ),
-                                      onTap: () {},
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (bottomSheetContext) =>
+                                              const LanguageSelectionBottomSheet(),
+                                        );
+                                      },
                                     ),
                                     Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
                                     ProfileMenuItem(

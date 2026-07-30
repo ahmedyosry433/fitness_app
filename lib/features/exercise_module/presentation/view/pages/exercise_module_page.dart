@@ -496,6 +496,9 @@ class ExerciseModulePage extends StatelessWidget {
           ),
         ],
       ),
+          ),
+        ],
+      ),
     );
   }
 }
