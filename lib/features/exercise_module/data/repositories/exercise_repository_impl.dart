@@ -3,6 +3,8 @@ import 'package:fitness/config/base_response/base_response.dart';
 import 'package:fitness/features/exercise_module/data/datasources/exercise_remote_data_source.dart';
 import 'package:fitness/features/exercise_module/domain/entities/difficulty_level_entity.dart';
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
+import 'package:fitness/features/exercise_module/domain/entities/muscle_entity.dart';
+import 'package:fitness/features/exercise_module/domain/entities/muscle_group_entity.dart';
 import 'package:fitness/features/exercise_module/domain/repositories/exercise_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,19 +15,54 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
   ExerciseRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Result<List<ExerciseEntity>>> getAllExercises(
-      {required String primeMoverMuscleId, required String difficultyLevelId}) {
+  Future<Result<List<ExerciseEntity>>> getAllExercises({
+    required String primeMoverMuscleId,
+    required String difficultyLevelId,
+  }) {
     return executeApi(() async {
-      final response = await _remoteDataSource.getExercises(primeMoverMuscleId, difficultyLevelId);
+      final response = await _remoteDataSource.getExercises(
+        primeMoverMuscleId,
+        difficultyLevelId,
+      );
       return response.exerciseEntities;
     });
   }
 
   @override
-  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({required String primeMoverMuscleId}) {
+  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({
+    required String primeMoverMuscleId,
+  }) {
     return executeApi(() async {
-      final response = await _remoteDataSource.getDifficultyLevels(primeMoverMuscleId);
+      final response =
+          await _remoteDataSource.getDifficultyLevels(primeMoverMuscleId);
       return response.difficultyLevels;
+    });
+  }
+
+  @override
+  Future<Result<List<MuscleGroupEntity>>> getMuscleGroups() {
+    return executeApi(() async {
+      final response = await _remoteDataSource.getMuscleGroups();
+      return response.muscleGroupEntities;
+    });
+  }
+
+  @override
+  Future<Result<List<MuscleEntity>>> getRandomMuscles() {
+    return executeApi(() async {
+      final response = await _remoteDataSource.getRandomMuscles();
+      return response.muscleEntities;
+    });
+  }
+
+  @override
+  Future<Result<List<MuscleEntity>>> getMusclesByGroupId({
+    required String muscleGroupId,
+  }) {
+    return executeApi(() async {
+      final response =
+          await _remoteDataSource.getMusclesByGroupId(muscleGroupId);
+      return response.muscleEntities;
     });
   }
 }
