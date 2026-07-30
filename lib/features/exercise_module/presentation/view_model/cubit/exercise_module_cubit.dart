@@ -59,9 +59,10 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
               exception: Exception(LocaleKeys.exercise_no_exercises_found.tr())));
           return;
         }
+        final selectedLevels = levels.take(3).toList();
         emit(BaseState.all(
             state: StateType.success,
-            data: _data.copyWith(difficultyLevels: levels),
+            data: _data.copyWith(difficultyLevels: selectedLevels),
             exception: null));
         _loadExercises(0);
       },

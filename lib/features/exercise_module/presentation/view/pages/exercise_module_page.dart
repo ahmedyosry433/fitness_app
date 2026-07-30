@@ -17,8 +17,8 @@ import 'package:fitness/features/exercise_module/presentation/view_model/exercis
 import 'package:fitness/config/base_state/base_state.dart';
 
 import 'package:fitness/core/shared/widgets/custom_cached_image.dart';
-import 'package:fitness/core/widgets/custom_back_button.dart';
 import 'widgets/exercise_card.dart';
+import 'widgets/popular_training_section.dart';
 
 class ExerciseModulePage extends StatelessWidget {
   final String primeMoverMuscleId;
@@ -33,36 +33,6 @@ class ExerciseModulePage extends StatelessWidget {
     required this.pageDescription,
     this.backgroundImage = '',
   });
-
-  Widget _buildTab(
-    BuildContext context,
-    String label,
-    int index,
-    bool isSelected,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        context.read<ExerciseModuleCubit>().processIntent(
-          LoadExercisesIntent(index),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.w),
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.orangePrimary : AppColors.transparent,
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Text(
-          label,
-          style: 13.bold.copyWith(color: AppColors.whiteFF),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-    );
-  }
 
   Widget _buildChip(String label, {bool isOrangeText = false}) {
     return Container(
@@ -310,32 +280,22 @@ class ExerciseModulePage extends StatelessWidget {
                         return prevData?.difficultyLevels !=
                                 currData?.difficultyLevels ||
                             prevData?.selectedDifficultyIndex !=
-                                currData?.selectedDifficultyIndex;
+                                currData?.selectedDifficultyIndex ||
+                            prevData?.exercises != currData?.exercises;
                       },
                       builder: (context, state) {
                         final data =
                             state.data ?? const ExerciseModuleUIModel();
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: data.difficultyLevels.asMap().entries.map(
-                              (entry) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                  ),
-                                  child: _buildTab(
-                                    context,
-                                    entry.value.name,
-                                    entry.key,
-                                    data.selectedDifficultyIndex == entry.key,
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                          ),
+                        return PopularTrainingSection(
+                          levels: data.difficultyLevels,
+                          selectedIndex: data.selectedDifficultyIndex,
+                          muscleName: data.pageTitle.isNotEmpty ? data.pageTitle : null,
+                          currentExerciseCount: data.exercises.length,
+                          onLevelSelected: (index) {
+                            context.read<ExerciseModuleCubit>().processIntent(
+                              LoadExercisesIntent(index),
+                            );
+                          },
                         );
                       },
                     ),
