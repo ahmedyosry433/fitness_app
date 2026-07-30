@@ -59,15 +59,32 @@ class CustomCachedImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (imagePath.isEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 12),
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: ColoredBox(
-            color: color ?? AppColors.black22.withValues(alpha: 0.35),
-            child: _fallbackImage(),
-          ),
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        width: width,
+        height: height,
+        padding: errorImage != null && errorImage!.endsWith(".png")
+            ? EdgeInsets.zero
+            : const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius ?? 12),
+          color: color ?? AppColors.transparent,
+        ),
+        child: Center(
+          child: (errorImage != null && !errorImage!.endsWith(".svg"))
+              ? Image.asset(
+                  errorImage!,
+                  width: width,
+                  height: height,
+                  fit: fit ?? BoxFit.contain,
+                )
+              : SvgPicture.asset(
+                  errorImage ?? AppIcons.iconsNoProfile,
+                  fit: BoxFit.scaleDown,
+                  width: 100,
+                  height: 100,
+                ),
         ),
       );
     }
@@ -81,15 +98,31 @@ class CustomCachedImage extends StatelessWidget {
       errorListener: (value) {
         log('Error loading image: $value|| $imagePath');
       },
-      errorWidget: (context, url, error) => ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 12),
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: ColoredBox(
-            color: AppColors.black22.withValues(alpha: 0.35),
-            child: _fallbackImage(),
-          ),
+      errorWidget: (context, url, error) => Container(
+        width: width,
+        height: height,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius ?? 12),
+          color: AppColors.primaryLight.withValues(alpha: 0.08),
+        ),
+        child: Center(
+          child: (errorImage != null && !errorImage!.endsWith(".svg"))
+              ? Image.asset(
+                  errorImage!,
+                  width: width,
+                  height: height,
+                  fit: fit ?? BoxFit.contain,
+                )
+              : SvgPicture.asset(
+                  errorImage ?? AppIcons.iconsNoProfile,
+                  fit: BoxFit.contain,
+                  width: width,
+                  height: height,
+                  colorFilter:
+                      emptyColorFilter ??
+                      ColorFilter.mode(AppColors.gray5F, BlendMode.srcIn),
+                ),
         ),
       ),
       progressIndicatorBuilder: (context, url, progress) => Container(

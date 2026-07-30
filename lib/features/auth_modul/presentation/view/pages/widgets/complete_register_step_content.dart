@@ -5,19 +5,21 @@ import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/comp
 import 'package:flutter/material.dart';
 
 class CompleteRegisterStepContent extends StatelessWidget {
-  final int currentStep;
+  final int? currentStep;
   final String title;
   final String subtitle;
   final Widget child;
   final VoidCallback onNext;
+  final String? buttonText;
 
   const CompleteRegisterStepContent({
     super.key,
-    required this.currentStep,
+    this.currentStep,
     required this.title,
     required this.subtitle,
     required this.child,
     required this.onNext,
+    this.buttonText,
   });
 
   @override

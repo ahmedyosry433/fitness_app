@@ -15,12 +15,15 @@ import 'package:fitness/features/exercise_module/presentation/view/pages/exercis
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/intent/details_food_intent.dart';
 import 'package:fitness/features/food/presentation/details_food/views/details_food_view.dart';
+import 'package:fitness/features/profile/presentation/view/pages/edit_profile_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/change_password_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
+import 'package:fitness/core/widgets/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -191,6 +194,25 @@ final GoRouter router = GoRouter(
           state.uri.queryParameters['conversationId'] ?? '',
         ),
       ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.editProfile,
+      page: (state, context) => const EditProfilePage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.changePassword,
+      page: (state, context) => const ChangePasswordPage(),
+    ),
+
+    _customAnimatedGoRoute(
+      route: Routes.webView,
+      page: (state, context) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final title = extra?['title'] as String? ?? '';
+        final url = extra?['url'] as String? ?? '';
+
+        return WebViewPage(title: title, url: url);
+      },
     ),
   ],
 );

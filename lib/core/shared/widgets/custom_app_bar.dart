@@ -1,7 +1,6 @@
 import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
+import 'package:fitness/core/widgets/custom_back_button.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   // added isCenteredTitle parameter to make title go left if needed
@@ -36,12 +35,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: 20.medium.copyWith(color: textColor ?? Colors.black),
         ),
         leading: automaticallyImplyLeading && canPop
-            ? InkWell(
-                overlayColor: WidgetStateProperty.all(Colors.transparent),
-                onTap: () {
-                  context.pop();
-                },
-                child: Icon(Icons.chevron_left, size: 38),
+            ? const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CustomBackButton(size: 32),
               )
             : null,
         actions: actions,

@@ -14,4 +14,8 @@ abstract class Routes {
   static const String profile = '/profile';
   static const String exercise = '/exercise';
   static const String detailsFood = '/detailsFood';
+  static const String editProfile = '/editProfile';
+  static const String webView = '/webView';
+  static const String changePassword = '/changePassword';
+  static const String editWeight = '/editWeight';
 }

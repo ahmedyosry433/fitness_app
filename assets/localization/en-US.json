@@ -1,15 +1,15 @@
 {
     "error_api_failure": {
         "connectionError": "Failed to connect to the server",
-        "connectionTimeout": "Connection to the server timed out",
-        "cancelled": "The request to the server was cancelled",
-        "unknown": "An unexpected error occurred, please try again later!",
+        "connectionTimeout": "Connection timeout",
+        "cancelled": "Request to the server was cancelled",
+        "unknown": "An unexpected error occurred while connecting to the server, please try again later!",
         "server_error": "Server error, please try again later!",
         "receiveTimeout": "Failed to connect to the server while receiving data",
         "sendTimeout": "Failed to connect to the server while sending data",
         "unexpected_error": "An unexpected error occurred",
         "badCertificate": "Invalid certificate from the server",
-        "expiredToken": "Session expired, please log in again"
+        "expiredToken": "Session expired, please login again"
     },
     "global": {
         "view_all": "View All",
@@ -274,5 +274,23 @@
         "image_recommendations": "اقتراحات مرتبطة من قاعدة البيانات:",
         "image_unreadable": "تعذر تحليل الصورة، يرجى إرسال صورة أوضح.",
         "service_busy": "خدمة التحليل مشغولة حالياً، أعد المحاولة بعد لحظات."
+    },
+    "profile": {
+        "profile": "Profile",
+        "edit_profile": "Edit Profile",
+        "change_password": "Change Password",
+        "select_language": "Select Language",
+        "security": "Security",
+        "privacy_policy": "Privacy Policy",
+        "help": "Help",
+        "logout": "Logout",
+        "your_weight": "Your Weight",
+        "your_goal": "Your Goal",
+        "your_activity_level": "Your activity level",
+        "tap_to_edit": "(tap To Edit)",
+        "rookie": "Rookie",
+        "gain_weight": "Gain Weight",
+        "english": "English",
+        "old_password": "Old Password"
     }
 }
