@@ -11,6 +11,6 @@ class ForgetPasswordUseCase {
   ForgetPasswordUseCase(this._repository);
 
   Future<Result<AuthCommonResponse>> call(ForgetPasswordRequest request) async {
-    return await _repository.forgetPassword(request);
+    return _repository.forgetPassword(request);
   }
 }

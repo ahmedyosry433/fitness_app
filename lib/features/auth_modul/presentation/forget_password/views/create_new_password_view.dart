@@ -98,7 +98,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                       BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
                         builder: (context, state) {
                           return CustomButton(
-                            title: "Done",
+                            title: LocaleKeys.forget_password_done.tr(),
                             titleStyle: Theme.of(context).textTheme.bodyMedium!
                                 .copyWith(
                                   color: AppColors.white,

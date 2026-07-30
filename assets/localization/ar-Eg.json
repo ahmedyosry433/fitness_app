@@ -127,7 +127,9 @@
         "password_updated_successfully": "تم تحديث كلمة المرور بنجاح",
         "password": "كلمة المرور",
         "otp_code": "رمز التحقق",
-        "please_enter_the_complete4": "الرجاء إدخال الرمز الكامل المكون من 4 أرقام"
+        "please_enter_the_complete4": "الرجاء إدخال الرمز الكامل المكون من 4 أرقام",
+        "done":"تم",
+        "sentOtp":"إرسال رمز التحقق"
     },
     "splash": {
         "title": "سوبر فيتنس",

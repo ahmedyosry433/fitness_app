@@ -18,8 +18,10 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../core/user_helper/user_helper.dart' as _i589;
-import '../../features/auth_modul/api/datasources/auth_modul_remote_data_source_impl.dart'
-    as _i306;
+import '../../features/auth_modul/api/api_client/auth_modul_api_client.dart'
+    as _i740;
+import '../../features/auth_modul/api/datasources/auth_modul_remote_data_source_mock_impl.dart'
+    as _i894;
 import '../../features/auth_modul/data/datasources/auth_modul_remote_data_source_contract.dart'
     as _i94;
 import '../../features/auth_modul/data/repositories/auth_modul_repository_impl.dart'
@@ -60,7 +62,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => coreInjectableModule.internetConnection(),
     );
     gh.factory<_i94.AuthModulRemoteDataSource>(
-      () => _i306.AuthModulRemoteDataSourceImpl(),
+      () => _i894.AuthModulRemoteDataSourceMockImpl(),
+    );
+    gh.factory<_i740.AuthModulApiClient>(
+      () => _i740.AuthModulApiClient(gh<_i361.Dio>()),
     );
     gh.singleton<_i781.AppInterceptors>(
       () => _i781.AppInterceptors(

@@ -29,14 +29,15 @@ class ForgetPasswordCubit
 
   @override
   Future<void> doAction(ForgetPasswordIntent event) async {
-    if (event is SendOtpIntent) {
-      await _executeSendOtp(event.email);
-    } else if (event is VerifyOtpIntent) {
-      await _executeVerifyOtp(event.otp);
-    } else if (event is ResendOtpIntent) {
-      await _executeResendOtp();
-    } else if (event is ResetPasswordSubmitIntent) {
-      await _executeResetPassword(event.newPassword, event.confirmPassword);
+    switch (event) {
+      case SendOtpIntent():
+        await _executeSendOtp(event.email);
+      case VerifyOtpIntent():
+        await _executeVerifyOtp(event.otp);
+      case ResendOtpIntent():
+        await _executeResendOtp();
+      case ResetPasswordSubmitIntent():
+        await _executeResetPassword(event.newPassword, event.confirmPassword);
     }
   }
 

@@ -24,8 +24,9 @@ class OtpVerificationView extends StatefulWidget {
 }
 
 class _OtpVerificationViewState extends State<OtpVerificationView> {
-  bool isOtpInvalid = false;
   final otpController = TextEditingController();
+  final otpFormKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     otpController.dispose();
@@ -35,7 +36,7 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ForgetPasswordCubit>();
-    final otpFormKey = GlobalKey<FormState>();
+
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 50,
@@ -72,13 +73,10 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
         listenWhen: (previous, current) => previous.state != current.state,
         listener: (context, state) {
           if (state.state == StateType.success && state.otp.isNotEmpty) {
-            setState(() => isOtpInvalid = false);
             context.pushNamed(Routes.createNewPasswordView, extra: cubit);
           } else if (state.state == StateType.error) {
-            setState(() {
-              isOtpInvalid = true;
-            });
             otpFormKey.currentState?.reset();
+            otpController.clear();
           }
         },
         child: Form(
@@ -104,7 +102,6 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                 ),
               ),
               const SizedBox(height: 16),
-
               ClipRRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
@@ -130,21 +127,21 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 ForgetPasswordState
                               >(
                                 builder: (context, state) {
-                                  if (state.state == StateType.error) {
-                                    otpController.clear();
-                                  }
+                                  final isError =
+                                      state.state == StateType.error;
                                   return Pinput(
-                                    key: ValueKey('pinput_error_$isOtpInvalid'),
                                     controller: otpController,
                                     length: 4,
                                     defaultPinTheme: defaultPinTheme,
                                     focusedPinTheme: focusedPinTheme,
                                     submittedPinTheme: submittedPinTheme,
                                     errorPinTheme: errorPinTheme,
-                                    forceErrorState: isOtpInvalid,
-                                    errorText: LocaleKeys
-                                        .forget_password_invalid_otp_code
-                                        .tr(),
+                                    forceErrorState: isError,
+                                    errorText: isError
+                                        ? LocaleKeys
+                                              .forget_password_invalid_otp_code
+                                              .tr()
+                                        : null,
                                     errorTextStyle: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
@@ -154,18 +151,6 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                               LanguageHelper.englishFontFamily,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                    onChanged: (value) {
-                                      if (isOtpInvalid) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                              if (mounted) {
-                                                setState(() {
-                                                  isOtpInvalid = false;
-                                                });
-                                              }
-                                            });
-                                      }
-                                    },
                                     validator: AppValidators.validateOtp,
                                   );
                                 },
@@ -191,17 +176,6 @@ class _OtpVerificationViewState extends State<OtpVerificationView> {
                                 }
                               },
                             );
-                            // return CustomAuthButton(
-                            //   title: LocaleKeys.forget_password_confirm.tr(),
-                            //   isLoading: state.state == StateType.loading,
-                            //   onPressed: () {
-                            //     if (otpFormKey.currentState!.validate()) {
-                            //       cubit.doAction(
-                            //         VerifyOtpIntent(otpController.text),
-                            //       );
-                            //     }
-                            //   },
-                            // );
                           },
                         ),
                         const SizedBox(height: 8),

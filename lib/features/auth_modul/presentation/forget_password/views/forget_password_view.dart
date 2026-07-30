@@ -101,7 +101,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           selector: (state) => state.state,
                           builder: (context, stateType) {
                             return CustomButton(
-                              title: "Sent OTP",
+                              title: LocaleKeys.forget_password_sentOtp.tr(),
                               titleStyle: Theme.of(context)
                                   .textTheme
                                   .titleLarge!

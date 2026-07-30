@@ -8,7 +8,7 @@ class ForgetPasswordState extends BaseState<AuthCommonResponse> {
   final String confirmPassword;
 
   const ForgetPasswordState({
-    super.state, // initial, loading, success, error
+    super.state,
     super.data,
     super.errorMessage,
     this.email = '',
@@ -46,7 +46,7 @@ class ForgetPasswordState extends BaseState<AuthCommonResponse> {
 
   @override
   List<Object?> get props => [
-    super.props,
+    ...super.props,
     email,
     otp,
     newPassword,

@@ -128,7 +128,9 @@
         "password_updated_successfully": "Password updated successfully",
         "password": "Password",
         "otp_code": "OTP CODE",
-        "please_enter_the_complete4": "Please enter the complete 4-digit code"
+        "please_enter_the_complete4": "Please enter the complete 4-digit code",
+        "done":"Done",
+        "sentOtp":"Sent OTP"
     },
     "splash": {
         "title": "SUPER FITNESS",
