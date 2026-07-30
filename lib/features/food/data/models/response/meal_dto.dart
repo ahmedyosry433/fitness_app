@@ -1,3 +1,4 @@
+import 'package:fitness/features/food/domain/entities/ingredient_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'meal_dto.g.dart';
@@ -151,17 +152,10 @@ class MealDto {
       final measure = rawMeasures[i];
       if (name != null && name.trim().isNotEmpty) {
         list.add(
-          IngredientEntity(name: name.trim(), amount: measure?.trim() ?? ''),
+          IngredientEntity(name: name.trim(), measure: measure?.trim() ?? ''),
         );
       }
     }
     return list;
   }
-}
-
-
-class IngredientEntity {
-  final String name;
-  final String amount;
-  IngredientEntity({required this.name, required this.amount});
 }

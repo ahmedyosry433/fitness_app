@@ -42,5 +42,6 @@ class AppImages {
   static const String userAvatar = "assets/images/user_avatar.png";
   static const String robotSkipping = "assets/images/robot_skipping.png";
   static const String chatBg = "assets/images/chat_bg.png";
-}
+
+ }
 

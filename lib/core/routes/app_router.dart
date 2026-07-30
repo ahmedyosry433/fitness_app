@@ -6,10 +6,11 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/view_mo
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
-import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
+import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_chat_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
+import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/intent/details_food_intent.dart';
@@ -36,6 +37,18 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.splash,
       page: (state, context) => const SplashPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.login,
+      page: (state, context) => const LoginPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.register,
+      page: (state, context) => const RegisterPage(),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.completeRegister,
+      page: (state, context) => const CompleteRegisterPage(),
     ),
 
     _customAnimatedGoRoute(
