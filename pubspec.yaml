@@ -93,7 +93,7 @@ flutter:
     - assets/images/auth/
     - assets/icons/
     - assets/localization/en-US.json
-    - assets/localization/ar-EG.json
+    - assets/localization/ar-Eg.json
   fonts:
     - family: RobotoEnglish
       fonts:

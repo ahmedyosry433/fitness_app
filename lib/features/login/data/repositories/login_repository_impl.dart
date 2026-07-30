@@ -20,7 +20,9 @@ class LoginRepositoryImpl implements LoginRepository {
 
     if (result is Success<AuthResponseModel>) {
       final data = result.data;
-      if (data == null) return const Error(exception: null);
+      if (data == null) {
+        return Error(exception: Exception('User data is null or empty'));
+      }
       final user = data.toEntity();
       await _localDataSource.saveUser(user);
       return Success(data: user);
