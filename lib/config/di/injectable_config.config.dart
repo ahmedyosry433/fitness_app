@@ -42,6 +42,8 @@ import '../../features/ai_agent/domain/repositories/ollama_repository.dart'
     as _i646;
 import '../../features/ai_agent/domain/use_cases/delete_conversation_use_case.dart'
     as _i601;
+import '../../features/ai_agent/domain/use_cases/get_ai_user_context_use_case.dart'
+    as _i788;
 import '../../features/ai_agent/domain/use_cases/get_conversation_messages_use_case.dart'
     as _i61;
 import '../../features/ai_agent/domain/use_cases/get_conversations_use_case.dart'
@@ -435,6 +437,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i589.UserHelper>(),
       ),
     );
+    gh.factory<_i788.GetAiUserContextUseCase>(
+      () => _i788.GetAiUserContextUseCase(
+        gh<_i589.UserHelper>(),
+        gh<_i487.AiChatHistoryRepository>(),
+      ),
+    );
     gh.factory<_i42.ForgetPasswordUseCase>(
       () => _i42.ForgetPasswordUseCase(gh<_i566.AuthModulRepository>()),
     );
@@ -498,16 +506,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i104.UserFirestoreService>(),
       ),
     );
-    gh.factory<_i967.ProfileCubit>(
-      () => _i967.ProfileCubit(
-        gh<_i110.GetProfileUseCase>(),
-        gh<_i186.UpdateProfileUseCase>(),
-        gh<_i967.UploadPhotoUseCase>(),
-        gh<_i266.ChangePasswordUseCase>(),
-        gh<_i546.DeleteAccountUseCase>(),
-        gh<_i332.LogoutUseCase>(),
-      ),
-    );
     gh.factory<_i599.AiAgentCubit>(
       () => _i599.AiAgentCubit(
         gh<_i219.SendAgentMessageUseCase>(),
@@ -517,6 +515,19 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i219.SaveChatMessageUseCase>(),
         gh<_i1069.UpdateChatMessageUseCase>(),
         gh<_i601.DeleteConversationUseCase>(),
+        gh<_i589.UserHelper>(),
+        gh<_i110.GetProfileUseCase>(),
+        gh<_i788.GetAiUserContextUseCase>(),
+      ),
+    );
+    gh.factory<_i967.ProfileCubit>(
+      () => _i967.ProfileCubit(
+        gh<_i110.GetProfileUseCase>(),
+        gh<_i186.UpdateProfileUseCase>(),
+        gh<_i967.UploadPhotoUseCase>(),
+        gh<_i266.ChangePasswordUseCase>(),
+        gh<_i546.DeleteAccountUseCase>(),
+        gh<_i332.LogoutUseCase>(),
       ),
     );
     return this;

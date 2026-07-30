@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/ai_agent/domain/entities/ai_ref_entity.dart';
 import 'package:fitness/features/ai_agent/domain/entities/chat_message_entity.dart';
@@ -12,9 +11,10 @@ import 'package:fitness/features/ai_agent/presentation/view/widgets/meal_ref_car
 import 'package:flutter/material.dart';
 
 class ChatMessageBubble extends StatelessWidget {
-  const ChatMessageBubble({super.key, required this.message});
+  const ChatMessageBubble({super.key, required this.message, this.userPhoto});
 
   final ChatMessageEntity message;
+  final String? userPhoto;
 
   static const double _avatarRadius = 18;
   static const double _gutter = 12;
@@ -22,12 +22,14 @@ class ChatMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return message.isUser ? _UserMessage(message: message) : _BotMessage(
-      message: message,
-      avatarRadius: _avatarRadius,
-      gutter: _gutter,
-      oppositeInset: _oppositeInset,
-    );
+    return message.isUser
+        ? _UserMessage(message: message, userPhoto: userPhoto)
+        : _BotMessage(
+            message: message,
+            avatarRadius: _avatarRadius,
+            gutter: _gutter,
+            oppositeInset: _oppositeInset,
+          );
   }
 }
 
@@ -98,9 +100,10 @@ class _RefCard extends StatelessWidget {
 }
 
 class _UserMessage extends StatelessWidget {
-  const _UserMessage({required this.message});
+  const _UserMessage({required this.message, this.userPhoto});
 
   final ChatMessageEntity message;
+  final String? userPhoto;
 
   static const BorderRadius _radius = BorderRadius.only(
     topLeft: Radius.circular(20),
@@ -116,59 +119,100 @@ class _UserMessage extends StatelessWidget {
       children: [
         const SizedBox(width: 40),
         Flexible(
-          child: ClipRRect(
-            borderRadius: _radius,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF6A00).withValues(alpha: 0.5),
+              borderRadius: _radius,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: 10,
                 ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF6A00).withValues(alpha: 0.5),
-                  borderRadius: _radius,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      blurRadius: 10,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (message.hasImage)
+                  ChatImageThumbnail(
+                    imagePath: message.imagePath!,
+                    width: 180,
+                    height: 180,
+                  ),
+                if (message.hasImage && message.text.isNotEmpty)
+                  const SizedBox(height: 8),
+                if (message.text.isNotEmpty)
+                  Text(
+                    message.text,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                      height: 1.5,
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (message.hasImage)
-                      ChatImageThumbnail(
-                        imagePath: message.imagePath!,
-                        width: 180,
-                        height: 180,
-                      ),
-                    if (message.hasImage && message.text.isNotEmpty)
-                      const SizedBox(height: 8),
-                    if (message.text.isNotEmpty)
-                      Text(
-                        message.text,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          height: 1.5,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+                  ),
+              ],
             ),
           ),
         ),
         const SizedBox(width: 12),
-        const CircleAvatar(
-          radius: 18,
-          backgroundImage: AssetImage(AppImages.userAvatar),
-          backgroundColor: Colors.transparent,
-        ),
+        _UserAvatar(userPhoto: userPhoto),
       ],
+    );
+  }
+}
+
+/// Displays user avatar with proper loading/error handling.
+/// Uses [Image.network] with `loadingBuilder` and `errorBuilder` so the
+/// avatar never appears as a blank circle that "keeps loading".
+class _UserAvatar extends StatelessWidget {
+  const _UserAvatar({this.userPhoto});
+
+  final String? userPhoto;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasPhoto = userPhoto != null && userPhoto!.isNotEmpty;
+
+    return CircleAvatar(
+      radius: 18,
+      backgroundColor: const Color(0xFF3A3A3A),
+      backgroundImage: hasPhoto ? null : const AssetImage(AppImages.userAvatar),
+      child: hasPhoto
+          ? ClipOval(
+              child: Image.network(
+                userPhoto!,
+                width: 36,
+                height: 36,
+                fit: BoxFit.cover,
+                cacheWidth: 72,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                          color: AppColors.primaryOrangeLight,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder: (_, _, _) => Image.asset(
+                  AppImages.userAvatar,
+                  width: 36,
+                  height: 36,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }

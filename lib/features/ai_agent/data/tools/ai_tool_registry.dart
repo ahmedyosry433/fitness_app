@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fitness/features/ai_agent/data/datasource/knowledge_local_datasource.dart';
 import 'package:fitness/features/ai_agent/domain/entities/ai_ref_entity.dart';
+import 'package:fitness/features/ai_agent/domain/entities/ai_user_context_entity.dart';
 import 'package:injectable/injectable.dart';
 
 /// Outcome of running one model tool call against the local database.
@@ -32,12 +33,14 @@ class AiToolRegistry {
   static const String searchMealsTool = 'search_meals';
   static const String searchByTextTool = 'search_by_text';
 
-  Future<String> buildSystemPrompt() async {
+  Future<String> buildSystemPrompt({
+    AiUserContextEntity userContext = AiUserContextEntity.empty,
+  }) async {
     final vocabulary = await _knowledge.getVocabulary();
 
     String block(String key) => jsonEncode(vocabulary[key] ?? const []);
 
-    return '''
+    final buffer = StringBuffer('''
 أنت "المدرب الذكي (Smart Coach)" - مساعد افتراضي احترافي ومخصص للياقة البدنية والتغذية داخل تطبيق Fitness App.
 
 قواعد الاستجابة المطلوبة:
@@ -59,14 +62,70 @@ class AiToolRegistry {
 - معدات التمارين: ${block('equipment')}
 - مستويات الصعوبة: ${block('difficulty')}
 - تصنيفات الوجبات: ${block('meal_categories')}
-''';
+''');
+
+    buffer.write(_userContextBlock(userContext));
+
+    return buffer.toString();
   }
+
+  /// Profile fields + recap of the previous conversation, rendered as prompt
+  /// blocks. Returns an empty string when nothing is known about the user.
+  String _userContextBlock(AiUserContextEntity context) {
+    if (context.isEmpty) return '';
+
+    final buffer = StringBuffer();
+
+    if (context.hasProfile) {
+      buffer.writeln();
+      buffer.writeln('[بيانات المستخدم الحالي - استخدمها لتخصيص ردودك]:');
+      if (context.name != null) buffer.writeln('- الاسم: ${context.name}');
+      if (context.email != null) {
+        buffer.writeln('- البريد الإلكتروني: ${context.email}');
+      }
+      if (context.phone != null) {
+        buffer.writeln('- رقم الهاتف: ${context.phone}');
+      }
+      buffer.writeln('- ناده باسمه الأول في أول رد فقط، ثم تابع بشكل طبيعي.');
+      buffer.writeln(
+        '- لا تذكر بريده أو رقم هاتفه في ردك إلا إذا سأل عنهما صراحةً.',
+      );
+    }
+
+    if (context.hasPreviousChat) {
+      buffer.writeln();
+      buffer.writeln(
+        '[ملخص آخر محادثة سابقة مع نفس المستخدم - للاستئناس فقط]:',
+      );
+      if (context.previousChatTitle != null) {
+        buffer.writeln('- الموضوع: ${context.previousChatTitle}');
+      }
+      if (context.previousChatDate != null) {
+        buffer.writeln('- التاريخ: ${_formatDate(context.previousChatDate!)}');
+      }
+      for (final turn in context.previousChatTurns) {
+        buffer.writeln('- ${turn.isUser ? 'المستخدم' : 'أنت'}: ${turn.text}');
+      }
+      buffer.writeln(
+        '- استخدم هذا السياق للاستمرارية فقط، ولا تفترض أنه سؤال الآن، '
+        'ولا تكرره أو تعلّق عليه إلا إذا كان مرتبطاً برسالة المستخدم الحالية.',
+      );
+    }
+
+    return buffer.toString();
+  }
+
+  static String _formatDate(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-'
+      '${date.day.toString().padLeft(2, '0')}';
 
   /// Prompt for the multimodal model when the user attaches a photo.
   ///
   /// The vision model has no tools, so it is asked to name what it sees using
   /// database vocabulary; those words are then used to fetch grounded refs.
-  Future<String> buildVisionPrompt() async {
+  Future<String> buildVisionPrompt({
+    AiUserContextEntity userContext = AiUserContextEntity.empty,
+  }) async {
     final vocabulary = await _knowledge.getVocabulary();
 
     String names(String key) {
@@ -100,7 +159,7 @@ class AiToolRegistry {
 - مجموعات العضلات: ${names('muscle_groups')}
 - المعدات: ${names('equipment')}
 - تصنيفات الوجبات: ${names('meal_categories')}
-''';
+${_userContextBlock(userContext)}''';
   }
 
   List<Map<String, dynamic>> get toolDefinitions => [
@@ -208,11 +267,7 @@ class AiToolRegistry {
         );
 
       default:
-        return ToolCallOutcome(
-          toolName: name,
-          items: const [],
-          refs: const [],
-        );
+        return ToolCallOutcome(toolName: name, items: const [], refs: const []);
     }
   }
 

@@ -107,7 +107,8 @@ class _AiAgentChatPageState extends State<AiAgentChatPage> {
       child: Scaffold(
         backgroundColor: const Color(0xFF242424),
         body: BlocBuilder<AiAgentCubit, BaseState<AiAgentUIModel>>(
-          buildWhen: (previous, current) => previous.data != current.data,
+          buildWhen: (previous, current) =>
+              previous.state != current.state || previous.data != current.data,
           builder: (context, state) {
             final data = state.data ?? const AiAgentUIModel();
 
@@ -155,18 +156,29 @@ class _AiAgentChatPageState extends State<AiAgentChatPage> {
                         ),
                       ),
                       Expanded(
-                        child: ListView.separated(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
-                          itemCount: data.messages.length,
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: 20),
-                          itemBuilder: (context, index) =>
-                              ChatMessageBubble(message: data.messages[index]),
-                        ),
+                        child: state.isLoading && data.messages.isEmpty
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryOrangeDark,
+                                ),
+                              )
+                            : ListView.separated(
+                                controller: _scrollController,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                                cacheExtent: 500,
+                                addAutomaticKeepAlives: true,
+                                itemCount: data.messages.length,
+                                separatorBuilder: (_, _) =>
+                                    const SizedBox(height: 20),
+                                itemBuilder: (context, index) =>
+                                    ChatMessageBubble(
+                                      message: data.messages[index],
+                                      userPhoto: data.userPhoto,
+                                    ),
+                              ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),

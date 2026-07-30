@@ -122,8 +122,7 @@ class PreviousConversationsDrawer extends StatelessWidget {
                                 onTap: () => onSelectConversation(conversation),
                                 onDelete: onDeleteConversation == null
                                     ? null
-                                    : () =>
-                                          onDeleteConversation!(conversation),
+                                    : () => onDeleteConversation!(conversation),
                               );
                             },
                           ),

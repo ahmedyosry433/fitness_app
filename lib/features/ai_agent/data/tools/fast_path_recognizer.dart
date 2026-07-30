@@ -73,10 +73,8 @@ class FastPathRecognizer {
           items: exercises,
           refs: exercises
               .map(
-                (row) => KnowledgeSearchResult.refFromRow(
-                  row,
-                  AiRefType.exercise,
-                ),
+                (row) =>
+                    KnowledgeSearchResult.refFromRow(row, AiRefType.exercise),
               )
               .toList(),
         );
@@ -100,8 +98,7 @@ class FastPathRecognizer {
           items: meals,
           refs: meals
               .map(
-                (row) =>
-                    KnowledgeSearchResult.refFromRow(row, AiRefType.meal),
+                (row) => KnowledgeSearchResult.refFromRow(row, AiRefType.meal),
               )
               .toList(),
         );

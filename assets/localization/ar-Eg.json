@@ -415,6 +415,7 @@
         "new_conversation": "محادثة جديدة",
         "no_conversations": "لا توجد محادثات سابقة.",
         "greeting": "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+        "thinking": "المدرب الذكي يفكر...",
         "unexpected_error": "حدث خطأ غير متوقع.",
         "invalid_video_url": "رابط الفيديو غير صالح"
     },

@@ -270,11 +270,10 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(primeMover)) {
       final pattern = '%${primeMover!.trim()}%';
-      addFilter(' AND (e.prime_mover_id LIKE ? OR e.name LIKE ? OR e.name_ar LIKE ?)', [
-        pattern,
-        pattern,
-        pattern,
-      ]);
+      addFilter(
+        ' AND (e.prime_mover_id LIKE ? OR e.name LIKE ? OR e.name_ar LIKE ?)',
+        [pattern, pattern, pattern],
+      );
     }
 
     if (_hasValue(equipment)) {
@@ -327,7 +326,9 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(category)) {
       final pattern = '%${category!.trim()}%';
-      buffer.writeln(' AND (mc.id LIKE ? OR mc.name LIKE ? OR mc.name_ar LIKE ?)');
+      buffer.writeln(
+        ' AND (mc.id LIKE ? OR mc.name LIKE ? OR mc.name_ar LIKE ?)',
+      );
       variables.addAll([
         Variable<String>(pattern),
         Variable<String>(pattern),
@@ -337,7 +338,9 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(area)) {
       final pattern = '%${area!.trim()}%';
-      buffer.writeln(' AND (ma.id LIKE ? OR ma.name LIKE ? OR ma.name_ar LIKE ?)');
+      buffer.writeln(
+        ' AND (ma.id LIKE ? OR ma.name LIKE ? OR ma.name_ar LIKE ?)',
+      );
       variables.addAll([
         Variable<String>(pattern),
         Variable<String>(pattern),
@@ -358,10 +361,7 @@ class KnowledgeLocalDatasource {
     if (_hasValue(query)) {
       final pattern = '%${query!.trim()}%';
       buffer.writeln(' AND (m.name LIKE ? OR m.name_ar LIKE ?)');
-      variables.addAll([
-        Variable<String>(pattern),
-        Variable<String>(pattern),
-      ]);
+      variables.addAll([Variable<String>(pattern), Variable<String>(pattern)]);
     }
 
     buffer.writeln(' ORDER BY m.popularity DESC LIMIT ?');
@@ -404,10 +404,7 @@ class KnowledgeLocalDatasource {
 }
 
 class KnowledgeSearchResult {
-  const KnowledgeSearchResult({
-    required this.exercises,
-    required this.meals,
-  });
+  const KnowledgeSearchResult({required this.exercises, required this.meals});
 
   final List<Map<String, Object?>> exercises;
   final List<Map<String, Object?>> meals;

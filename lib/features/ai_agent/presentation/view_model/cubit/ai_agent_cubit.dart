@@ -8,15 +8,18 @@ import 'package:fitness/features/ai_agent/domain/entities/ai_agent_stream_event.
 import 'package:fitness/features/ai_agent/domain/entities/ai_ref_entity.dart';
 import 'package:fitness/features/ai_agent/domain/entities/chat_message_entity.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/delete_conversation_use_case.dart';
+import 'package:fitness/features/ai_agent/domain/use_cases/get_ai_user_context_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/get_conversation_messages_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/get_conversations_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/save_chat_message_use_case.dart';
-import 'package:fitness/features/ai_agent/domain/use_cases/send_agent_message_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/start_conversation_use_case.dart';
+import 'package:fitness/features/ai_agent/domain/use_cases/send_agent_message_use_case.dart';
 import 'package:fitness/features/ai_agent/domain/use_cases/update_chat_message_use_case.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_intent.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_navigation.dart';
 import 'package:fitness/features/ai_agent/presentation/view_model/cubit/ai_agent_states.dart';
+import 'package:fitness/core/user_helper/user_helper.dart';
+import 'package:fitness/features/profile/domain/use_cases/get_profile_use_case.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -30,6 +33,9 @@ class AiAgentCubit
     this.saveChatMessageUseCase,
     this.updateChatMessageUseCase,
     this.deleteConversationUseCase,
+    this.userHelper,
+    this.getProfileUseCase,
+    this.getAiUserContextUseCase,
   ) : super(const BaseState.initial());
 
   final SendAgentMessageUseCase sendAgentMessageUseCase;
@@ -39,16 +45,17 @@ class AiAgentCubit
   final SaveChatMessageUseCase saveChatMessageUseCase;
   final UpdateChatMessageUseCase updateChatMessageUseCase;
   final DeleteConversationUseCase deleteConversationUseCase;
+  final UserHelper userHelper;
+  final GetProfileUseCase getProfileUseCase;
+  final GetAiUserContextUseCase getAiUserContextUseCase;
 
   StreamSubscription<AiAgentStreamEvent>? _answerSubscription;
   int? _streamingMessageId;
 
   AiAgentUIModel get _data => state.data ?? const AiAgentUIModel();
 
-  static ChatMessageEntity get greeting => ChatMessageEntity(
-    text: LocaleKeys.ai_agent_greeting.tr(),
-    isUser: false,
-  );
+  static ChatMessageEntity get greeting =>
+      ChatMessageEntity(text: LocaleKeys.ai_agent_greeting.tr(), isUser: false);
 
   @override
   Future<void> doAction(AiAgentIntent event) async {
@@ -70,16 +77,64 @@ class AiAgentCubit
     }
   }
 
+  /// Loads cached user data instantly (no network), then refreshes from
+  /// profile API in the background. This prevents the page from blocking.
+  Future<void> _loadUserData() async {
+    // Phase 1: instant cached data (SharedPreferences — no network).
+    try {
+      final cachedName = await userHelper.getUserName();
+      final cachedPhoto = await userHelper.getUserPhoto();
+      if (cachedName != null || cachedPhoto != null) {
+        _emit(
+          _data.copyWith(
+            userName: cachedName ?? _data.userName,
+            userPhoto: cachedPhoto ?? _data.userPhoto,
+          ),
+        );
+      }
+    } catch (_) {}
+
+    // Phase 2: refresh from profile API (fire and forget, non-blocking).
+    _refreshProfileInBackground();
+  }
+
+  void _refreshProfileInBackground() {
+    getProfileUseCase()
+        .then((result) {
+          result.when(
+            success: (user) {
+              if (user != null && !isClosed) {
+                String? name;
+                String? photo;
+                if (user.name.isNotEmpty) name = user.name;
+                if (user.photo != null && user.photo!.isNotEmpty)
+                  photo = user.photo;
+                if (name != null || photo != null) {
+                  _emit(_data.copyWith(userName: name, userPhoto: photo));
+                }
+              }
+            },
+            error: (_) {},
+          );
+        })
+        .catchError((_) {});
+  }
+
   Future<void> _loadConversations() async {
     try {
       final conversations = await getConversationsUseCase();
       _emit(_data.copyWith(conversations: conversations));
+      // Load user data without blocking conversation display.
+      _loadUserData();
     } on Exception catch (exception) {
       _emitError(exception);
     }
   }
 
   Future<void> _openConversation(int? conversationId) async {
+    // Start user data loading in parallel, don't await.
+    _loadUserData();
+
     if (conversationId == null) {
       _startNewConversation();
       await _loadConversations();
@@ -170,22 +225,30 @@ class AiAgentCubit
         .where((message) => message.text.trim().isNotEmpty || message.hasImage)
         .toList();
 
-    await _answerSubscription?.cancel();
-    _answerSubscription = sendAgentMessageUseCase(history).listen(
-      _onStreamEvent,
-      onDone: _finishAnswer,
-      onError: (Object error) {
-        _updateAnswer(
-          (current) => current.copyWith(
-            text: current.text.isEmpty
-                ? LocaleKeys.ai_agent_unexpected_error.tr()
-                : current.text,
-          ),
-        );
-        _finishAnswer();
-      },
-      cancelOnError: true,
+    // Cached profile fields + recap of the previous chat, so the model knows
+    // who it is talking to and what was already discussed.
+    final userContext = await getAiUserContextUseCase(
+      currentConversationId: conversationId,
+      fallbackName: _data.userName,
     );
+
+    await _answerSubscription?.cancel();
+    _answerSubscription =
+        sendAgentMessageUseCase(history, userContext: userContext).listen(
+          _onStreamEvent,
+          onDone: _finishAnswer,
+          onError: (Object error) {
+            _updateAnswer(
+              (current) => current.copyWith(
+                text: current.text.isEmpty
+                    ? LocaleKeys.ai_agent_unexpected_error.tr()
+                    : current.text,
+              ),
+            );
+            _finishAnswer();
+          },
+          cancelOnError: true,
+        );
   }
 
   void _onStreamEvent(AiAgentStreamEvent event) {
@@ -258,11 +321,7 @@ class AiAgentCubit
 
   void _emitError(Exception exception) {
     emit(
-      BaseState.all(
-        state: StateType.error,
-        data: _data,
-        exception: exception,
-      ),
+      BaseState.all(state: StateType.error, data: _data, exception: exception),
     );
   }
 

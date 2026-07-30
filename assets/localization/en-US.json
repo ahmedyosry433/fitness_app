@@ -285,6 +285,7 @@
         "new_conversation": "New Conversation",
         "no_conversations": "No previous conversations found.",
         "greeting": "Hello! How can I help you today?",
+        "thinking": "Smart Coach is thinking...",
         "unexpected_error": "An unexpected error occurred."
     },
     "profile": {

@@ -39,10 +39,8 @@ class KnowledgeDatabase extends _$KnowledgeDatabase {
 
   /// The asset owns the schema, so drift must never try to create or alter it.
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (_) async {},
-    onUpgrade: (_, _, _) async {},
-  );
+  MigrationStrategy get migration =>
+      MigrationStrategy(onCreate: (_) async {}, onUpgrade: (_, _, _) async {});
 
   /// Runs a raw query and returns plain maps, mirroring the old JS helpers.
   Future<List<Map<String, Object?>>> rawQuery(

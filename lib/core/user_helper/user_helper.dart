@@ -47,6 +47,31 @@ class UserHelper {
     return null;
   }
 
+  /// Returns all non-sensitive cached user data as a map for AI prompt context.
+  /// Keys: name, email, phone. Returns empty map if nothing is cached.
+  Future<Map<String, String>> getUserProfileContext() async {
+    final raw = _prefs.getString('cached_auth_user');
+    if (raw == null) return const {};
+
+    try {
+      final map = jsonDecode(raw) as Map<String, dynamic>;
+      final result = <String, String>{};
+
+      final name = map['name'] as String?;
+      if (name != null && name.isNotEmpty) result['name'] = name;
+
+      final email = map['email'] as String?;
+      if (email != null && email.isNotEmpty) result['email'] = email;
+
+      final phone = map['phone'] as String?;
+      if (phone != null && phone.isNotEmpty) result['phone'] = phone;
+
+      return result;
+    } catch (_) {
+      return const {};
+    }
+  }
+
   Future<void> clearUserData() async {
     await _prefs.clear();
     await _fss.deleteAll();
