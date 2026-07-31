@@ -136,12 +136,9 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
                 elevation: 16,
                 icon: Padding(
                   padding: const EdgeInsetsDirectional.only(start: 5),
-                  child: SvgPicture.asset(
-                    AppIcons.iconsDownArrow,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.gray5F,
-                      BlendMode.srcIn,
-                    ),
+                  child: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColors.gray5F,
                   ),
                 ),
                 underline: SizedBox(),
@@ -171,11 +168,10 @@ class _CustomPhoneFieldState extends State<CustomPhoneField> {
                 },
               ),
 
-              prefixIcon: SvgPicture.asset(
-                AppIcons.iconsPhone,
-                width: 20,
-                height: 20,
-                fit: BoxFit.scaleDown,
+              prefixIcon: Icon(
+                Icons.phone_outlined,
+                color: AppColors.gray5F,
+                size: 20,
               ),
 
               errorBorder: customOutLineBorders(

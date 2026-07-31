@@ -8,6 +8,7 @@ import 'package:fitness/features/food/data/datasources/food_remote_data_source_c
 import 'package:fitness/features/food/data/models/response/category_dto.dart';
 import 'package:fitness/features/food/data/models/response/meal_dto.dart';
 import 'package:injectable/injectable.dart';
+import 'package:fitness/features/food/api/api_client/food_api_client.dart';
 
 @Injectable(as: FoodRemoteDataSourceContract)
 class FoodRemoteDataSourceImpl implements FoodRemoteDataSourceContract {
@@ -121,14 +122,12 @@ class FoodRemoteDataSourceImpl implements FoodRemoteDataSourceContract {
       CategoryDto(
         idCategory: '1',
         strCategory: 'Lunch',
-        strCategoryThumb:
-            'https://www.themealdb.com/images/category/beef.png',
+        strCategoryThumb: 'https://www.themealdb.com/images/category/beef.png',
       ),
       CategoryDto(
         idCategory: '6',
         strCategory: 'Dinner',
-        strCategoryThumb:
-            'https://www.themealdb.com/images/category/pasta.png',
+        strCategoryThumb: 'https://www.themealdb.com/images/category/pasta.png',
       ),
     ];
   }

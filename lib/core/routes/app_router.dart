@@ -12,7 +12,6 @@ import 'package:fitness/features/auth_modul/presentation/view/pages/complete_reg
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/features/food/presentation/details_food/view_model/cubit/details_food_cubit.dart';
-import 'package:fitness/features/food/presentation/details_food/view_model/intent/details_food_intent.dart';
 import 'package:fitness/features/food/presentation/details_food/views/details_food_view.dart';
 import 'package:fitness/features/food/presentation/food_recommendation/view_model/cubit/food_recommendation_cubit.dart';
 import 'package:fitness/features/food/presentation/food_recommendation/views/food_recommendation_view.dart';
@@ -54,12 +53,10 @@ final GoRouter router = GoRouter(
       route: Routes.completeRegister,
       page: (state, context) => const CompleteRegisterPage(),
     ),
-
     _customAnimatedGoRoute(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
     ),
-
     _customAnimatedGoRoute(
       route: Routes.forgetPassword,
       page: (state, context) => BlocProvider(
@@ -90,12 +87,16 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.detailsFood,
       page: (state, context) {
-        final mealId = (state.extra as String?) ?? '52959';
+        // The meal id travels in `extra`, with `?id=` kept as a deep-link
+        // fallback. `DetailsFoodView` owns the fetch, so it is not triggered
+        // here as well.
+        final extra = state.extra;
+        final mealId = extra is String && extra.isNotEmpty
+            ? extra
+            : (state.uri.queryParameters['id'] ?? '');
 
         return BlocProvider(
-          create: (context) =>
-              getIt<DetailsFoodCubit>()
-                ..doIntent(FetchMealDetailsIntent(mealId)),
+          create: (context) => getIt<DetailsFoodCubit>(),
           child: DetailsFoodView(mealId: mealId),
         );
       },

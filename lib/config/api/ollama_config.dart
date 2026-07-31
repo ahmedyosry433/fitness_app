@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// shared, rotatable secret and keep an eye on the concurrency limits: every
 /// device uses the same key, so bursts can return `429 Too Many Requests`.
 abstract final class OllamaConfig {
-  static const String envFileName = '.env';
+  static const String envFileName = 'assets/.env';
 
   static const String _defaultBaseUrl = 'https://ollama.com';
   static const String _defaultModel = 'gpt-oss:20b';

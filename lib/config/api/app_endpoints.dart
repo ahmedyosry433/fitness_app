@@ -5,11 +5,12 @@ class AppEndPoints {
   static const String getProductsEndpoint = '$baseUrl/products';
   static const String getCategoriesEndpoint = '$baseUrl/categories';
   static const String refreshToken = '$baseUrl/refresh-token';
-  static const String mealDetailsEndpoint = '/lookup.php';
 
   static const String signIn = '/auth/signin';
   static const String signUp = '/auth/signup';
   static const String forgotPassword = '/auth/forgotPassword';
+  static const String mealDetailsEndpoint = '/lookup.php';
+
   static const String exercisesEndpoint = '$baseUrl/exercises';
   static const String getRandomExercisesEndpoint = '$baseUrl/exercises/random';
   static const String exercisesByMuscleAndDifficultyEndpoint =

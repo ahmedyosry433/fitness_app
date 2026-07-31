@@ -1,3 +1,4 @@
+import 'package:fitness/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -5,17 +6,13 @@ class MealRefCard extends StatelessWidget {
   final String id;
   final String name;
 
-  const MealRefCard({
-    super.key,
-    required this.id,
-    required this.name,
-  });
+  const MealRefCard({super.key, required this.id, required this.name});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push('/meal?id=$id');
+        context.push(Routes.detailsFood, extra: id);
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(

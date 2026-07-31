@@ -120,30 +120,40 @@ class LoginBodyWidget extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: AuthUiConfig.sectionSpacing),
-                            AuthSocialLoginRowWidget(
-                              onFacebookTap: () =>
-                                  context.read<LoginCubit>().doAction(
-                                    const SocialLoginEvent(
-                                      AuthSocialProvider.facebook,
-                                    ),
-                                  ),
-                              onGoogleTap: () =>
-                                  context.read<LoginCubit>().doAction(
-                                    const SocialLoginEvent(
-                                      AuthSocialProvider.google,
-                                    ),
-                                  ),
-                              onAppleTap: () =>
-                                  context.read<LoginCubit>().doAction(
-                                    const SocialLoginEvent(
-                                      AuthSocialProvider.apple,
-                                    ),
-                                  ),
+                            BlocSelector<LoginCubit, LoginState, AuthSocialProvider?>(
+                              selector: (state) =>
+                                  state.loginState.state == StateType.loading
+                                      ? state.loadingSocialProvider
+                                      : null,
+                              builder: (context, loadingProvider) {
+                                return AuthSocialLoginRowWidget(
+                                  loadingProvider: loadingProvider,
+                                  onFacebookTap: () =>
+                                      context.read<LoginCubit>().doAction(
+                                        const SocialLoginEvent(
+                                          AuthSocialProvider.facebook,
+                                        ),
+                                      ),
+                                  onGoogleTap: () =>
+                                      context.read<LoginCubit>().doAction(
+                                        const SocialLoginEvent(
+                                          AuthSocialProvider.google,
+                                        ),
+                                      ),
+                                  onAppleTap: () =>
+                                      context.read<LoginCubit>().doAction(
+                                        const SocialLoginEvent(
+                                          AuthSocialProvider.apple,
+                                        ),
+                                      ),
+                                );
+                              },
                             ),
                             const SizedBox(height: AuthUiConfig.sectionSpacing),
                             BlocSelector<LoginCubit, LoginState, bool>(
                               selector: (state) =>
-                                  state.loginState.state == StateType.loading,
+                                  state.loginState.state == StateType.loading &&
+                                  state.loadingSocialProvider == null,
                               builder: (context, isLoading) {
                                 return AuthPrimaryButtonWidget(
                                   label: LocaleKeys.auth_login.tr(),

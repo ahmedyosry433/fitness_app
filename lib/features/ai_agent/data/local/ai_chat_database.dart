@@ -14,11 +14,8 @@ class Conversations extends Table {
 
 class ChatMessages extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get conversationId => integer().references(
-    Conversations,
-    #id,
-    onDelete: KeyAction.cascade,
-  )();
+  IntColumn get conversationId =>
+      integer().references(Conversations, #id, onDelete: KeyAction.cascade)();
   TextColumn get content => text()();
   BoolColumn get isUser => boolean()();
 
@@ -61,19 +58,20 @@ class AiChatDatabase extends _$AiChatDatabase {
   );
 
   Future<int> createConversation(String title) {
-    return into(conversations).insert(
-      ConversationsCompanion.insert(title: _normalizeTitle(title)),
-    );
+    return into(
+      conversations,
+    ).insert(ConversationsCompanion.insert(title: _normalizeTitle(title)));
   }
 
   Future<void> renameConversation(int conversationId, String title) {
-    return (update(conversations)..where((t) => t.id.equals(conversationId)))
-        .write(
-          ConversationsCompanion(
-            title: Value(_normalizeTitle(title)),
-            updatedAt: Value(DateTime.now()),
-          ),
-        );
+    return (update(
+      conversations,
+    )..where((t) => t.id.equals(conversationId))).write(
+      ConversationsCompanion(
+        title: Value(_normalizeTitle(title)),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
   }
 
   Future<void> touchConversation(int conversationId) {
@@ -121,10 +119,7 @@ class AiChatDatabase extends _$AiChatDatabase {
     String? refsJson,
   }) {
     return (update(chatMessages)..where((t) => t.id.equals(messageId))).write(
-      ChatMessagesCompanion(
-        content: Value(content),
-        refsJson: Value(refsJson),
-      ),
+      ChatMessagesCompanion(content: Value(content), refsJson: Value(refsJson)),
     );
   }
 
@@ -136,11 +131,12 @@ class AiChatDatabase extends _$AiChatDatabase {
   }
 
   Future<void> deleteConversation(int conversationId) async {
-    await (delete(chatMessages)
-          ..where((t) => t.conversationId.equals(conversationId)))
-        .go();
-    await (delete(conversations)..where((t) => t.id.equals(conversationId)))
-        .go();
+    await (delete(
+      chatMessages,
+    )..where((t) => t.conversationId.equals(conversationId))).go();
+    await (delete(
+      conversations,
+    )..where((t) => t.id.equals(conversationId))).go();
   }
 
   static String _normalizeTitle(String title) {

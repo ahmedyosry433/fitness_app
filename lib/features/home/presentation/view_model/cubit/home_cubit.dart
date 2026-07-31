@@ -35,7 +35,27 @@ class HomeCubit extends Cubit<BaseState<HomeUIModel>> {
         _loadHome();
       case SelectMuscleGroupIntent(:final muscleGroupId):
         _selectMuscleGroup(muscleGroupId);
+      case RefreshUserIntent():
+        _refreshUser();
+      case _:
+        break;
     }
+  }
+
+  Future<void> _refreshUser() async {
+    final cachedName = await userHelper.getUserName();
+    final cachedPhoto = await userHelper.getUserPhoto();
+
+    emit(
+      BaseState.all(
+        state: state.state, // keep current state (success, error, etc)
+        data: _data.copyWith(
+          userName: cachedName ?? _data.userName,
+          userPhoto: cachedPhoto ?? _data.userPhoto,
+        ),
+        exception: state.exception,
+      ),
+    );
   }
 
   Future<void> _loadHome() async {

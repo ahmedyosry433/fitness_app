@@ -8,6 +8,8 @@ import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:fitness/core/values/app_images.dart';
+import 'package:fitness/features/exercise_module/domain/entities/difficulty_level_entity.dart';
+import 'package:fitness/features/exercise_module/presentation/view/pages/widgets/popular_training_section.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/widgets/recommendation_to_day_section.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/widgets/upcoming_workouts_section.dart';
 import 'package:fitness/features/food/presentation/food_recommendation/widgets/food_recommendation_home_section.dart';
@@ -25,32 +27,27 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          getIt<HomeCubit>()..processIntent(const LoadHomeIntent()),
+      create: (_) => getIt<HomeCubit>()..processIntent(const LoadHomeIntent()),
       child: Scaffold(
         extendBody: true,
         body: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                AppImages.homeBack,
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset(AppImages.homeBack, fit: BoxFit.cover),
             ),
             Positioned.fill(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  color: AppColors.black.withValues(alpha: 0.5),
-                ),
+                child: Container(color: AppColors.black.withValues(alpha: 0.5)),
               ),
             ),
             SafeArea(
               child: BlocBuilder<HomeCubit, BaseState<HomeUIModel>>(
                 builder: (context, state) {
                   final data = state.data ?? const HomeUIModel();
-                  final displayName =
-                      data.userName.isNotEmpty ? data.userName : 'User';
+                  final displayName = data.userName.isNotEmpty
+                      ? data.userName
+                      : 'User';
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +64,9 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  LocaleKeys.home_hi_name.tr(args: [displayName]),
+                                  LocaleKeys.home_hi_name.tr(
+                                    args: [displayName],
+                                  ),
                                   style: 16.regular.copyWith(
                                     color: AppColors.whiteFF,
                                   ),
@@ -84,11 +83,12 @@ class HomePage extends StatelessWidget {
                             CircleAvatar(
                               radius: 25.r,
                               backgroundColor: AppColors.gray5F,
-                              backgroundImage: (data.userPhoto != null &&
+                              backgroundImage:
+                                  (data.userPhoto != null &&
                                       data.userPhoto!.isNotEmpty)
                                   ? NetworkImage(data.userPhoto!)
                                   : const AssetImage(AppImages.humanGym)
-                                      as ImageProvider,
+                                        as ImageProvider,
                             ),
                           ],
                         ),
@@ -96,113 +96,153 @@ class HomePage extends StatelessWidget {
                       Expanded(
                         child: Builder(
                           builder: (context) {
-                        final data = state.data ?? const HomeUIModel();
-                        final isLoading = state.state == StateType.loading ||
-                            state.state == StateType.initial;
+                            final data = state.data ?? const HomeUIModel();
+                            final isLoading =
+                                state.state == StateType.loading ||
+                                state.state == StateType.initial;
 
-                        if (state.state == StateType.error &&
-                            data.randomMuscles.isEmpty &&
-                            data.muscleGroups.isEmpty) {
-                          return Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24.w),
-                              child: Text(
-                                state.errorMessage ??
-                                    LocaleKeys.exercise_failed_to_load.tr(
-                                      args: [''],
+                            if (state.state == StateType.error &&
+                                data.randomMuscles.isEmpty &&
+                                data.muscleGroups.isEmpty) {
+                              return Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 24.w,
+                                  ),
+                                  child: Text(
+                                    state.errorMessage ??
+                                        LocaleKeys.exercise_failed_to_load.tr(
+                                          args: [''],
+                                        ),
+                                    style: 14.regular.copyWith(
+                                      color: AppColors.whiteFF,
                                     ),
-                                style: 14.regular.copyWith(
-                                  color: AppColors.whiteFF,
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          );
-                        }
+                              );
+                            }
 
-                        final recommendationItems = data.randomMuscles
-                            .take(8)
-                            .map(
-                              (muscle) => RecommendationItem(
-                                title: muscle.name,
-                                imagePath: muscle.imageUrl,
-                                onTap: () => _openExerciseModule(
-                                  context,
-                                  muscleId: muscle.id,
-                                  title: muscle.name,
-                                  imageUrl: muscle.imageUrl,
-                                ),
-                              ),
-                            )
-                            .toList();
+                            final recommendationItems = data.randomMuscles
+                                .take(8)
+                                .map(
+                                  (muscle) => RecommendationItem(
+                                    title: muscle.name,
+                                    imagePath: muscle.imageUrl,
+                                    onTap: () => _openExerciseModule(
+                                      context,
+                                      muscleId: muscle.id,
+                                      title: muscle.name,
+                                      imageUrl: muscle.imageUrl,
+                                    ),
+                                  ),
+                                )
+                                .toList();
 
-                        final filters = data.muscleGroups
-                            .map(
-                              (group) => WorkoutFilter(
-                                id: group.id,
-                                label: group.name,
-                              ),
-                            )
-                            .toList();
+                            final filters = data.muscleGroups
+                                .map(
+                                  (group) => WorkoutFilter(
+                                    id: group.id,
+                                    label: group.name,
+                                  ),
+                                )
+                                .toList();
 
-                        final categories = data.groupMuscles
-                            .map(
-                              (muscle) => WorkoutCategoryItem(
-                                id: muscle.id,
-                                title: muscle.name,
-                                imagePath: muscle.imageUrl,
-                                onTap: () => _openExerciseModule(
-                                  context,
-                                  muscleId: muscle.id,
-                                  title: muscle.name,
-                                  imageUrl: muscle.imageUrl,
-                                ),
-                              ),
-                            )
-                            .toList();
+                            final categories = data.groupMuscles
+                                .map(
+                                  (muscle) => WorkoutCategoryItem(
+                                    id: muscle.id,
+                                    title: muscle.name,
+                                    imagePath: muscle.imageUrl,
+                                    onTap: () => _openExerciseModule(
+                                      context,
+                                      muscleId: muscle.id,
+                                      title: muscle.name,
+                                      imageUrl: muscle.imageUrl,
+                                    ),
+                                  ),
+                                )
+                                .toList();
 
-                        return SingleChildScrollView(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RecommendationToDaySection(
-                                items: recommendationItems,
-                                isLoading: isLoading,
-                              ),
-                              SizedBox(height: 24.h),
-                              const FoodRecommendationHomeSection(),
-                              SizedBox(height: 24.h),
-                              UpcomingWorkoutsSection(
-                                filters: filters,
-                                categories: categories,
-                                selectedFilterId: data.selectedMuscleGroupId,
-                                isLoading: isLoading,
-                                isLoadingCategories:
-                                    data.isLoadingGroupMuscles,
-                                onFilterSelected: (id) {
-                                  context.read<HomeCubit>().processIntent(
+                            return SingleChildScrollView(
+                              padding: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RecommendationToDaySection(
+                                    items: recommendationItems,
+                                    isLoading: isLoading,
+                                  ),
+                                  SizedBox(height: 24.h),
+                                  UpcomingWorkoutsSection(
+                                    filters: filters,
+                                    categories: categories,
+                                    selectedFilterId:
+                                        data.selectedMuscleGroupId,
+                                    isLoading: isLoading,
+                                    isLoadingCategories:
+                                        data.isLoadingGroupMuscles,
+                                    onFilterSelected: (id) {
+                                      context.read<HomeCubit>().processIntent(
                                         SelectMuscleGroupIntent(id),
                                       );
-                                  context.go(Routes.workout, extra: id);
-                                },
-                                onSeeAllTap: () => context.go(
-                                  Routes.workout,
-                                  extra: data.selectedMuscleGroupId,
-                                ),
+                                      context.go(Routes.workout, extra: id);
+                                    },
+                                    onSeeAllTap: () => context.go(
+                                      Routes.workout,
+                                      extra: data.selectedMuscleGroupId,
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 24.h),
+                                  const FoodRecommendationHomeSection(),
+                                  SizedBox(height: 24.h),
+                                  PopularTrainingSection(
+                                    padding: EdgeInsets.zero,
+                                    levels: const [
+                                      DifficultyLevelEntity(
+                                        id: '1',
+                                        name: 'Beginner',
+                                      ),
+                                      DifficultyLevelEntity(
+                                        id: '2',
+                                        name: 'Intermediate',
+                                      ),
+                                      DifficultyLevelEntity(
+                                        id: '3',
+                                        name: 'Advanced',
+                                      ),
+                                    ],
+                                    selectedIndex: 0,
+                                    onLevelSelected: (index) {
+                                      final titles = [
+                                        'Chest',
+                                        'Back',
+                                        'Full Body',
+                                      ];
+                                      final title =
+                                          titles[index % titles.length];
+                                      _openExerciseModule(
+                                        context,
+                                        muscleId: '69d982ef85f6bfa972bf2248',
+                                        title: title,
+                                        imageUrl: AppImages.exercisesBack,
+                                      );
+                                    },
+                                  ),
+
+                                  SizedBox(height: 100.h),
+                                ],
                               ),
-                              SizedBox(height: 100.h),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

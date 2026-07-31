@@ -8,6 +8,7 @@ import 'package:fitness/features/ai_agent/data/tools/fast_path_recognizer.dart';
 import 'package:fitness/features/ai_agent/data/tools/image_attachment_encoder.dart';
 import 'package:fitness/features/ai_agent/domain/entities/ai_agent_stream_event.dart';
 import 'package:fitness/features/ai_agent/domain/entities/ai_ref_entity.dart';
+import 'package:fitness/features/ai_agent/domain/entities/ai_user_context_entity.dart';
 import 'package:fitness/features/ai_agent/domain/entities/chat_message_entity.dart';
 import 'package:fitness/features/ai_agent/domain/repositories/ollama_repository.dart';
 import 'package:flutter/foundation.dart';
@@ -47,14 +48,15 @@ class OllamaRepositoryImpl implements OllamaRepository {
 
   @override
   Stream<AiAgentStreamEvent> sendMessage(
-    List<ChatMessageEntity> conversation,
-  ) async* {
+    List<ChatMessageEntity> conversation, {
+    AiUserContextEntity userContext = AiUserContextEntity.empty,
+  }) async* {
     final lastUserTurn = _lastUserTurn(conversation);
     final userMessage = lastUserTurn?.text.trim() ?? '';
 
     // Step 0 - an attached photo takes the multimodal path.
     if (lastUserTurn != null && lastUserTurn.hasImage) {
-      yield* _analyzeImage(conversation, lastUserTurn);
+      yield* _analyzeImage(conversation, lastUserTurn, userContext);
       return;
     }
 
@@ -79,7 +81,10 @@ class OllamaRepositoryImpl implements OllamaRepository {
       }
 
       final baseMessages = <Map<String, dynamic>>[
-        {'role': 'system', 'content': await _tools.buildSystemPrompt()},
+        {
+          'role': 'system',
+          'content': await _tools.buildSystemPrompt(userContext: userContext),
+        },
         ...conversation.map((message) => message.toChatTurn()),
       ];
 
@@ -152,6 +157,7 @@ class OllamaRepositoryImpl implements OllamaRepository {
   Stream<AiAgentStreamEvent> _analyzeImage(
     List<ChatMessageEntity> conversation,
     ChatMessageEntity imageTurn,
+    AiUserContextEntity userContext,
   ) async* {
     final encodedImage = await _imageEncoder.encodeToBase64(
       imageTurn.imagePath,
@@ -178,7 +184,10 @@ class OllamaRepositoryImpl implements OllamaRepository {
           .toList();
 
       final visionMessages = <Map<String, dynamic>>[
-        {'role': 'system', 'content': await _tools.buildVisionPrompt()},
+        {
+          'role': 'system',
+          'content': await _tools.buildVisionPrompt(userContext: userContext),
+        },
         ...history,
         {
           'role': 'user',
@@ -253,8 +262,9 @@ class OllamaRepositoryImpl implements OllamaRepository {
           {
             'role': 'user',
             'content':
-                '$caption\n\n[تحليل الصورة]\n$analysis\n\n'
-                'استخدم الأدوات المتاحة لاقتراح تمارين أو وجبات حقيقية مناسبة لما ورد في التحليل.',
+                '$caption\n\n[Image analysis]\n$analysis\n\n'
+                'Use the available tools to suggest real exercises or meals '
+                'that match this analysis.',
           },
         ],
         tools: _tools.toolDefinitions,
@@ -303,7 +313,7 @@ class OllamaRepositoryImpl implements OllamaRepository {
       buffer.writeln(LocaleKeys.ai_agent_exercises_intro.tr());
       buffer.writeln();
       for (final row in fastPath.items) {
-        final name = row['name_ar'] ?? row['name'];
+        final name = KnowledgeSearchResult.localizedName(row) ?? '';
         final equipment =
             row['equipment_name'] ?? LocaleKeys.ai_agent_no_equipment.tr();
         buffer.writeln('• **$name** ($equipment)');
@@ -314,7 +324,7 @@ class OllamaRepositoryImpl implements OllamaRepository {
       buffer.writeln(LocaleKeys.ai_agent_meals_intro.tr());
       buffer.writeln();
       for (final row in fastPath.items) {
-        final name = row['name_ar'] ?? row['name'];
+        final name = KnowledgeSearchResult.localizedName(row) ?? '';
         final kcal = _formatNumber(row['kcal']);
         final protein = _formatNumber(row['protein_g']);
         buffer.writeln(
@@ -347,8 +357,6 @@ class OllamaRepositoryImpl implements OllamaRepository {
 
   static List<AiRefEntity> _dedupeRefs(List<AiRefEntity> refs) {
     final seen = <String>{};
-    return refs
-        .where((ref) => seen.add('${ref.type.name}:${ref.id}'))
-        .toList();
+    return refs.where((ref) => seen.add('${ref.type.name}:${ref.id}')).toList();
   }
 }

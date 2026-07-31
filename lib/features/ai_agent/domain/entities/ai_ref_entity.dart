@@ -18,21 +18,13 @@ enum AiRefType {
 /// Only ids that were actually returned by a local query become refs, which is
 /// what stops the model from inventing exercise/meal ids.
 class AiRefEntity extends Equatable {
-  const AiRefEntity({
-    required this.type,
-    required this.id,
-    required this.name,
-  });
+  const AiRefEntity({required this.type, required this.id, required this.name});
 
   final AiRefType type;
   final String id;
   final String name;
 
-  Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'id': id,
-    'name': name,
-  };
+  Map<String, dynamic> toJson() => {'type': type.name, 'id': id, 'name': name};
 
   static AiRefEntity? tryFromJson(Map<String, dynamic> json) {
     final type = AiRefType.tryParse(json['type'] as String?);

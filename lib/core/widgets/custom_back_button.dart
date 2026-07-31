@@ -13,7 +13,7 @@ class CustomBackButton extends StatelessWidget {
     this.onPressed,
     this.backgroundColor = AppColors.primaryOrange,
     this.iconColor = Colors.white,
-    this.size = 25.0,
+    this.size = 28.0,
   });
 
   @override

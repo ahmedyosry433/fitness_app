@@ -2,33 +2,33 @@ part of 'workout_cubit.dart';
 
 class WorkoutState extends Equatable {
   final BaseState<List<MuscleGroupEntity>> categoriesState;
-  final BaseState<List<ExerciseEntity>> exercisesState;
+  final BaseState<List<MuscleEntity>> musclesState;
   final int selectedCategoryIndex;
 
   const WorkoutState({
     this.categoriesState = const BaseState.initial(),
-    this.exercisesState = const BaseState.initial(),
+    this.musclesState = const BaseState.initial(),
     this.selectedCategoryIndex = 0,
   });
 
   List<MuscleGroupEntity> get categories => categoriesState.data ?? const [];
 
-  List<ExerciseEntity> get exercises => exercisesState.data ?? const [];
+  List<MuscleEntity> get muscles => musclesState.data ?? const [];
 
   bool get isLoadingCategories =>
       categoriesState.isLoading || categoriesState.isInitial;
 
-  bool get isLoadingExercises =>
-      exercisesState.isLoading || exercisesState.isInitial;
+  bool get isLoadingMuscles =>
+      musclesState.isLoading || musclesState.isInitial;
 
   WorkoutState copyWith({
     BaseState<List<MuscleGroupEntity>>? categoriesState,
-    BaseState<List<ExerciseEntity>>? exercisesState,
+    BaseState<List<MuscleEntity>>? musclesState,
     int? selectedCategoryIndex,
   }) {
     return WorkoutState(
       categoriesState: categoriesState ?? this.categoriesState,
-      exercisesState: exercisesState ?? this.exercisesState,
+      musclesState: musclesState ?? this.musclesState,
       selectedCategoryIndex:
           selectedCategoryIndex ?? this.selectedCategoryIndex,
     );
@@ -37,7 +37,7 @@ class WorkoutState extends Equatable {
   @override
   List<Object?> get props => [
         categoriesState,
-        exercisesState,
+        musclesState,
         selectedCategoryIndex,
       ];
 }

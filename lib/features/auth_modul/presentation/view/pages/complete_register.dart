@@ -23,7 +23,26 @@ import 'package:toastification/toastification.dart';
 import 'widgets/blurred_background_wrapper.dart';
 import 'widgets/complete_register_gender_selection.dart';
 import 'widgets/complete_register_number_picker.dart';
+import 'widgets/complete_register_radio_list.dart';
 import 'widgets/complete_register_step_content.dart';
+
+// ─── Goal options ────────────────────────────────────────────────────────────
+const _goalOptions = [
+  'Gain Weight',
+  'Lose Weight',
+  'Get Fitter',
+  'Gain More Flexible',
+  'Learn The Basic',
+];
+
+// ─── Activity Level options ───────────────────────────────────────────────────
+const _activityOptions = [
+  'Rookie',
+  'Beginner',
+  'Intermediate',
+  'Advance',
+  'True Beast',
+];
 
 class CompleteRegisterPage extends StatefulWidget {
   const CompleteRegisterPage({super.key});
@@ -41,6 +60,8 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
   int _selectedAge = 25;
   int _selectedWeight = 90;
   int _selectedHeight = 167;
+  String _selectedGoal = _goalOptions.first;
+  String _selectedActivity = _activityOptions.first;
 
   @override
   void dispose() {
@@ -49,7 +70,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
   }
 
   void _nextStep() {
-    if (_currentStep < 3) {
+    if (_currentStep < 5) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -106,8 +127,8 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
           age: _selectedAge,
           weight: _selectedWeight,
           height: _selectedHeight,
-          goal: 'Gain weight',
-          activityLevel: 'level1',
+          goal: _selectedGoal,
+          activityLevel: _selectedActivity,
         );
       } catch (e) {
         if (!mounted) return;
@@ -132,8 +153,8 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
         height: _selectedHeight,
         weight: _selectedWeight,
         age: _selectedAge,
-        goal: 'Gain weight',
-        activityLevel: 'level1',
+        goal: _selectedGoal,
+        activityLevel: _selectedActivity,
       );
       var apiResult = await repository.register(params: params);
       if (apiResult is Error) {
@@ -185,8 +206,8 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
       height: _selectedHeight,
       weight: _selectedWeight,
       age: _selectedAge,
-      goal: 'Gain weight',
-      activityLevel: 'level1',
+      goal: _selectedGoal,
+      activityLevel: _selectedActivity,
     );
 
     final repository = getIt<AuthRepository>();
@@ -217,8 +238,8 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
               age: _selectedAge,
               weight: _selectedWeight,
               height: _selectedHeight,
-              goal: 'Gain weight',
-              activityLevel: 'level1',
+              goal: _selectedGoal,
+              activityLevel: _selectedActivity,
             )
             .catchError((Object e, StackTrace stackTrace) {
               log(
@@ -285,6 +306,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                       });
                     },
                     children: [
+                      // ── Step 1: Gender ──────────────────────────────────
                       CompleteRegisterStepContent(
                         currentStep: _currentStep,
                         title: LocaleKeys
@@ -300,6 +322,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                               setState(() => _selectedGender = val),
                         ),
                       ),
+                      // ── Step 2: Age ─────────────────────────────────────
                       CompleteRegisterStepContent(
                         currentStep: _currentStep,
                         title: LocaleKeys.complete_register_how_old_are_you
@@ -316,6 +339,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                           onChanged: (val) => _selectedAge = val,
                         ),
                       ),
+                      // ── Step 3: Weight ──────────────────────────────────
                       CompleteRegisterStepContent(
                         currentStep: _currentStep,
                         title: LocaleKeys.complete_register_what_is_your_weight
@@ -332,6 +356,7 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                           onChanged: (val) => _selectedWeight = val,
                         ),
                       ),
+                      // ── Step 4: Height ──────────────────────────────────
                       CompleteRegisterStepContent(
                         currentStep: _currentStep,
                         title: LocaleKeys.complete_register_what_is_your_height
@@ -346,6 +371,33 @@ class _CompleteRegisterPageState extends State<CompleteRegisterPage> {
                           initialValue: _selectedHeight,
                           label: LocaleKeys.complete_register_cm.tr(),
                           onChanged: (val) => _selectedHeight = val,
+                        ),
+                      ),
+                      // ── Step 5: Goal ────────────────────────────────────
+                      CompleteRegisterStepContent(
+                        currentStep: _currentStep,
+                        title: 'WHAT IS YOUR GOAL ?',
+                        subtitle:
+                            'This Helps Us Create Your Personalized Plan',
+                        onNext: _nextStep,
+                        child: CompleteRegisterRadioList(
+                          options: _goalOptions,
+                          selectedOption: _selectedGoal,
+                          onChanged: (val) =>
+                              setState(() => _selectedGoal = val),
+                        ),
+                      ),
+                      // ── Step 6: Activity Level ──────────────────────────
+                      CompleteRegisterStepContent(
+                        currentStep: _currentStep,
+                        title: 'YOUR REGULAR PHYSICAL\nACTIVITY LEVEL ?',
+                        subtitle: '',
+                        onNext: _nextStep,
+                        child: CompleteRegisterRadioList(
+                          options: _activityOptions,
+                          selectedOption: _selectedActivity,
+                          onChanged: (val) =>
+                              setState(() => _selectedActivity = val),
                         ),
                       ),
                     ],

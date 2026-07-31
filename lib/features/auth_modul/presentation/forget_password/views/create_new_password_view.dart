@@ -10,6 +10,7 @@ import 'package:fitness/features/auth_modul/presentation/forget_password/view_mo
 import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/state/forget_password_state.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/auth_background.dart';
 import 'package:fitness/features/auth_modul/presentation/forget_password/widgets/custom_auth_text_field.dart';
+import 'package:fitness/core/shared/widgets/password_criteria_widget.dart';
 import 'package:fitness/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,6 +84,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                         isPassword: true,
                         validator: AppValidators.validatePassword,
                       ),
+                      PasswordCriteriaWidget(controller: passwordController),
                       const SizedBox(height: 16),
                       CustomAuthTextField(
                         controller: confirmPasswordController,

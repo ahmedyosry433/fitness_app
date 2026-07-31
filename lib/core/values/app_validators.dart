@@ -28,7 +28,7 @@ abstract class AppValidators {
     if (!RegExp(
       r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
     ).hasMatch(password)) {
-      return LocaleKeys.validations_confirm_password_invalid.tr();
+      return LocaleKeys.validations_password_advanced_validation.tr();
     }
 
     return null;

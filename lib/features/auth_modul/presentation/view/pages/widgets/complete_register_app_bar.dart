@@ -1,6 +1,7 @@
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
+
 class CompleteRegisterAppBar extends StatelessWidget {
   final VoidCallback onBack;
 

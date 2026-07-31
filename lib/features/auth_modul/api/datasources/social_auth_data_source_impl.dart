@@ -52,19 +52,23 @@ class AuthModulSocialAuthDataSourceImpl
       ),
     };
 
-    final userCredential = await _firebaseAuth.signInWithCredential(credential);
-    final user = userCredential.user;
-    if (user == null) {
-      throw Exception('Sign in failed: no Firebase user was returned.');
-    }
+    try {
+      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final user = userCredential.user;
+      if (user == null) {
+        throw Exception('Sign in failed: no Firebase user was returned.');
+      }
 
-    return SocialAccountModel(
-      uid: user.uid,
-      name: user.displayName ?? '',
-      email: user.email ?? '',
-      photoUrl: user.photoURL ?? '',
-      isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false,
-    );
+      return SocialAccountModel(
+        uid: user.uid,
+        name: user.displayName ?? '',
+        email: user.email ?? '',
+        photoUrl: user.photoURL ?? '',
+        isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _parseFirebaseAuthException(e);
+    }
   }
 
   Future<SocialAccountModel> _googleDirectSignIn() async {
@@ -99,11 +103,55 @@ class AuthModulSocialAuthDataSourceImpl
         photoUrl: user.photoURL ?? account.photoUrl ?? '',
         isNewUser: userCredential.additionalUserInfo?.isNewUser ?? false,
       );
+    } on FirebaseAuthException catch (e) {
+      throw _parseFirebaseAuthException(e);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw SocialAuthCancelledException('Google sign in was cancelled.');
       }
       rethrow;
+    }
+  }
+
+  Exception _parseFirebaseAuthException(FirebaseAuthException e) {
+    log('FirebaseAuthException caught: ${e.code} - ${e.message}', name: 'SocialAuth');
+    switch (e.code) {
+      case 'account-exists-with-different-credential':
+        return Exception(
+          'An account already exists with the same email address using a different sign-in method. Please sign in using your original method.',
+        );
+      case 'email-already-in-use':
+        return Exception(
+          'An account already exists with this email address.',
+        );
+      case 'invalid-credential':
+        return Exception(
+          'The sign-in credential is invalid or has expired.',
+        );
+      case 'user-disabled':
+        return Exception(
+          'This user account has been disabled.',
+        );
+      case 'user-not-found':
+        return Exception(
+          'No account found matching these credentials.',
+        );
+      case 'wrong-password':
+        return Exception(
+          'Incorrect password. Please try again.',
+        );
+      case 'operation-not-allowed':
+        return Exception(
+          'This sign-in method is not enabled.',
+        );
+      case 'network-request-failed':
+        return Exception(
+          'Network request failed. Please check your internet connection.',
+        );
+      default:
+        final rawMessage = e.message ?? e.code;
+        final cleanMessage = rawMessage.replaceFirst(RegExp(r'^\[.*?\]\s*'), '');
+        return Exception(cleanMessage);
     }
   }
 

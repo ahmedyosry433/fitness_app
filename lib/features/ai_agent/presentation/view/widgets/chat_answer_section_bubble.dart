@@ -39,7 +39,10 @@ class ChatAnswerSectionBubble extends StatelessWidget {
           children.add(
             Text.rich(
               TextSpan(
-                children: ChatInlineMarkdown.parse(block.text ?? '', _bodyStyle),
+                children: ChatInlineMarkdown.parse(
+                  block.text ?? '',
+                  _bodyStyle,
+                ),
               ),
             ),
           );

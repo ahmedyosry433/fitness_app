@@ -118,7 +118,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
   }
 
   static const String defaultDifficultyLevelId = '69d982ed85f6bfa972bf2216';
-  final Map<String, List<ExerciseEntity>> _categoryCache = {};
+  final Map<String, List<MuscleEntity>> _categoryCache = {};
 
   Future<void> _loadCategory(int index) async {
     if (_isLoadingCategory) return;
@@ -130,7 +130,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
       emit(
         state.copyWith(
           selectedCategoryIndex: index,
-          exercisesState: BaseState.success(_categoryCache[category.id]!),
+          musclesState: BaseState.success(_categoryCache[category.id]!),
         ),
       );
       return;
@@ -141,28 +141,28 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     emit(
       state.copyWith(
         selectedCategoryIndex: index,
-        exercisesState: const BaseState.loading(),
+        musclesState: const BaseState.loading(),
       ),
     );
 
-    final Result<List<ExerciseEntity>> exercisesResult =
+    final Result<List<MuscleEntity>> musclesResult =
         category.id == fullBodyCategoryId
-            ? await _loadFullBodyExercises()
-            : await _loadGroupExercises(category.id);
+            ? await _loadFullBodyMuscles()
+            : await _loadGroupMuscles(category.id);
 
     if (isClosed) {
       _isLoadingCategory = false;
       return;
     }
 
-    exercisesResult.when(
-      success: (exercises) {
-        final list = exercises ?? const [];
+    musclesResult.when(
+      success: (muscles) {
+        final list = muscles ?? const [];
         _categoryCache[category.id] = list;
         emit(
           state.copyWith(
             selectedCategoryIndex: index,
-            exercisesState: BaseState.success(list),
+            musclesState: BaseState.success(list),
           ),
         );
       },
@@ -172,7 +172,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
         emit(
           state.copyWith(
             selectedCategoryIndex: index,
-            exercisesState: BaseState.error(error),
+            musclesState: BaseState.error(error),
           ),
         );
         emitEvent(WorkoutErrorUiEvent(error.toString()));
@@ -182,25 +182,28 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     _isLoadingCategory = false;
   }
 
-  Future<Result<List<ExerciseEntity>>> _loadFullBodyExercises() async {
-    final randomResult = await _getRandomMusclesUseCase();
+  Future<Result<List<MuscleEntity>>> _loadFullBodyMuscles() async {
+    final groups = state.categories.where((c) => c.id != fullBodyCategoryId).toList();
 
-    if (randomResult is Error<List<MuscleEntity>>) {
-      return Error(exception: randomResult.exception);
-    }
-
-    final muscles =
-        (randomResult as Success<List<MuscleEntity>>).data ?? const [];
-    if (muscles.isEmpty) return const Success(data: <ExerciseEntity>[]);
+    if (groups.isEmpty) return const Success(data: <MuscleEntity>[]);
 
     final results = await Future.wait(
-      muscles.take(4).map((m) => _fetchExercisesForMuscle(m.id)),
+      groups.map((group) => _getMusclesByGroupUseCase(muscleGroupId: group.id)),
     );
-    final exercises = results.expand((list) => list).toList()..shuffle();
-    return Success(data: exercises);
+
+    final allMuscles = <MuscleEntity>[];
+    for (final result in results) {
+      if (result is Success<List<MuscleEntity>>) {
+        allMuscles.addAll((result as Success<List<MuscleEntity>>).data ?? []);
+      }
+    }
+
+    final uniqueMuscles = {for (var m in allMuscles) m.id: m}.values.toList();
+
+    return Success(data: uniqueMuscles);
   }
 
-  Future<Result<List<ExerciseEntity>>> _loadGroupExercises(
+  Future<Result<List<MuscleEntity>>> _loadGroupMuscles(
     String groupId,
   ) async {
     final musclesResult = await _getMusclesByGroupUseCase(
@@ -213,23 +216,6 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
 
     final muscles =
         (musclesResult as Success<List<MuscleEntity>>).data ?? const [];
-    if (muscles.isEmpty) return const Success(data: <ExerciseEntity>[]);
-
-    final results = await Future.wait(
-      muscles.map((m) => _fetchExercisesForMuscle(m.id)),
-    );
-    return Success(data: results.expand((list) => list).toList());
-  }
-
-  Future<List<ExerciseEntity>> _fetchExercisesForMuscle(String muscleId) async {
-    final exercisesResult = await _getExercisesUseCase(
-      primeMoverMuscleId: muscleId,
-      difficultyLevelId: defaultDifficultyLevelId,
-    );
-
-    return exercisesResult.when(
-      success: (exercises) => exercises ?? const [],
-      error: (_) => const [],
-    );
+    return Success(data: muscles);
   }
 }

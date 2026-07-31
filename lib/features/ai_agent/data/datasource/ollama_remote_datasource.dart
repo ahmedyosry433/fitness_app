@@ -180,7 +180,9 @@ class OllamaRemoteDatasource {
       if (!failure.isTransient || attempt == _maxAttempts) break;
 
       if (kDebugMode) {
-        debugPrint('[Ollama] attempt $attempt failed (${failure.message}), retrying');
+        debugPrint(
+          '[Ollama] attempt $attempt failed (${failure.message}), retrying',
+        );
       }
       await Future<void>.delayed(_retryDelay * attempt);
     }

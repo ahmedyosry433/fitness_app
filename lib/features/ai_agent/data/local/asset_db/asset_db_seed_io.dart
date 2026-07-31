@@ -16,7 +16,8 @@ Future<String> seedAssetDatabasePath({
   final target = File('${directory.path}${Platform.pathSeparator}$fileName');
 
   final bytes = await loadAssetDatabaseBytes(assetKey);
-  final isUpToDate = await target.exists() && await target.length() == bytes.length;
+  final isUpToDate =
+      await target.exists() && await target.length() == bytes.length;
 
   if (!isUpToDate) {
     await target.parent.create(recursive: true);

@@ -2,7 +2,10 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitness/core/theme/app_colors.dart';
+import 'package:fitness/core/values/app_icons.dart';
+import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomCachedImage extends StatelessWidget {
   const CustomCachedImage({
@@ -11,6 +14,7 @@ class CustomCachedImage extends StatelessWidget {
     this.height,
     required this.imagePath,
     this.fit,
+    this.alignment,
     this.emptyColorFilter,
     this.color,
     this.radius,
@@ -22,31 +26,49 @@ class CustomCachedImage extends StatelessWidget {
   final String? errorImage;
   final ColorFilter? emptyColorFilter;
   final BoxFit? fit;
+  final Alignment? alignment;
   final Color? color;
 
-  Widget _buildErrorPlaceholder() {
-    return Container(
-      width: width,
-      height: height,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius ?? 12),
-        color: color ?? AppColors.gray5F.withValues(alpha: 0.15),
-      ),
-      child: Center(
-        child: Icon(
-          Icons.restaurant_menu_rounded,
+  static bool _isRasterAsset(String path) {
+    final lower = path.toLowerCase();
+    return lower.endsWith('.png') ||
+        lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.webp') ||
+        lower.endsWith('.gif');
+  }
+
+  Widget _fallbackImage() {
+    final fallback = errorImage ?? AppImages.humanGym;
+    if (_isRasterAsset(fallback)) {
+      return Image.asset(
+        fallback,
+        width: width,
+        height: height,
+        fit: fit ?? BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.fitness_center,
           color: AppColors.gray5F,
-          size: (width != null && width! < 60) ? 20 : 32,
+          size: (width ?? 40) * 0.5,
         ),
-      ),
+      );
+    }
+
+    return SvgPicture.asset(
+      fallback,
+      fit: BoxFit.contain,
+      width: width ?? 100,
+      height: height ?? 100,
+      colorFilter:
+          emptyColorFilter ??
+          ColorFilter.mode(AppColors.gray5F, BlendMode.srcIn),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     if (imagePath.isEmpty) {
-      return _buildErrorPlaceholder();
+      return _fallbackImage();
     }
 
     return CachedNetworkImage(
@@ -54,11 +76,12 @@ class CustomCachedImage extends StatelessWidget {
       height: height,
       fit: fit ?? BoxFit.cover,
       imageUrl: imagePath,
+      alignment: alignment ?? Alignment.center,
       fadeInDuration: const Duration(milliseconds: 300),
       errorListener: (value) {
         log('Error loading image: $value|| $imagePath');
       },
-      errorWidget: (context, url, error) => _buildErrorPlaceholder(),
+      errorWidget: (context, url, error) => _fallbackImage(),
       progressIndicatorBuilder: (context, url, progress) => Container(
         width: width,
         height: height,

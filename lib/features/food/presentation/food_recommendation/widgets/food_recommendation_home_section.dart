@@ -5,13 +5,15 @@ import 'package:fitness/core/shared/widgets/custom_cached_image.dart';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/core/languages/locale_keys.g.dart';
 
 class FoodRecommendationItem {
-  final String title;
+  final String titleKey;
   final String imageUrl;
 
   const FoodRecommendationItem({
-    required this.title,
+    required this.titleKey,
     required this.imageUrl,
   });
 }
@@ -24,15 +26,15 @@ class FoodRecommendationHomeSection extends StatelessWidget {
     super.key,
     this.items = const [
       FoodRecommendationItem(
-        title: 'Breakfast',
+        titleKey: 'Breakfast',
         imageUrl: 'https://www.themealdb.com/images/category/breakfast.png',
       ),
       FoodRecommendationItem(
-        title: 'Lunch',
+        titleKey: 'Lunch',
         imageUrl: 'https://www.themealdb.com/images/category/beef.png',
       ),
       FoodRecommendationItem(
-        title: 'Dinner',
+        titleKey: 'Dinner',
         imageUrl: 'https://www.themealdb.com/images/category/pasta.png',
       ),
     ],
@@ -61,9 +63,9 @@ class FoodRecommendationHomeSection extends StatelessWidget {
                   () {
                     context.push(Routes.foodRecommendation);
                   },
-              child: const Text(
-                'See All',
-                style: TextStyle(
+              child: Text(
+                LocaleKeys.exercise_see_all.tr(),
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                   color: AppColors.prime,
@@ -75,7 +77,7 @@ class FoodRecommendationHomeSection extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         SizedBox(
           height: 104,
           child: ListView.separated(
@@ -105,7 +107,7 @@ class _FoodRecommendationCard extends StatelessWidget {
       onTap: () {
         context.push(
           Routes.foodRecommendation,
-          extra: item.title,
+          extra: item.titleKey,
         );
       },
       child: Container(
@@ -143,10 +145,13 @@ class _FoodRecommendationCard extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                      padding: const EdgeInsets.all(8),
                       color: const Color(0x80242424),
+                      alignment: Alignment.center,
                       child: Text(
-                        item.title,
+                        ['Breakfast', 'Lunch', 'Dinner', 'Snacks'].contains(item.titleKey)
+                            ? 'food.${item.titleKey}'.tr()
+                            : item.titleKey,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 12,

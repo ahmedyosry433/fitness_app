@@ -74,10 +74,12 @@ class _AiAgentPageState extends State<AiAgentPage> {
         backgroundColor: const Color(0xFF242424),
         body: BlocBuilder<AiAgentCubit, BaseState<AiAgentUIModel>>(
           buildWhen: (previous, current) =>
-              previous.data?.conversations != current.data?.conversations,
+              previous.data?.conversations != current.data?.conversations ||
+              previous.data?.userName != current.data?.userName,
           builder: (context, state) {
-            final conversations =
-                (state.data ?? const AiAgentUIModel()).conversations;
+            final data = state.data ?? const AiAgentUIModel();
+            final conversations = data.conversations;
+            final displayName = data.userName.isNotEmpty ? data.userName : '';
 
             return Stack(
               children: [
@@ -108,7 +110,7 @@ class _AiAgentPageState extends State<AiAgentPage> {
                               children: [
                                 Text(
                                   LocaleKeys.ai_agent_hi_user.tr(
-                                    args: const ['Ahmed'],
+                                    args: [displayName],
                                   ),
                                   style: 16.medium.copyWith(
                                     color: AppColors.white,

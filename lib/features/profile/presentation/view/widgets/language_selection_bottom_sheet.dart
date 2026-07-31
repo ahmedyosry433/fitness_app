@@ -1,9 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/lang.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageSelectionBottomSheet extends StatelessWidget {
   const LanguageSelectionBottomSheet({super.key});
@@ -43,9 +47,15 @@ class LanguageSelectionBottomSheet extends StatelessWidget {
               title: LocaleKeys.profile_english.tr(),
               subtitle: 'English (US)',
               isSelected: currentLocale.languageCode == 'en',
-              onTap: () {
-                context.setLocale(englishLocale);
-                Navigator.pop(context);
+              onTap: () async {
+                final prefs = getIt<SharedPreferences>();
+                await prefs.setString('locale', 'en');
+                if (context.mounted) {
+                  context.setLocale(englishLocale);
+                  AppTextStyles.setLocale(english);
+                  Navigator.pop(context);
+                  context.go(Routes.splash);
+                }
               },
             ),
             const SizedBox(height: 8),
@@ -53,9 +63,15 @@ class LanguageSelectionBottomSheet extends StatelessWidget {
               title: 'العربية',
               subtitle: 'Arabic (EG)',
               isSelected: currentLocale.languageCode == 'ar',
-              onTap: () {
-                context.setLocale(arabicLocale);
-                Navigator.pop(context);
+              onTap: () async {
+                final prefs = getIt<SharedPreferences>();
+                await prefs.setString('locale', 'ar');
+                if (context.mounted) {
+                  context.setLocale(arabicLocale);
+                  AppTextStyles.setLocale(arabic);
+                  Navigator.pop(context);
+                  context.go(Routes.splash);
+                }
               },
             ),
             const SizedBox(height: 12),

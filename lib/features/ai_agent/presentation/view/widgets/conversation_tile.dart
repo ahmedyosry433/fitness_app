@@ -29,15 +29,10 @@ class ConversationTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(
-              Icons.chevron_left_rounded,
-              color: AppColors.primaryOrangeDark,
-              size: 20,
-            ),
             Expanded(
               child: Text(
                 conversation.title,
-                textAlign: TextAlign.end,
+                textAlign: TextAlign.start,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -46,6 +41,13 @@ class ConversationTile extends StatelessWidget {
                   color: Color(0xFFD3D3D3),
                 ),
               ),
+            ),
+            Icon(
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.chevron_left_rounded
+                  : Icons.chevron_right_rounded,
+              color: AppColors.primaryOrangeDark,
+              size: 20,
             ),
           ],
         ),

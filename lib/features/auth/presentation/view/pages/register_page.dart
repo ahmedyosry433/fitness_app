@@ -5,6 +5,7 @@ import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_toast.dart';
+import 'package:fitness/core/values/app_validators.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/register_body_widget.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
 import 'package:flutter/material.dart';
@@ -131,12 +132,7 @@ class _RegisterViewState extends State<_RegisterView> {
         }
         return null;
       },
-      passwordValidator: (value) {
-        if (value == null || value.isEmpty) {
-          return LocaleKeys.validations_password_required.tr();
-        }
-        return null;
-      },
+      passwordValidator: AppValidators.validatePassword,
     );
   }
 }

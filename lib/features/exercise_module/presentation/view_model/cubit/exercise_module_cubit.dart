@@ -39,6 +39,7 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
     required String pageTitle,
     required String pageDescription,
   }) async {
+    if (isClosed) return;
     emit(BaseState.all(
         state: StateType.loading,
         data: _data.copyWith(
@@ -50,8 +51,10 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
     
     final levelsResult = await getDifficultyLevelsUseCase(primeMoverMuscleId);
     
+    if (isClosed) return; // المستخدم خرج من الصفحة أثناء الـ API call
     levelsResult.when(
       success: (levels) {
+        if (isClosed) return;
         if (levels == null || levels.isEmpty) {
           emit(BaseState.all(
               state: StateType.error,
@@ -59,13 +62,15 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
               exception: Exception(LocaleKeys.exercise_no_exercises_found.tr())));
           return;
         }
+        final selectedLevels = levels.take(3).toList();
         emit(BaseState.all(
             state: StateType.success,
-            data: _data.copyWith(difficultyLevels: levels),
+            data: _data.copyWith(difficultyLevels: selectedLevels),
             exception: null));
         _loadExercises(0);
       },
       error: (exception) {
+        if (isClosed) return;
         emit(BaseState.all(
             state: StateType.error,
             data: _data,
@@ -77,6 +82,7 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
   Future<void> _loadExercises(int difficultyIndex) async {
     if (_data.difficultyLevels.isEmpty) return;
 
+    if (isClosed) return;
     emit(BaseState.all(
         state: StateType.loading,
         data: _data.copyWith(selectedDifficultyIndex: difficultyIndex),
@@ -93,14 +99,17 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
       difficultyLevelId: difficultyLevelId,
     );
 
+    if (isClosed) return; // المستخدم خرج من الصفحة أثناء الـ API call
     result.when(
       success: (exercises) {
+        if (isClosed) return;
         emit(BaseState.all(
             state: StateType.success,
             data: _data.copyWith(exercises: exercises),
             exception: null));
       },
       error: (exception) {
+        if (isClosed) return;
         emit(BaseState.all(
             state: StateType.error,
             data: _data,

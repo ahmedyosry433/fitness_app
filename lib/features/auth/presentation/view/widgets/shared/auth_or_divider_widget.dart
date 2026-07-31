@@ -1,3 +1,4 @@
+import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/auth_assets.dart';
 import 'package:fitness/core/values/auth_ui_config.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +30,10 @@ class AuthOrDividerWidget extends StatelessWidget {
 class _OrDividerLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: AuthUiConfig.orLineWidth,
       height: 1,
-      child: SvgPicture.asset(
-        AuthAssets.dividerLine,
-        width: AuthUiConfig.orLineWidth,
-        height: 1,
-        fit: BoxFit.fill,
-      ),
+      color: AppColors.grayD3,
     );
   }
 }

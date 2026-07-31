@@ -8,6 +8,7 @@ import 'package:fitness/features/profile/domain/use_cases/delete_account_use_cas
 import 'package:fitness/features/profile/domain/use_cases/logout_use_case.dart';
 import 'package:fitness/features/profile/presentation/view_model/cubit/profile_events.dart';
 import 'package:fitness/features/profile/presentation/view_model/cubit/profile_states.dart';
+import 'package:fitness/core/utility/global_events.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -70,6 +71,7 @@ class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent> {
           final photoResult = await _uploadPhotoUseCase(profileImage: event.profileImage!);
           photoResult.when(
             success: (photoData) {
+              GlobalEvents.profileUpdated.value = !GlobalEvents.profileUpdated.value;
               emit(BaseState.success(currentState?.copyWith(user: photoData) ?? ProfileUIModel(user: photoData)));
             },
             error: (exception) {
@@ -77,6 +79,7 @@ class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent> {
             },
           );
         } else {
+          GlobalEvents.profileUpdated.value = !GlobalEvents.profileUpdated.value;
           emit(BaseState.success(currentState?.copyWith(user: data) ?? ProfileUIModel(user: data)));
         }
       },

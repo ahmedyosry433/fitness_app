@@ -10,6 +10,8 @@ class AiAgentUIModel extends Equatable {
     this.conversationId,
     this.isStreaming = false,
     this.pendingImagePath,
+    this.userName = '',
+    this.userPhoto,
   });
 
   final List<ChatMessageEntity> messages;
@@ -19,6 +21,9 @@ class AiAgentUIModel extends Equatable {
 
   /// Image picked but not sent yet, shown as a preview above the input field.
   final String? pendingImagePath;
+
+  final String userName;
+  final String? userPhoto;
 
   bool get hasPendingImage =>
       pendingImagePath != null && pendingImagePath!.isNotEmpty;
@@ -31,6 +36,8 @@ class AiAgentUIModel extends Equatable {
     bool? isStreaming,
     String? pendingImagePath,
     bool clearPendingImage = false,
+    String? userName,
+    String? userPhoto,
   }) {
     return AiAgentUIModel(
       messages: messages ?? this.messages,
@@ -42,6 +49,8 @@ class AiAgentUIModel extends Equatable {
       pendingImagePath: clearPendingImage
           ? null
           : (pendingImagePath ?? this.pendingImagePath),
+      userName: userName ?? this.userName,
+      userPhoto: userPhoto ?? this.userPhoto,
     );
   }
 
@@ -52,5 +61,7 @@ class AiAgentUIModel extends Equatable {
     conversationId,
     isStreaming,
     pendingImagePath,
+    userName,
+    userPhoto,
   ];
 }

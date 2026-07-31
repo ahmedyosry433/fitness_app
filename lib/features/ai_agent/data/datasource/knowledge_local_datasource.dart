@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:fitness/core/languages/app_locale.dart';
 import 'package:fitness/features/ai_agent/data/local/knowledge_database.dart';
 import 'package:fitness/features/ai_agent/domain/entities/ai_ref_entity.dart';
 import 'package:injectable/injectable.dart';
@@ -270,11 +271,10 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(primeMover)) {
       final pattern = '%${primeMover!.trim()}%';
-      addFilter(' AND (e.prime_mover_id LIKE ? OR e.name LIKE ? OR e.name_ar LIKE ?)', [
-        pattern,
-        pattern,
-        pattern,
-      ]);
+      addFilter(
+        ' AND (e.prime_mover_id LIKE ? OR e.name LIKE ? OR e.name_ar LIKE ?)',
+        [pattern, pattern, pattern],
+      );
     }
 
     if (_hasValue(equipment)) {
@@ -327,7 +327,9 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(category)) {
       final pattern = '%${category!.trim()}%';
-      buffer.writeln(' AND (mc.id LIKE ? OR mc.name LIKE ? OR mc.name_ar LIKE ?)');
+      buffer.writeln(
+        ' AND (mc.id LIKE ? OR mc.name LIKE ? OR mc.name_ar LIKE ?)',
+      );
       variables.addAll([
         Variable<String>(pattern),
         Variable<String>(pattern),
@@ -337,7 +339,9 @@ class KnowledgeLocalDatasource {
 
     if (_hasValue(area)) {
       final pattern = '%${area!.trim()}%';
-      buffer.writeln(' AND (ma.id LIKE ? OR ma.name LIKE ? OR ma.name_ar LIKE ?)');
+      buffer.writeln(
+        ' AND (ma.id LIKE ? OR ma.name LIKE ? OR ma.name_ar LIKE ?)',
+      );
       variables.addAll([
         Variable<String>(pattern),
         Variable<String>(pattern),
@@ -358,10 +362,7 @@ class KnowledgeLocalDatasource {
     if (_hasValue(query)) {
       final pattern = '%${query!.trim()}%';
       buffer.writeln(' AND (m.name LIKE ? OR m.name_ar LIKE ?)');
-      variables.addAll([
-        Variable<String>(pattern),
-        Variable<String>(pattern),
-      ]);
+      variables.addAll([Variable<String>(pattern), Variable<String>(pattern)]);
     }
 
     buffer.writeln(' ORDER BY m.popularity DESC LIMIT ?');
@@ -404,10 +405,7 @@ class KnowledgeLocalDatasource {
 }
 
 class KnowledgeSearchResult {
-  const KnowledgeSearchResult({
-    required this.exercises,
-    required this.meals,
-  });
+  const KnowledgeSearchResult({required this.exercises, required this.meals});
 
   final List<Map<String, Object?>> exercises;
   final List<Map<String, Object?>> meals;
@@ -421,14 +419,21 @@ class KnowledgeSearchResult {
 
   static AiRefEntity refFromRow(Map<String, Object?> row, AiRefType type) {
     final id = (row['id'] as String?) ?? '';
-    final nameAr = row['name_ar'] as String?;
-    final name = row['name'] as String?;
-    return AiRefEntity(
-      type: type,
-      id: id,
-      name: (nameAr != null && nameAr.trim().isNotEmpty)
-          ? nameAr
-          : (name ?? id),
-    );
+    return AiRefEntity(type: type, id: id, name: localizedName(row) ?? id);
+  }
+
+  /// Row name in the active app language, falling back to the other language
+  /// when the preferred column is missing for that row.
+  static String? localizedName(Map<String, Object?> row) {
+    final arabicName = (row['name_ar'] as String?)?.trim();
+    final englishName = (row['name'] as String?)?.trim();
+
+    final preferred = AppLocale.isArabic ? arabicName : englishName;
+    if (preferred != null && preferred.isNotEmpty) return preferred;
+
+    final fallback = AppLocale.isArabic ? englishName : arabicName;
+    if (fallback != null && fallback.isNotEmpty) return fallback;
+
+    return null;
   }
 }

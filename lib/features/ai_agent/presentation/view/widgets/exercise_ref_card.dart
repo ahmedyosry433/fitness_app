@@ -7,11 +7,7 @@ class ExerciseRefCard extends StatelessWidget {
   final String id;
   final String name;
 
-  const ExerciseRefCard({
-    super.key,
-    required this.id,
-    required this.name,
-  });
+  const ExerciseRefCard({super.key, required this.id, required this.name});
 
   @override
   Widget build(BuildContext context) {

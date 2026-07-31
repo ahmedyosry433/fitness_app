@@ -14,12 +14,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/widgets/custom_back_button.dart';
 import 'package:fitness/core/values/app_images.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/profile_menu_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitness/core/languages/lang.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/language_selection_bottom_sheet.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/logout_confirmation_dialog.dart';
+import 'package:fitness/core/values/app_urls.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -29,12 +32,16 @@ class ProfilePage extends StatelessWidget {
       create: (context) => getIt<ProfileCubit>()..doAction(LoadProfileEvent()),
       child: BlocConsumer<ProfileCubit, BaseState<ProfileUIModel>>(
         listener: (context, state) {
-          if (state.data?.isLoggedOut == true || state.data?.isAccountDeleted == true) {
+          if (state.data?.isLoggedOut == true ||
+              state.data?.isAccountDeleted == true) {
             context.go(Routes.login);
             return;
           }
           if (state.state == StateType.error) {
-            final msg = state.exception.toString().replaceFirst('Exception: ', '').replaceAll('DioException [bad response]:', '');
+            final msg = state.exception
+                .toString()
+                .replaceFirst('Exception: ', '')
+                .replaceAll('DioException [bad response]:', '');
             toastification.show(
               context: context,
               type: ToastificationType.error,
@@ -81,40 +88,82 @@ class ProfilePage extends StatelessWidget {
                                   children: [
                                     ProfileMenuItem(
                                       icon: Icons.person_outline,
-                                      title: LocaleKeys.profile_edit_profile.tr(),
+                                      title: LocaleKeys.profile_edit_profile
+                                          .tr(),
                                       onTap: () {
                                         context.push(Routes.editProfile);
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
                                     ProfileMenuItem(
                                       icon: Icons.sync,
-                                      title: LocaleKeys.profile_change_password.tr(),
+                                      title: LocaleKeys.profile_change_password
+                                          .tr(),
                                       onTap: () {
                                         context.push(Routes.changePassword);
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
                                     ProfileMenuItem(
                                       icon: Icons.language,
-                                      title: LocaleKeys.profile_select_language.tr(),
-                                      trailingText: '(${context.locale.languageCode == 'en' ? LocaleKeys.profile_english.tr() : 'العربية'})',
+                                      title: LocaleKeys.profile_select_language
+                                          .tr(),
+                                      trailingText:
+                                          '(${context.locale.languageCode == 'en' ? 'English (US)' : 'العربية (EG)'})',
                                       trailingWidget: Transform.scale(
                                         scale: 0.7,
                                         child: Switch(
-                                          value: context.locale.languageCode == 'en',
-                                          onChanged: (val) {
+                                          value:
+                                              context.locale.languageCode ==
+                                              'en',
+                                          onChanged: (val) async {
+                                            final prefs =
+                                                getIt<SharedPreferences>();
                                             if (val) {
-                                              context.setLocale(englishLocale);
+                                              await prefs.setString(
+                                                'locale',
+                                                'en',
+                                              );
+                                              if (context.mounted) {
+                                                context.setLocale(
+                                                  englishLocale,
+                                                );
+                                                AppTextStyles.setLocale(
+                                                  english,
+                                                );
+                                                context.go(Routes.splash);
+                                              }
                                             } else {
-                                              context.setLocale(arabicLocale);
+                                              await prefs.setString(
+                                                'locale',
+                                                'ar',
+                                              );
+                                              if (context.mounted) {
+                                                context.setLocale(arabicLocale);
+                                                AppTextStyles.setLocale(arabic);
+                                                context.go(Routes.splash);
+                                              }
                                             }
                                           },
-                                          activeTrackColor: AppColors.primaryOrange,
+                                          activeTrackColor:
+                                              AppColors.primaryOrange,
                                           activeThumbColor: AppColors.whiteFF,
                                           inactiveThumbColor: AppColors.grayEA,
                                           inactiveTrackColor: AppColors.black35,
-                                          trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+                                          trackOutlineColor:
+                                              WidgetStateProperty.all(
+                                                Colors.transparent,
+                                              ),
                                         ),
                                       ),
                                       onTap: () {
@@ -126,15 +175,30 @@ class ProfilePage extends StatelessWidget {
                                         );
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
                                     ProfileMenuItem(
                                       leadingIcon: Stack(
                                         alignment: Alignment.center,
                                         children: [
-                                          const Icon(Icons.settings_outlined, color: AppColors.primaryOrange, size: 24),
+                                          const Icon(
+                                            Icons.settings_outlined,
+                                            color: AppColors.primaryOrange,
+                                            size: 24,
+                                          ),
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 2.0),
-                                            child: const Icon(Icons.lock_outline, color: AppColors.primaryOrange, size: 12),
+                                            padding: const EdgeInsets.only(
+                                              top: 2.0,
+                                            ),
+                                            child: const Icon(
+                                              Icons.lock_outline,
+                                              color: AppColors.primaryOrange,
+                                              size: 12,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -143,27 +207,41 @@ class ProfilePage extends StatelessWidget {
                                         context.push(
                                           Routes.webView,
                                           extra: {
-                                            'title': LocaleKeys.profile_security.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/security.html',
+                                            'title': LocaleKeys.profile_security
+                                                .tr(),
+                                            'url': AppUrls.securityUrl,
                                           },
                                         );
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
                                     ProfileMenuItem(
                                       icon: Icons.privacy_tip_outlined,
-                                      title: LocaleKeys.profile_privacy_policy.tr(),
+                                      title: LocaleKeys.profile_privacy_policy
+                                          .tr(),
                                       onTap: () {
                                         context.push(
                                           Routes.webView,
                                           extra: {
-                                            'title': LocaleKeys.profile_privacy_policy.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/privacy-policy.html',
+                                            'title': LocaleKeys
+                                                .profile_privacy_policy
+                                                .tr(),
+                                            'url': AppUrls.privacyPolicyUrl,
                                           },
                                         );
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
                                     ProfileMenuItem(
                                       icon: Icons.help_outline,
                                       title: LocaleKeys.profile_help.tr(),
@@ -171,13 +249,19 @@ class ProfilePage extends StatelessWidget {
                                         context.push(
                                           Routes.webView,
                                           extra: {
-                                            'title': LocaleKeys.profile_help.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/help.html',
+                                            'title': LocaleKeys.profile_help
+                                                .tr(),
+                                            'url': AppUrls.helpUrl,
                                           },
                                         );
                                       },
                                     ),
-                                    Divider(height: 1, color: AppColors.whiteFF.withValues(alpha: 0.1)),
+                                    Divider(
+                                      height: 1,
+                                      color: AppColors.whiteFF.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                    ),
 
                                     ProfileMenuItem(
                                       icon: Icons.logout,
@@ -191,7 +275,9 @@ class ProfilePage extends StatelessWidget {
                                           builder: (dialogContext) {
                                             return LogoutConfirmationDialog(
                                               onConfirm: () {
-                                                context.read<ProfileCubit>().doAction(LogoutEvent());
+                                                context
+                                                    .read<ProfileCubit>()
+                                                    .doAction(LogoutEvent());
                                               },
                                             );
                                           },
@@ -255,17 +341,24 @@ class ProfilePage extends StatelessWidget {
                 ? CachedNetworkImage(
                     imageUrl: photo,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: AppColors.primaryOrange)),
-                    errorWidget: (context, url, error) => Image.asset('assets/images/ic_launcher.png', fit: BoxFit.cover),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryOrange,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/ic_launcher.png',
+                      fit: BoxFit.cover,
+                    ),
                   )
-                : Image.asset('assets/images/ic_launcher.png', fit: BoxFit.cover),
+                : Image.asset(
+                    'assets/images/ic_launcher.png',
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
         const SizedBox(height: 12),
-        Text(
-          name,
-          style: 18.bold.copyWith(color: AppColors.whiteFF),
-        ),
+        Text(name, style: 18.bold.copyWith(color: AppColors.whiteFF)),
       ],
     );
   }

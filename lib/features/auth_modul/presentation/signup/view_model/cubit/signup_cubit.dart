@@ -57,8 +57,20 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpNavigation> {
           message: 'Signed in as ${account.name}',
         );
 
+        final nameParts = (account.name).trim().split(' ');
+        final userData = {
+          'firstName': nameParts.isNotEmpty ? nameParts.first : account.name,
+          'lastName': nameParts.length > 1 ? nameParts.sublist(1).join(' ') : 'Tech',
+          'email': account.email,
+          'password': '',
+          'rePassword': '',
+          'uid': account.uid,
+          'photoUrl': account.photoUrl,
+          'isSocial': true,
+        };
+
         emit(state.copyWith(signUpState: BaseState.success(response)));
-        doNavigationAction(SignUpSuccessNavigation(response));
+        doNavigationAction(SignUpSuccessNavigation(response, userData));
       },
       error: (exception) {
         emit(state.copyWith(signUpState: BaseState.error(exception)));
@@ -93,8 +105,19 @@ class SignUpCubit extends BaseCubit<SignUpState, SignUpNavigation> {
 
     result.when(
       success: (response) {
+        // تمرير بيانات المستخدم لصفحة CompleteRegister
+        final nameParts = event.name.trim().split(' ');
+        final userData = {
+          'firstName': nameParts.isNotEmpty ? nameParts.first : event.name,
+          'lastName': nameParts.length > 1 ? nameParts.sublist(1).join(' ') : 'Tech',
+          'email': event.email,
+          'password': event.password,
+          'rePassword': event.confirmPassword,
+          'phone': event.phone,
+          'isSocial': false,
+        };
         emit(state.copyWith(signUpState: BaseState.success(response)));
-        doNavigationAction(SignUpSuccessNavigation(response));
+        doNavigationAction(SignUpSuccessNavigation(response, userData));
       },
       error: (exception) {
         emit(state.copyWith(signUpState: BaseState.error(exception)));

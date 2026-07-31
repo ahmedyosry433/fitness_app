@@ -48,8 +48,9 @@ class ChatInputBar extends StatelessWidget {
           maxLines: 4,
           textInputAction: TextInputAction.send,
           keyboardType: TextInputType.multiline,
-          enabled: !isSending,
-          onFieldSubmitted: (_) => onSend(),
+          onFieldSubmitted: (_) {
+            if (!isSending) onSend();
+          },
           decoration: ChatFieldTheme.decoration(
             hintText: LocaleKeys.ai_agent_message_hint.tr(),
             prefixIcon: _AttachButton(
@@ -112,12 +113,15 @@ class _SendButton extends StatelessWidget {
         end: ChatFieldTheme.horizontalPadding,
       ),
       child: isSending
-          ? const SizedBox(
-              width: ChatFieldTheme.iconSize,
-              height: ChatFieldTheme.iconSize,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.primaryOrangeDark,
+          ? Container(
+              width: ChatFieldTheme.iconSize + 8,
+              height: ChatFieldTheme.iconSize + 8,
+              padding: const EdgeInsets.all(4),
+              child: const CircularProgressIndicator(
+                strokeWidth: 2.2,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.primaryOrangeLight,
+                ),
               ),
             )
           : IconButton(

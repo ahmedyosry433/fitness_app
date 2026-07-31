@@ -210,14 +210,10 @@ class $AssetsImagesAuthGen {
 }
 
 abstract final class Assets {
-  static const String aEnv = '.env';
   static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLocalizationGen localization = $AssetsLocalizationGen();
-
-  /// List of all assets
-  static List<String> get values => [aEnv];
 }
 
 class AssetGenImage {
