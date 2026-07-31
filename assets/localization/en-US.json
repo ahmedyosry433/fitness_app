@@ -305,6 +305,13 @@
         "rookie": "Rookie",
         "gain_weight": "Gain Weight",
         "english": "English",
+        "arabic": "Arabic",
         "old_password": "Old Password"
+    },
+    "food": {
+        "Breakfast": "Breakfast",
+        "Lunch": "Lunch",
+        "Dinner": "Dinner",
+        "Snacks": "Snacks"
     }
 }

@@ -36,8 +36,11 @@ class UserFirestoreService {
         if (phone != null && phone.isNotEmpty) 'phone': phone,
         if (photoUrl != null && photoUrl.isNotEmpty) 'photoUrl': photoUrl,
         if (gender != null && gender.isNotEmpty) 'gender': gender,
+        // ignore: use_null_aware_elements
         if (age != null) 'age': age,
+        // ignore: use_null_aware_elements
         if (weight != null) 'weight': weight,
+        // ignore: use_null_aware_elements
         if (height != null) 'height': height,
         if (goal != null && goal.isNotEmpty) 'goal': goal,
         if (activityLevel != null && activityLevel.isNotEmpty)

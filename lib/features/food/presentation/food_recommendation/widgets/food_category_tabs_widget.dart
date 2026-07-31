@@ -1,5 +1,6 @@
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FoodCategoryTabsWidget extends StatelessWidget {
   final List<String> categories;
@@ -31,7 +32,9 @@ class FoodCategoryTabsWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              category,
+              ['Breakfast', 'Lunch', 'Dinner', 'Snacks'].contains(category)
+                  ? 'food.$category'.tr()
+                  : category,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

@@ -107,8 +107,9 @@ class AiAgentCubit
                 String? name;
                 String? photo;
                 if (user.name.isNotEmpty) name = user.name;
-                if (user.photo != null && user.photo!.isNotEmpty)
+                if (user.photo != null && user.photo!.isNotEmpty) {
                   photo = user.photo;
+                }
                 if (name != null || photo != null) {
                   _emit(_data.copyWith(userName: name, userPhoto: photo));
                 }

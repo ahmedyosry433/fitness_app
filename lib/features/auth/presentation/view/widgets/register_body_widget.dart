@@ -4,6 +4,8 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/email_field.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/global_text_field.dart';
 import 'package:fitness/core/shared/widgets/global/text_field/password_field.dart';
+import 'package:fitness/core/shared/widgets/password_criteria_widget.dart';
+
 import 'package:fitness/core/values/auth_ui_config.dart';
 import 'package:fitness/core/values/field_assets.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/shared/auth_footer_link_widget.dart';
@@ -104,15 +106,21 @@ class RegisterBodyWidget extends StatelessWidget {
                       BlocSelector<RegisterCubit, RegisterState, bool>(
                         selector: (state) => state.isPasswordHidden,
                         builder: (context, isPasswordHidden) {
-                          return PasswordField(
-                            controller: passwordController,
-                            hintText: LocaleKeys.auth_password.tr(),
-                            isObscure: isPasswordHidden,
-                            onToggleVisibility: () =>
-                                context.read<RegisterCubit>().doAction(
-                                  const TogglePasswordVisibilityEvent(),
-                                ),
-                            validator: passwordValidator,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PasswordField(
+                                controller: passwordController,
+                                hintText: LocaleKeys.auth_password.tr(),
+                                isObscure: isPasswordHidden,
+                                onToggleVisibility: () =>
+                                    context.read<RegisterCubit>().doAction(
+                                      const TogglePasswordVisibilityEvent(),
+                                    ),
+                                validator: passwordValidator,
+                              ),
+                              PasswordCriteriaWidget(controller: passwordController),
+                            ],
                           );
                         },
                       ),
@@ -123,30 +131,40 @@ class RegisterBodyWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: AuthUiConfig.sectionSpacing),
-                      AuthSocialLoginRowWidget(
-                        onFacebookTap: () =>
-                            context.read<RegisterCubit>().doAction(
-                              const SocialRegisterEvent(
-                                AuthSocialProvider.facebook,
-                              ),
-                            ),
-                        onGoogleTap: () =>
-                            context.read<RegisterCubit>().doAction(
-                              const SocialRegisterEvent(
-                                AuthSocialProvider.google,
-                              ),
-                            ),
-                        onAppleTap: () =>
-                            context.read<RegisterCubit>().doAction(
-                              const SocialRegisterEvent(
-                                AuthSocialProvider.apple,
-                              ),
-                            ),
+                      BlocSelector<RegisterCubit, RegisterState, AuthSocialProvider?>(
+                        selector: (state) =>
+                            state.registerState.state == StateType.loading
+                                ? state.loadingSocialProvider
+                                : null,
+                        builder: (context, loadingProvider) {
+                          return AuthSocialLoginRowWidget(
+                            loadingProvider: loadingProvider,
+                            onFacebookTap: () =>
+                                context.read<RegisterCubit>().doAction(
+                                  const SocialRegisterEvent(
+                                    AuthSocialProvider.facebook,
+                                  ),
+                                ),
+                            onGoogleTap: () =>
+                                context.read<RegisterCubit>().doAction(
+                                  const SocialRegisterEvent(
+                                    AuthSocialProvider.google,
+                                  ),
+                                ),
+                            onAppleTap: () =>
+                                context.read<RegisterCubit>().doAction(
+                                  const SocialRegisterEvent(
+                                    AuthSocialProvider.apple,
+                                  ),
+                                ),
+                          );
+                        },
                       ),
                       const SizedBox(height: AuthUiConfig.sectionSpacing),
                       BlocSelector<RegisterCubit, RegisterState, bool>(
                         selector: (state) =>
-                            state.registerState.state == StateType.loading,
+                            state.registerState.state == StateType.loading &&
+                            state.loadingSocialProvider == null,
                         builder: (context, isLoading) {
                           return AuthPrimaryButtonWidget(
                             label: LocaleKeys.auth_register.tr(),

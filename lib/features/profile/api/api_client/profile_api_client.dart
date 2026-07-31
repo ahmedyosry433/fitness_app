@@ -14,7 +14,7 @@ abstract class ProfileApiClient {
   @factoryMethod
   factory ProfileApiClient(Dio dio) = _ProfileApiClient;
 
-  @PATCH(AppEndPoints.editProfile)
+  @PATCH(AppEndPoints.profileData)
   @MultiPart()
   Future<ProfileResponseDto> updateProfile({
     @Part(name: AppEndPoints.nameParam) required String name,

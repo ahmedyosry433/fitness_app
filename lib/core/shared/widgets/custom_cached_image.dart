@@ -11,6 +11,7 @@ class CustomCachedImage extends StatelessWidget {
     this.height,
     required this.imagePath,
     this.fit,
+    this.alignment,
     this.emptyColorFilter,
     this.color,
     this.radius,
@@ -22,6 +23,7 @@ class CustomCachedImage extends StatelessWidget {
   final String? errorImage;
   final ColorFilter? emptyColorFilter;
   final BoxFit? fit;
+  final Alignment? alignment;
   final Color? color;
 
   Widget _buildErrorPlaceholder() {
@@ -53,6 +55,7 @@ class CustomCachedImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit ?? BoxFit.cover,
+      alignment: alignment ?? Alignment.center,
       imageUrl: imagePath,
       fadeInDuration: const Duration(milliseconds: 300),
       errorListener: (value) {

@@ -19,14 +19,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:fitness/core/utility/global_events.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final HomeCubit _homeCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeCubit = getIt<HomeCubit>()..processIntent(const LoadHomeIntent());
+    GlobalEvents.profileUpdated.addListener(_onProfileUpdated);
+  }
+
+  @override
+  void dispose() {
+    GlobalEvents.profileUpdated.removeListener(_onProfileUpdated);
+    _homeCubit.close();
+    super.dispose();
+  }
+
+  void _onProfileUpdated() {
+    _homeCubit.processIntent(const RefreshUserIntent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          getIt<HomeCubit>()..processIntent(const LoadHomeIntent()),
+    return BlocProvider.value(
+      value: _homeCubit,
       child: Scaffold(
         extendBody: true,
         body: Stack(

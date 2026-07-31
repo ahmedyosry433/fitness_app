@@ -39,39 +39,35 @@ class RecommendationToDaySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title ?? LocaleKeys.exercise_recommendation_to_day.tr(),
-          style: 16.semiBold.copyWith(
-            color: AppColors.whiteFF,
-            height: 1.2,
-          ),
-        ),
-        SizedBox(height: 8.h),
         SizedBox(
           height: 104.w,
           child: isLoading
               ? const _RecommendationShimmer()
               : items.isEmpty
-                  ? Center(
-                      child: Text(
-                        LocaleKeys.exercise_no_exercises_found.tr(),
-                        style: 12.regular.copyWith(color: AppColors.grayD3),
-                      ),
-                    )
-                  : ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: items.length,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: 16.w),
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        return _RecommendationCard(
-                          title: item.title,
-                          imagePath: item.imagePath,
-                          onTap: item.onTap,
-                        );
-                      },
-                    ),
+              ? Center(
+                  child: Text(
+                    LocaleKeys.exercise_no_exercises_found.tr(),
+                    style: 12.regular.copyWith(color: AppColors.grayD3),
+                  ),
+                )
+              : ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) => SizedBox(width: 16.w),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return _RecommendationCard(
+                      title: item.title,
+                      imagePath: item.imagePath,
+                      onTap: item.onTap,
+                    );
+                  },
+                ),
+        ),
+        SizedBox(height: 15.h),
+        Text(
+          title ?? LocaleKeys.exercise_recommendation_to_day.tr(),
+          style: 16.semiBold.copyWith(color: AppColors.whiteFF, height: 1.2),
         ),
       ],
     );
@@ -126,10 +122,8 @@ class _RecommendationCard extends StatelessWidget {
                 Image.asset(
                   imagePath.isEmpty ? AppImages.exercisesBack : imagePath,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Image.asset(
-                    AppImages.exercisesBack,
-                    fit: BoxFit.cover,
-                  ),
+                  errorBuilder: (context, error, stackTrace) =>
+                      Image.asset(AppImages.exercisesBack, fit: BoxFit.cover),
                 ),
               Container(color: AppColors.black.withValues(alpha: 0.2)),
               Positioned(

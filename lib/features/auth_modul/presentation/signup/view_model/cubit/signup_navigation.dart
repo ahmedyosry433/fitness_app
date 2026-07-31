@@ -6,7 +6,9 @@ sealed class SignUpNavigation {
 
 class SignUpSuccessNavigation extends SignUpNavigation {
   final AuthCommonResponse? response;
-  const SignUpSuccessNavigation([this.response]);
+  final Map<String, dynamic> userData;
+
+  const SignUpSuccessNavigation([this.response, this.userData = const {}]);
 }
 
 class SignUpShowErrorNavigation extends SignUpNavigation {

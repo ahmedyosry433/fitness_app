@@ -217,7 +217,7 @@ class _WorkoutContent extends StatelessWidget {
     return BlocBuilder<WorkoutCubit, WorkoutState>(
       buildWhen: (previous, current) {
         return previous.categoriesState != current.categoriesState ||
-            previous.exercisesState != current.exercisesState ||
+            previous.musclesState != current.musclesState ||
             previous.selectedCategoryIndex != current.selectedCategoryIndex;
       },
       builder: (context, state) {
@@ -237,13 +237,13 @@ class _WorkoutContent extends StatelessWidget {
           );
         }
 
-        if (!state.exercisesState.isSuccess) {
-          if (state.exercisesState.isError) {
+        if (!state.musclesState.isSuccess) {
+          if (state.musclesState.isError) {
             return Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Text(
-                  state.exercisesState.exception
+                  state.musclesState.exception
                           ?.toString()
                           .replaceAll('Exception: ', '') ??
                       LocaleKeys.exercise_failed_to_load.tr(args: ['']),
@@ -256,7 +256,7 @@ class _WorkoutContent extends StatelessWidget {
           return const WorkoutGridShimmer();
         }
 
-        if (state.exercises.isEmpty) {
+        if (state.muscles.isEmpty) {
           return Center(
             child: Text(
               LocaleKeys.exercise_no_exercises_found.tr(),
@@ -265,7 +265,7 @@ class _WorkoutContent extends StatelessWidget {
           );
         }
 
-        return WorkoutExercisesGrid(exercises: state.exercises);
+        return WorkoutMusclesGrid(muscles: state.muscles);
       },
     );
   }

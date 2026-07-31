@@ -39,7 +39,7 @@ class CompleteRegisterStepContent extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       title,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 22,
@@ -49,11 +49,12 @@ class CompleteRegisterStepContent extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  if (subtitle.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       subtitle,
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
@@ -92,7 +93,7 @@ class CompleteRegisterStepContent extends StatelessWidget {
                                 ),
                               ),
                               child: Text(
-                                currentStep == 3
+                                currentStep == 5
                                     ? LocaleKeys.custom_widget_done.tr()
                                     : LocaleKeys.onboard_next.tr(),
                                 style: const TextStyle(

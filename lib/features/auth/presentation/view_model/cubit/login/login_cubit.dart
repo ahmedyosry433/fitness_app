@@ -30,7 +30,10 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
   Future<void> _login(LoginSubmittedEvent event) async {
     if (state.loginState.state == StateType.loading) return;
 
-    emit(state.copyWith(loginState: const BaseState.loading()));
+    emit(state.copyWith(
+      loginState: const BaseState.loading(),
+      clearLoadingSocialProvider: true,
+    ));
 
     final result = await _authRepository.login(
       params: LoginParams(email: event.email, password: event.password),
@@ -57,7 +60,10 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
   Future<void> _socialLogin(AuthSocialProvider provider) async {
     if (state.loginState.state == StateType.loading) return;
 
-    emit(state.copyWith(loginState: const BaseState.loading()));
+    emit(state.copyWith(
+      loginState: const BaseState.loading(),
+      loadingSocialProvider: provider,
+    ));
 
     final result = await _authRepository.socialLogin(provider: provider);
 
@@ -65,14 +71,21 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
       success: (socialResult) {
         if (socialResult == null) {
           final message = LocaleKeys.error_api_failure_unexpected_error.tr();
-          emit(state.copyWith(loginState: BaseState.error(message)));
+          emit(state.copyWith(
+            loginState: BaseState.error(message),
+            clearLoadingSocialProvider: true,
+          ));
           doNavigationAction(LoginShowErrorNavigation(message));
           return;
         }
-        // Not signed in yet: the profile still has to be completed, so the
-        // state must not report a logged-in user.
+
+        // If the user hasn't completed their profile, they shouldn't log in
+        // yet (or we should redirect them to complete profile).
         if (socialResult.isNewUser) {
-          emit(state.copyWith(loginState: const BaseState.initial()));
+          emit(state.copyWith(
+            loginState: const BaseState.initial(),
+            clearLoadingSocialProvider: true,
+          ));
           doNavigationAction(
             LoginSocialProfileRequiredNavigation(
               socialResult.completeRegisterArgs,
@@ -80,7 +93,10 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
           );
           return;
         }
-        emit(state.copyWith(loginState: BaseState.success(socialResult.user)));
+        emit(state.copyWith(
+          loginState: BaseState.success(socialResult.user),
+          clearLoadingSocialProvider: true,
+        ));
         doNavigationAction(const LoginSocialSignedInNavigation());
       },
       error: (exception) {
@@ -89,10 +105,16 @@ class LoginCubit extends BaseCubit<LoginState, LoginNavigation> {
             : '';
         if (exception is SocialAuthCancelledException ||
             message.toLowerCase().contains('cancelled')) {
-          emit(state.copyWith(loginState: const BaseState.initial()));
+          emit(state.copyWith(
+            loginState: const BaseState.initial(),
+            clearLoadingSocialProvider: true,
+          ));
           return;
         }
-        emit(state.copyWith(loginState: BaseState.error(exception)));
+        emit(state.copyWith(
+          loginState: BaseState.error(exception),
+          clearLoadingSocialProvider: true,
+        ));
         if (exception != null) {
           doNavigationAction(LoginShowErrorNavigation(message));
         }

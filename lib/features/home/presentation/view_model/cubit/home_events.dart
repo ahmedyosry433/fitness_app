@@ -11,6 +11,10 @@ class LoadHomeIntent extends HomeIntent {
   const LoadHomeIntent();
 }
 
+class RefreshUserIntent extends HomeIntent {
+  const RefreshUserIntent();
+}
+
 class SelectMuscleGroupIntent extends HomeIntent {
   final String muscleGroupId;
 

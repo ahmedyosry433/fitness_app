@@ -168,7 +168,7 @@ class _AiAgentChatPageState extends State<AiAgentChatPage> {
                                   horizontal: 16,
                                   vertical: 16,
                                 ),
-                                cacheExtent: 500,
+                                cacheExtent: 1000,
                                 addAutomaticKeepAlives: true,
                                 itemCount: data.messages.length,
                                 separatorBuilder: (_, _) =>

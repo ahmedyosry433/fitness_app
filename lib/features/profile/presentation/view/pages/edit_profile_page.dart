@@ -17,6 +17,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/blurred_background_wrapper.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/complete_register_app_bar.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/complete_register_number_picker.dart';
+import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/complete_register_radio_list.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/complete_register_step_content.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/edit_profile_header.dart';
 import 'package:fitness/features/profile/presentation/view/widgets/edit_profile_text_field.dart';
@@ -38,6 +39,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _emailController;
   File? _selectedImage;
   int _weight = 90;
+  String _selectedGoal = 'Gain Weight';
+  String _selectedActivity = 'Rookie';
+
+  static const _goalOptions = [
+    'Gain Weight',
+    'Lose Weight',
+    'Get Fitter',
+    'Gain More Flexible',
+    'Learn The Basic',
+  ];
+
+  static const _activityOptions = [
+    'Rookie',
+    'Beginner',
+    'Intermediate',
+    'Advance',
+    'True Beast',
+  ];
 
   @override
   void initState() {
@@ -212,13 +231,93 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             EditProfileSection(
                               title: LocaleKeys.profile_your_goal.tr(),
                               subtitle: LocaleKeys.profile_tap_to_edit.tr(),
-                              value: LocaleKeys.profile_gain_weight.tr(),
+                              value: _selectedGoal,
+                              onTap: () async {
+                                String tempGoal = _selectedGoal;
+                                final result = await showDialog<String>(
+                                  context: context,
+                                  useSafeArea: false,
+                                  builder: (ctx) {
+                                    return Scaffold(
+                                      backgroundColor: Colors.transparent,
+                                      body: BlurredBackgroundWrapper(
+                                        imagePath: AppImages.signupBack,
+                                        child: SafeArea(
+                                          child: StatefulBuilder(
+                                            builder: (ctx, setInner) => Column(
+                                              children: [
+                                                CompleteRegisterAppBar(
+                                                  onBack: () => Navigator.of(ctx).pop(),
+                                                ),
+                                                Expanded(
+                                                  child: CompleteRegisterStepContent(
+                                                    title: 'WHAT IS YOUR GOAL ?',
+                                                    subtitle: 'This Helps Us Create Your Personalized Plan',
+                                                    buttonText: LocaleKeys.custom_widget_done.tr(),
+                                                    onNext: () => Navigator.of(ctx).pop(tempGoal),
+                                                    child: CompleteRegisterRadioList(
+                                                      options: _goalOptions,
+                                                      selectedOption: tempGoal,
+                                                      onChanged: (val) => setInner(() => tempGoal = val),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                                if (result != null) setState(() => _selectedGoal = result);
+                              },
                             ),
                             const SizedBox(height: 24),
                             EditProfileSection(
                               title: LocaleKeys.profile_your_activity_level.tr(),
                               subtitle: LocaleKeys.profile_tap_to_edit.tr(),
-                              value: LocaleKeys.profile_rookie.tr(),
+                              value: _selectedActivity,
+                              onTap: () async {
+                                String tempActivity = _selectedActivity;
+                                final result = await showDialog<String>(
+                                  context: context,
+                                  useSafeArea: false,
+                                  builder: (ctx) {
+                                    return Scaffold(
+                                      backgroundColor: Colors.transparent,
+                                      body: BlurredBackgroundWrapper(
+                                        imagePath: AppImages.signupBack,
+                                        child: SafeArea(
+                                          child: StatefulBuilder(
+                                            builder: (ctx, setInner) => Column(
+                                              children: [
+                                                CompleteRegisterAppBar(
+                                                  onBack: () => Navigator.of(ctx).pop(),
+                                                ),
+                                                Expanded(
+                                                  child: CompleteRegisterStepContent(
+                                                    title: 'YOUR REGULAR PHYSICAL\nACTIVITY LEVEL ?',
+                                                    subtitle: '',
+                                                    buttonText: LocaleKeys.custom_widget_done.tr(),
+                                                    onNext: () => Navigator.of(ctx).pop(tempActivity),
+                                                    child: CompleteRegisterRadioList(
+                                                      options: _activityOptions,
+                                                      selectedOption: tempActivity,
+                                                      onChanged: (val) => setInner(() => tempActivity = val),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                                if (result != null) setState(() => _selectedActivity = result);
+                              },
                             ),
                             const SizedBox(height: 30),
                           ],

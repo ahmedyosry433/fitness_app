@@ -37,14 +37,25 @@ class _SignUpViewState extends State<SignUpView> {
 
   void _handleNavigation(SignUpNavigation navigation) {
     switch (navigation) {
-      case SignUpSuccessNavigation(:final response):
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response?.message ?? "Account created successfully"),
-            backgroundColor: Colors.green,
-          ),
+      case SignUpSuccessNavigation(:final userData):
+        // الانتقال لصفحة CompleteRegister مع تمرير بيانات المستخدم
+        context.push(
+          Routes.completeRegister,
+          extra: userData.isNotEmpty
+              ? userData
+              : {
+                  'firstName': _nameController.text.trim().split(' ').first,
+                  'lastName': _nameController.text.trim().split(' ').length > 1
+                      ? _nameController.text.trim().split(' ').sublist(1).join(' ')
+                      : 'Tech',
+                  'email': _emailController.text.trim(),
+                  'password': _passwordController.text,
+                  'rePassword': _passwordController.text,
+                  'phone': _phoneController.text.trim(),
+                  'isSocial': false,
+                },
         );
-        context.go(Routes.login);
+
       case SignUpShowErrorNavigation(:final message):
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(message), backgroundColor: Colors.red),

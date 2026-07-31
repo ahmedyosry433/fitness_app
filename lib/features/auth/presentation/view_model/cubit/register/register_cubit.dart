@@ -31,7 +31,10 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
   Future<void> _register(RegisterSubmittedEvent event) async {
     if (state.registerState.state == StateType.loading) return;
 
-    emit(state.copyWith(registerState: const BaseState.loading()));
+    emit(state.copyWith(
+      registerState: const BaseState.loading(),
+      clearLoadingSocialProvider: true,
+    ));
 
     final nameParts = event.name.trim().split(RegExp(r'\s+'));
     final firstName = nameParts.isNotEmpty ? nameParts.first : event.name;
@@ -67,7 +70,10 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
   Future<void> _socialRegister(AuthSocialProvider provider) async {
     if (state.registerState.state == StateType.loading) return;
 
-    emit(state.copyWith(registerState: const BaseState.loading()));
+    emit(state.copyWith(
+      registerState: const BaseState.loading(),
+      loadingSocialProvider: provider,
+    ));
 
     final result = await _authRepository.socialLogin(provider: provider);
 
@@ -75,14 +81,20 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
       success: (socialResult) {
         if (socialResult == null) {
           final message = LocaleKeys.error_api_failure_unexpected_error.tr();
-          emit(state.copyWith(registerState: BaseState.error(message)));
+          emit(state.copyWith(
+            registerState: BaseState.error(message),
+            clearLoadingSocialProvider: true,
+          ));
           doNavigationAction(RegisterShowErrorNavigation(message));
           return;
         }
         // Not registered yet: the profile still has to be completed, so the
         // state must not report a successful registration.
         if (socialResult.isNewUser) {
-          emit(state.copyWith(registerState: const BaseState.initial()));
+          emit(state.copyWith(
+            registerState: const BaseState.initial(),
+            clearLoadingSocialProvider: true,
+          ));
           doNavigationAction(
             RegisterSocialProfileRequiredNavigation(
               socialResult.completeRegisterArgs,
@@ -91,7 +103,10 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
           return;
         }
         emit(
-          state.copyWith(registerState: BaseState.success(socialResult.user)),
+          state.copyWith(
+            registerState: BaseState.success(socialResult.user),
+            clearLoadingSocialProvider: true,
+          ),
         );
         doNavigationAction(const RegisterSocialSignedInNavigation());
       },
@@ -101,10 +116,16 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
             : '';
         if (exception is SocialAuthCancelledException ||
             message.toLowerCase().contains('cancelled')) {
-          emit(state.copyWith(registerState: const BaseState.initial()));
+          emit(state.copyWith(
+            registerState: const BaseState.initial(),
+            clearLoadingSocialProvider: true,
+          ));
           return;
         }
-        emit(state.copyWith(registerState: BaseState.error(exception)));
+        emit(state.copyWith(
+          registerState: BaseState.error(exception),
+          clearLoadingSocialProvider: true,
+        ));
         if (exception != null) {
           doNavigationAction(RegisterShowErrorNavigation(message));
         }

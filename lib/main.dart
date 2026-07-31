@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitness/app.dart';
@@ -23,6 +24,7 @@ void main() async {
   }
 
   try {
+    driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     await OllamaConfig.load();
   await configureDependencies();
   } catch (e) {
