@@ -6,9 +6,10 @@ class LoadProfileEvent extends ProfileEvent {}
 
 class UpdateProfileEvent extends ProfileEvent {
   final String name;
-  final File? profileImage;
-  UpdateProfileEvent({required this.name, this.profileImage});
+  UpdateProfileEvent({required this.name});
 }
+
+class UploadPhotoEvent extends ProfileEvent {}
 
 class ChangePasswordEvent extends ProfileEvent {
   final String oldPassword;

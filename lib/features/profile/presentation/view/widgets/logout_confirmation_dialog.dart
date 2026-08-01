@@ -25,7 +25,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Are You Sure To Logout?",
+              LocaleKeys.profile_are_you_sure_to_logout.tr(),
               textAlign: TextAlign.center,
               style: 20.bold.copyWith(color: AppColors.whiteFF),
             ),
@@ -45,7 +45,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "NO",
+                      LocaleKeys.profile_no.tr(),
                       style: 16.bold.copyWith(color: AppColors.whiteFF),
                     ),
                   ),
@@ -66,7 +66,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "Yes",
+                      LocaleKeys.profile_yes.tr(),
                       style: 16.bold.copyWith(color: AppColors.whiteFF),
                     ),
                   ),

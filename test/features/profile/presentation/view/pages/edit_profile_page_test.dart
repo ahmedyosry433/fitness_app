@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fitness/features/profile/presentation/view/pages/edit_profile_page.dart';
 import 'package:go_router/go_router.dart';
 
-class MockProfileCubit extends MockCubit<BaseState<ProfileUIModel>> implements ProfileCubit {}
+class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {}
 
 class FakeProfileEvent extends Fake implements ProfileEvent {}
 
@@ -54,13 +54,13 @@ void main() {
   testWidgets('displays user name and email in text fields on success state', (WidgetTester tester) async {
     final user = UserEntity(id: '1', name: 'John Doe', email: 'john@doe.com');
     
-    final successState = BaseState.success(ProfileUIModel(user: user));
+    final successState = const ProfileState().copyWith(getProfileState: BaseState.success(user));
     
     when(() => mockProfileCubit.state).thenReturn(successState);
     whenListen(
       mockProfileCubit,
       Stream.fromIterable([successState]),
-      initialState: BaseState.all(state: StateType.initial, data: ProfileUIModel(), exception: null),
+      initialState: const ProfileState(),
     );
     when(() => mockProfileCubit.doAction(any())).thenAnswer((_) async {});
 
@@ -76,13 +76,13 @@ void main() {
   testWidgets('shows validation error when name is empty and save is tapped', (WidgetTester tester) async {
     final user = UserEntity(id: '1', name: '', email: 'john@doe.com');
     
-    final successState = BaseState.success(ProfileUIModel(user: user));
+    final successState = const ProfileState().copyWith(getProfileState: BaseState.success(user));
     
     when(() => mockProfileCubit.state).thenReturn(successState);
     whenListen(
       mockProfileCubit,
       Stream.fromIterable([successState]),
-      initialState: BaseState.all(state: StateType.initial, data: ProfileUIModel(), exception: null),
+      initialState: const ProfileState(),
     );
     when(() => mockProfileCubit.doAction(any())).thenAnswer((_) async {});
 
@@ -104,13 +104,13 @@ void main() {
   testWidgets('calls UpdateProfileEvent when valid data and save is tapped', (WidgetTester tester) async {
     final user = UserEntity(id: '1', name: 'John Doe', email: 'john@doe.com');
     
-    final successState = BaseState.success(ProfileUIModel(user: user));
+    final successState = const ProfileState().copyWith(getProfileState: BaseState.success(user));
     
     when(() => mockProfileCubit.state).thenReturn(successState);
     whenListen(
       mockProfileCubit,
       Stream.fromIterable([successState]),
-      initialState: BaseState.all(state: StateType.initial, data: ProfileUIModel(), exception: null),
+      initialState: const ProfileState(),
     );
     when(() => mockProfileCubit.doAction(any())).thenAnswer((_) async {});
 

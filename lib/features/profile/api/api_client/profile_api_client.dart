@@ -4,6 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:fitness/config/api/app_endpoints.dart';
 import 'package:fitness/features/profile/data/models/change_password_request_dto.dart';
 import 'package:fitness/features/profile/data/models/profile_response_dto.dart';
+import 'package:fitness/features/profile/data/models/update_profile_request_dto.dart';
 import 'package:injectable/injectable.dart';
 
 part 'profile_api_client.g.dart';
@@ -15,10 +16,9 @@ abstract class ProfileApiClient {
   factory ProfileApiClient(Dio dio) = _ProfileApiClient;
 
   @PATCH(AppEndPoints.editProfile)
-  @MultiPart()
-  Future<ProfileResponseDto> updateProfile({
-    @Part(name: AppEndPoints.nameParam) required String name,
-  });
+  Future<ProfileResponseDto> updateProfile(
+    @Body() UpdateProfileRequestDto request,
+  );
 
   @PATCH(AppEndPoints.uploadPhoto)
   @MultiPart()

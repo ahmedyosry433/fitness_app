@@ -23,27 +23,22 @@ class ChangePasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ProfileCubit>(),
-      child: BlocConsumer<ProfileCubit, BaseState<ProfileUIModel>>(
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listenWhen: (previous, current) => previous.changePasswordState != current.changePasswordState,
         listener: (context, state) {
-          if (state.state == StateType.success) {
+          if (state.changePasswordState.state == StateType.success) {
             toastification.show(
               context: context,
               type: ToastificationType.success,
-              title: Text(
-                LocaleKeys.forget_password_password_reset_success.tr(),
-              ),
+              title: Text(LocaleKeys.custom_widget_done.tr()),
               autoCloseDuration: const Duration(seconds: 3),
             );
             context.pop();
-          } else if (state.state == StateType.error) {
-            final msg = state.exception
-                .toString()
-                .replaceFirst('Exception: ', '')
-                .replaceAll('DioException [bad response]:', '');
+          } else if (state.changePasswordState.state == StateType.error) {
             toastification.show(
               context: context,
               type: ToastificationType.error,
-              title: Text(msg),
+              title: Text(state.changePasswordState.exception.toString()),
               autoCloseDuration: const Duration(seconds: 3),
             );
           }
@@ -101,9 +96,7 @@ class ChangePasswordPage extends StatelessWidget {
                                   horizontal: 24,
                                 ),
                                 child: Text(
-                                  LocaleKeys
-                                      .forget_password_make_sure_8_characters_or_more
-                                      .tr(),
+                                  "Make Sure Its 8 Characters Or More",
                                   style: 14.regular.copyWith(
                                     color: AppColors.whiteFF,
                                   ),
@@ -115,9 +108,7 @@ class ChangePasswordPage extends StatelessWidget {
                                   horizontal: 24,
                                 ),
                                 child: Text(
-                                  LocaleKeys
-                                      .forget_password_create_new_password
-                                      .tr(),
+                                  "Create New Password",
                                   style: 20.bold.copyWith(
                                     color: AppColors.whiteFF,
                                   ),

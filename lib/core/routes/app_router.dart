@@ -24,6 +24,12 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
   initialLocation: Routes.home,
   navigatorKey: navigatorKey,
+  errorBuilder: (context, state) => Scaffold(
+    appBar: AppBar(title: const Text('Error')),
+    body: Center(
+      child: Text('Page not found: ${state.uri.toString()}'),
+    ),
+  ),
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,
@@ -84,12 +90,12 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.exercise,
       page: (state, context) {
-        final extra = state.extra as Map<String, dynamic>?;
+        final args = state.extra as ExercisePageArguments?;
         final primeMoverMuscleId =
-            extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
-        final pageTitle = extra?['pageTitle'] ?? '';
-        final pageDescription = extra?['pageDescription'] ?? '';
-        final backgroundImage = extra?['backgroundImage'] ?? '';
+            args?.primeMoverMuscleId ?? '69d982ef85f6bfa972bf2248';
+        final pageTitle = args?.pageTitle ?? '';
+        final pageDescription = args?.pageDescription ?? '';
+        final backgroundImage = args?.backgroundImage ?? '';
 
         return BlocProvider(
           create: (context) => getIt<ExerciseModuleCubit>()
@@ -121,9 +127,9 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.webView,
       page: (state, context) {
-        final extra = state.extra as Map<String, dynamic>?;
-        final title = extra?['title'] as String? ?? '';
-        final url = extra?['url'] as String? ?? '';
+        final args = state.extra as WebViewPageArguments?;
+        final title = args?.title ?? '';
+        final url = args?.url ?? '';
 
         return WebViewPage(title: title, url: url);
       },
@@ -158,3 +164,27 @@ GoRoute _customAnimatedGoRoute({
     },
   ),
 );
+
+class ExercisePageArguments {
+  final String primeMoverMuscleId;
+  final String pageTitle;
+  final String pageDescription;
+  final String backgroundImage;
+
+  ExercisePageArguments({
+    required this.primeMoverMuscleId,
+    required this.pageTitle,
+    required this.pageDescription,
+    required this.backgroundImage,
+  });
+}
+
+class WebViewPageArguments {
+  final String title;
+  final String url;
+
+  WebViewPageArguments({
+    required this.title,
+    required this.url,
+  });
+}

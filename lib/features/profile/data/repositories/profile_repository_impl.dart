@@ -6,25 +6,30 @@ import 'package:fitness/features/profile/data/models/change_password_request_dto
 import 'package:fitness/features/profile/domain/entities/user_entity.dart';
 import 'package:fitness/features/profile/domain/repositories/profile_repository.dart';
 import 'package:fitness/core/user_helper/user_helper.dart';
+import 'package:fitness/features/profile/data/models/profile_response_dto.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: ProfileRepository)
+@Injectable(as: ProfileRepository)
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSourceContract _remoteDataSource;
   final UserHelper _userHelper;
 
   ProfileRepositoryImpl(this._remoteDataSource, this._userHelper);
 
+  UserEntity _mapToEntity(ProfileResponseDto response, {String? defaultName}) {
+    return UserEntity(
+      id: response.data?.id ?? '',
+      name: response.data?.name ?? defaultName ?? '',
+      email: response.data?.email ?? '',
+      photo: response.data?.photo,
+    );
+  }
+
   @override
   Future<Result<UserEntity>> getProfile() async {
     return executeApi(() async {
       final response = await _remoteDataSource.getProfileData();
-      return UserEntity(
-        id: response.data?.id ?? '',
-        name: response.data?.name ?? '',
-        email: response.data?.email ?? '',
-        photo: response.data?.photo,
-      );
+      return _mapToEntity(response);
     });
   }
 
@@ -36,12 +41,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final response = await _remoteDataSource.updateProfile(
         name: name,
       );
-      return UserEntity(
-        id: response.data?.id ?? '',
-        name: response.data?.name ?? name,
-        email: response.data?.email ?? '',
-        photo: response.data?.photo,
-      );
+      return _mapToEntity(response, defaultName: name);
     });
   }
 
@@ -53,12 +53,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final response = await _remoteDataSource.uploadPhoto(
         profileImage: profileImage,
       );
-      return UserEntity(
-        id: response.data?.id ?? '',
-        name: response.data?.name ?? '',
-        email: response.data?.email ?? '',
-        photo: response.data?.photo,
-      );
+      return _mapToEntity(response);
     });
   }
 

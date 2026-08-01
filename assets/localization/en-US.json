@@ -1,4 +1,4 @@
-{
+﻿{
     "error_api_failure": {
         "connectionError": "Failed to connect to the server",
         "connectionTimeout": "Connection timeout",
@@ -114,7 +114,7 @@
     },
     "splash": {
         "title": "Super Fitness",
-        "subtitle": "Train · Transform · Triumph"
+        "subtitle": "Train Â· Transform Â· Triumph"
     },
     "onboarding": {
         "page1_title": "The price of excellence\nis discipline",
@@ -183,6 +183,9 @@
         "rookie": "Rookie",
         "gain_weight": "Gain Weight",
         "english": "English",
-        "old_password": "Old Password"
+        "old_password": "Old Password",
+        "are_you_sure_to_logout": "Are You Sure To Logout?",
+        "yes": "Yes",
+        "no": "No"
     }
 }

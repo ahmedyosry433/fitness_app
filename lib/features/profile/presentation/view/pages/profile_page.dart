@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:fitness/config/base_state/base_state.dart';
 import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/core/routes/app_router.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/theme/app_text_style.dart';
@@ -25,18 +26,17 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ProfileCubit>()..doAction(LoadProfileEvent()),
-      child: BlocConsumer<ProfileCubit, BaseState<ProfileUIModel>>(
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listenWhen: (previous, current) => previous.logoutState != current.logoutState,
         listener: (context, state) {
-          if (state.data?.isLoggedOut == true || state.data?.isAccountDeleted == true) {
+          if (state.logoutState.state == StateType.success) {
             context.go(Routes.login);
             return;
-          }
-          if (state.state == StateType.error) {
-            final msg = state.exception.toString().replaceFirst('Exception: ', '').replaceAll('DioException [bad response]:', '');
+          } else if (state.logoutState.state == StateType.error) {
             toastification.show(
               context: context,
               type: ToastificationType.error,
-              title: Text(msg),
+              title: Text(state.logoutState.exception.toString()),
               autoCloseDuration: const Duration(seconds: 3),
             );
           }
@@ -62,7 +62,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       _buildAppBar(context),
                       const SizedBox(height: 20),
-                      _buildProfileHeader(state.data),
+                      _buildProfileHeader(state),
                       const SizedBox(height: 30),
                       Expanded(
                         child: ListView(
@@ -133,10 +133,10 @@ class ProfilePage extends StatelessWidget {
                                       onTap: () {
                                         context.push(
                                           Routes.webView,
-                                          extra: {
-                                            'title': LocaleKeys.profile_security.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/security.html',
-                                          },
+                                          extra: WebViewPageArguments(
+                                            title: LocaleKeys.profile_security.tr(),
+                                            url: 'https://elevate-flutter-team.github.io/fitness-app-webviews/security.html',
+                                          ),
                                         );
                                       },
                                     ),
@@ -147,10 +147,10 @@ class ProfilePage extends StatelessWidget {
                                       onTap: () {
                                         context.push(
                                           Routes.webView,
-                                          extra: {
-                                            'title': LocaleKeys.profile_privacy_policy.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/privacy-policy.html',
-                                          },
+                                          extra: WebViewPageArguments(
+                                            title: LocaleKeys.profile_privacy_policy.tr(),
+                                            url: 'https://elevate-flutter-team.github.io/fitness-app-webviews/privacy-policy.html',
+                                          ),
                                         );
                                       },
                                     ),
@@ -161,10 +161,10 @@ class ProfilePage extends StatelessWidget {
                                       onTap: () {
                                         context.push(
                                           Routes.webView,
-                                          extra: {
-                                            'title': LocaleKeys.profile_help.tr(),
-                                            'url': 'https://elevate-flutter-team.github.io/fitness-app-webviews/help.html',
-                                          },
+                                          extra: WebViewPageArguments(
+                                            title: LocaleKeys.profile_help.tr(),
+                                            url: 'https://elevate-flutter-team.github.io/fitness-app-webviews/help.html',
+                                          ),
                                         );
                                       },
                                     ),
@@ -226,9 +226,9 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader(ProfileUIModel? uiModel) {
-    final photo = uiModel?.user?.photo;
-    final name = uiModel?.user?.name ?? LocaleKeys.auth_name.tr();
+  Widget _buildProfileHeader(ProfileState? state) {
+    final photo = state?.getProfileState.data?.photo;
+    final name = state?.getProfileState.data?.name ?? "User Name";
     return Column(
       children: [
         Container(

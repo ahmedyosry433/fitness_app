@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:fitness/config/base_response/base_response.dart';
 import 'package:fitness/features/profile/domain/entities/user_entity.dart';
 
-abstract class ProfileRepository {
+abstract interface class ProfileRepository {
   Future<Result<UserEntity>> getProfile();
 
   Future<Result<UserEntity>> updateProfile({

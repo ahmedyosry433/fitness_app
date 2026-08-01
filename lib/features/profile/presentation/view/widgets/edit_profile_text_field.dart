@@ -7,6 +7,7 @@ class EditProfileTextField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final bool enabled;
+  final String? Function(String?)? validator;
 
   const EditProfileTextField({
     super.key,
@@ -14,6 +15,7 @@ class EditProfileTextField extends StatelessWidget {
     required this.icon,
     required this.hint,
     this.enabled = true,
+    this.validator,
   });
 
   @override
@@ -27,9 +29,10 @@ class EditProfileTextField extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         enabled: enabled,
+        validator: validator,
         style: 14.regular.copyWith(color: AppColors.whiteFF),
         decoration: InputDecoration(
           hintText: hint,

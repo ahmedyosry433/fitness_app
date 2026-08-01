@@ -8,16 +8,18 @@ import 'package:fitness/features/profile/domain/use_cases/delete_account_use_cas
 import 'package:fitness/features/profile/domain/use_cases/logout_use_case.dart';
 import 'package:fitness/features/profile/presentation/view_model/cubit/profile_events.dart';
 import 'package:fitness/features/profile/presentation/view_model/cubit/profile_states.dart';
+import 'package:fitness/core/services/image_picker_service.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent, void> {
+class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
   final GetProfileUseCase _getProfileUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
   final UploadPhotoUseCase _uploadPhotoUseCase;
   final ChangePasswordUseCase _changePasswordUseCase;
   final DeleteAccountUseCase _deleteAccountUseCase;
   final LogoutUseCase _logoutUseCase;
+  final ImagePickerService _imagePickerService;
 
   ProfileCubit(
     this._getProfileUseCase,
@@ -26,109 +28,126 @@ class ProfileCubit extends BaseCubit<BaseState<ProfileUIModel>, ProfileEvent, vo
     this._changePasswordUseCase,
     this._deleteAccountUseCase,
     this._logoutUseCase,
-  ) : super(const BaseState.initial());
+    this._imagePickerService,
+  ) : super(const ProfileState());
 
   @override
   Future<void> doAction(ProfileEvent event) async {
-    if (event is LoadProfileEvent) {
-      await _loadProfile();
-    } else if (event is UpdateProfileEvent) {
-      await _updateProfile(event);
-    } else if (event is ChangePasswordEvent) {
-      await _changePassword(event);
-    } else if (event is LogoutEvent) {
-      await _logout();
-    } else if (event is DeleteAccountEvent) {
-      await _deleteAccount();
+    switch (event) {
+      case LoadProfileEvent():
+        await _loadProfile();
+        break;
+      case UpdateProfileEvent():
+        await _updateProfile(event);
+        break;
+      case UploadPhotoEvent():
+        await _uploadPhoto();
+        break;
+      case ChangePasswordEvent():
+        await _changePassword(event);
+        break;
+      case LogoutEvent():
+        await _logout();
+        break;
+      case DeleteAccountEvent():
+        await _deleteAccount();
+        break;
     }
   }
 
   Future<void> _loadProfile() async {
-    emit(const BaseState.loading());
+    emit(state.copyWith(getProfileState: const BaseState.loading()));
     final result = await _getProfileUseCase();
     result.when(
       success: (data) {
-        emit(BaseState.success(ProfileUIModel(user: data)));
+        emit(state.copyWith(getProfileState: BaseState.success(data)));
       },
       error: (exception) {
-        emit(BaseState.error(exception));
+        emit(state.copyWith(getProfileState: BaseState.error(exception)));
       },
     );
   }
 
   Future<void> _updateProfile(UpdateProfileEvent event) async {
-    final currentState = state.data;
-    emit(BaseState.all(state: StateType.loading, data: currentState, exception: null));
+    final currentData = state.getProfileState.data;
+    emit(state.copyWith(updateProfileState: BaseState.all(state: StateType.loading, data: currentData, exception: null)));
     
     final updateResult = await _updateProfileUseCase(
       name: event.name,
     );
 
-    await updateResult.when(
-      success: (data) async {
-        if (event.profileImage != null) {
-          final photoResult = await _uploadPhotoUseCase(profileImage: event.profileImage!);
-          photoResult.when(
-            success: (photoData) {
-              emit(BaseState.success(currentState?.copyWith(user: photoData) ?? ProfileUIModel(user: photoData)));
-            },
-            error: (exception) {
-              emit(BaseState.all(state: StateType.error, data: currentState?.copyWith(user: data) ?? ProfileUIModel(user: data), exception: exception));
-            },
-          );
-        } else {
-          emit(BaseState.success(currentState?.copyWith(user: data) ?? ProfileUIModel(user: data)));
-        }
+    updateResult.when(
+      success: (data) {
+        emit(state.copyWith(
+          updateProfileState: BaseState.success(data),
+          getProfileState: BaseState.success(data), // Update general profile too
+        ));
       },
-      error: (exception) async {
-        emit(BaseState.all(state: StateType.error, data: currentState, exception: exception));
+      error: (exception) {
+        emit(state.copyWith(updateProfileState: BaseState.error(exception)));
+      },
+    );
+  }
+
+  Future<void> _uploadPhoto() async {
+    final file = await _imagePickerService.pickImage();
+    if (file == null) return; // User cancelled
+
+    final currentData = state.getProfileState.data;
+    emit(state.copyWith(uploadPhotoState: BaseState.all(state: StateType.loading, data: currentData, exception: null)));
+
+    final photoResult = await _uploadPhotoUseCase(profileImage: file);
+    photoResult.when(
+      success: (photoData) {
+        emit(state.copyWith(
+          uploadPhotoState: BaseState.success(photoData),
+          getProfileState: BaseState.success(photoData), // Update general profile too
+        ));
+      },
+      error: (exception) {
+        emit(state.copyWith(uploadPhotoState: BaseState.error(exception)));
       },
     );
   }
 
   Future<void> _changePassword(ChangePasswordEvent event) async {
-    final currentState = state.data;
-    emit(BaseState.all(state: StateType.loading, data: currentState, exception: null));
+    emit(state.copyWith(changePasswordState: const BaseState.loading()));
     final result = await _changePasswordUseCase(
       oldPassword: event.oldPassword,
       newPassword: event.newPassword,
     );
     result.when(
       success: (_) {
-        if (currentState != null) {
-          emit(BaseState.success(currentState));
-        }
+        emit(state.copyWith(changePasswordState: const BaseState.success(null)));
       },
       error: (exception) {
-        emit(BaseState.all(state: StateType.error, data: currentState, exception: exception));
+        emit(state.copyWith(changePasswordState: BaseState.error(exception)));
       },
     );
   }
 
   Future<void> _logout() async {
-    final currentState = state.data ?? const ProfileUIModel();
-    emit(BaseState.all(state: StateType.loading, data: currentState, exception: null));
+    emit(state.copyWith(logoutState: const BaseState.loading()));
     final result = await _logoutUseCase();
     result.when(
       success: (_) {
-        emit(BaseState.success(currentState.copyWith(isLoggedOut: true)));
+        emit(state.copyWith(logoutState: const BaseState.success(null)));
       },
       error: (exception) {
-        emit(BaseState.all(state: StateType.error, data: currentState, exception: exception));
+        emit(state.copyWith(logoutState: BaseState.error(exception)));
       },
     );
   }
 
   Future<void> _deleteAccount() async {
-    final currentState = state.data ?? const ProfileUIModel();
-    emit(BaseState.all(state: StateType.loading, data: currentState, exception: null));
+    emit(state.copyWith(deleteAccountState: const BaseState.loading()));
     final result = await _deleteAccountUseCase();
     result.when(
       success: (_) {
-        emit(BaseState.success(currentState.copyWith(isAccountDeleted: true)));
+        emit(state.copyWith(deleteAccountState: const BaseState.success(null)));
       },
       error: (exception) {
-        emit(BaseState.all(state: StateType.error, data: currentState, exception: exception));
+        emit(state.copyWith(deleteAccountState: BaseState.error(exception)));
       },
     );
   }

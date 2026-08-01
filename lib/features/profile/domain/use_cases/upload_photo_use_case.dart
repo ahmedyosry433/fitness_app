@@ -4,7 +4,7 @@ import 'package:fitness/features/profile/domain/entities/user_entity.dart';
 import 'package:fitness/features/profile/domain/repositories/profile_repository.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
+@injectable
 class UploadPhotoUseCase {
   final ProfileRepository _repository;
 
