@@ -140,12 +140,12 @@
         "gender_female": "أنثى"
     },
     "home": {
-        "hi_name": "Hi {} ,",
-        "lets_start_your_day": "Let's Start Your Day",
-        "explore": "Explore",
-        "smart_coach": "Smart coach",
-        "workout": "Workout",
-        "profile": "Profile"
+        "hi_name": "أهلاً {} ،",
+        "lets_start_your_day": "دعنا نبدأ يومك",
+        "explore": "استكشف",
+        "smart_coach": "المدرب الذكي",
+        "workout": "تمرين",
+        "profile": "حسابي"
     },
     "exercise": {
         "chest_exercise": "تمرين الصدر",
@@ -163,14 +163,5 @@
         "skeleton_desc": "نص وصف الهيكل يكتب هنا...",
         "lorem_ipsum": "هذا النص هو مثال لنص يمكن أن يستبدل\nفي نفس المساحة، لقد تم توليد هذا النص",
         "invalid_video_url": "رابط الفيديو غير صالح"
-    },
-    "details": {
-        "no_meal_found": "No meal found",
-        "no_meal_details_found": "No meal details found",
-        "ingredients": "Ingredients",
-        "energy": "Energy",
-        "protein": "Protein",
-        "carbs": "Carbs",
-        "fat": "Fat"
     }
 }

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:fitness/config/api/app_endpoints.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
@@ -14,8 +16,7 @@ abstract class CoreInjectableModule {
   @preResolve
   Future<SharedPreferences> prefs() => SharedPreferences.getInstance();
 
-  static AndroidOptions _getAndroidOptions() =>
-      const AndroidOptions();
+  static AndroidOptions _getAndroidOptions() => const AndroidOptions();
   @lazySingleton
   FlutterSecureStorage secureStorage() =>
       FlutterSecureStorage(aOptions: _getAndroidOptions());
@@ -50,4 +51,10 @@ abstract class CoreInjectableModule {
 
   @lazySingleton
   InternetConnection internetConnection() => InternetConnection();
+
+  @lazySingleton
+  FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+
+  @lazySingleton
+  FirebaseFirestore get firestore => FirebaseFirestore.instance;
 }
