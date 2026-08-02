@@ -45,6 +45,9 @@ app.*.map.json
 /android/app/release
 android/build/
 ios/build/
+*.apk
+*.aab
+
 
 # Generated code files
 *.g.dart

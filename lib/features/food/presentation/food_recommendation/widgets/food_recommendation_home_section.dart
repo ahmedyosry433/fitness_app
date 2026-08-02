@@ -49,9 +49,9 @@ class FoodRecommendationHomeSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Recommendation For You',
-              style: TextStyle(
+            Text(
+              LocaleKeys.exercise_recommendation_to_day.tr(),
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
