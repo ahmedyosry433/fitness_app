@@ -86,59 +86,64 @@ class _AiAgentPageState extends State<AiAgentPage> {
                 const AiAgentBackground(),
                 SafeArea(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (context.canPop()) context.pop();
-                              },
-                              child: SvgPicture.asset(
-                                AppIcons.iconsBackOrange,
-                                width: 32,
-                                height: 32,
-                              ),
-                            ),
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  LocaleKeys.ai_agent_hi_user.tr(
-                                    args: [displayName],
-                                  ),
-                                  style: 16.medium.copyWith(
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                                Text(
-                                  LocaleKeys.ai_agent_i_am_your_smart_coach
-                                      .tr(),
-                                  style: 18.bold.copyWith(
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            GestureDetector(
-                              onTap: _toggleDrawer,
-                              child: SvgPicture.asset(
-                                AppIcons.iconsMenuOrange,
-                                width: 28,
-                                height: 28,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 20,
+                      //     vertical: 12,
+                      //   ),
+                      //   // child: Row(
+                      //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   //   children: [
+                      //   //     GestureDetector(
+                      //   //       onTap: () {
+                      //   //         if (context.canPop()) context.pop();
+                      //   //       },
+                      //   //       child: SvgPicture.asset(
+                      //   //         AppIcons.iconsBackOrange,
+                      //   //         width: 32,
+                      //   //         height: 32,
+                      //   //       ),
+                      //   //     ),
+                      //   //     Column(
+                      //   //       mainAxisSize: MainAxisSize.min,
+                      //   //       children: [
+                      //   //         Text(
+                      //   //           LocaleKeys.ai_agent_hi_user.tr(
+                      //   //             args: [displayName],
+                      //   //           ),
+                      //   //           style: 16.medium.copyWith(
+                      //   //             color: AppColors.white,
+                      //   //           ),
+                      //   //         ),
+                      //   //         Text(
+                      //   //           LocaleKeys.ai_agent_i_am_your_smart_coach
+                      //   //               .tr(),
+                      //   //           style: 18.bold.copyWith(
+                      //   //             color: AppColors.white,
+                      //   //           ),
+                      //   //         ),
+                      //   //       ],
+                      //   //     ),
+                      //   //     GestureDetector(
+                      //   //       onTap: _toggleDrawer,
+                      //   //       child: SvgPicture.asset(
+                      //   //         AppIcons.iconsMenuOrange,
+                      //   //         width: 28,
+                      //   //         height: 28,
+                      //   //       ),
+                      //   //     ),
+                      //   //   ],
+                      //   // ),
+                      // ),
+                      const SizedBox(height: 20),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
                           child: Center(
                             child: Image.asset(
                               AppImages.robotSkipping,
