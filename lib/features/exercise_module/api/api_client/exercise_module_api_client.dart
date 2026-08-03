@@ -2,9 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:fitness/config/api/app_endpoints.dart';
 import 'package:fitness/features/exercise_module/data/models/difficulty_level_response_model.dart';
 import 'package:fitness/features/exercise_module/data/models/exercise_response_model.dart';
-import 'package:fitness/features/exercise_module/data/models/muscle_group_details_response_model.dart';
-import 'package:fitness/features/exercise_module/data/models/muscles_response_model.dart';
-import 'package:fitness/features/exercise_module/data/models/random_muscles_response_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -23,18 +20,5 @@ abstract class ExerciseModuleApiClient {
   );
 
   @GET(AppEndPoints.difficultyLevels)
-  Future<DifficultyLevelResponseModel> getDifficultyLevels(
-    @Query(AppEndPoints.primeMoverMuscleIdParam) String primeMoverMuscleId,
-  );
-
-  @GET(AppEndPoints.muscles)
-  Future<MusclesResponseModel> getMuscleGroups();
-
-  @GET(AppEndPoints.musclesRandom)
-  Future<RandomMusclesResponseModel> getRandomMuscles();
-
-  @GET(AppEndPoints.musclesGroupById)
-  Future<MuscleGroupDetailsResponseModel> getMusclesByGroupId(
-    @Path('id') String muscleGroupId,
-  );
+  Future<DifficultyLevelResponseModel> getDifficultyLevels(@Query(AppEndPoints.primeMoverMuscleIdParam) String primeMoverMuscleId);
 }

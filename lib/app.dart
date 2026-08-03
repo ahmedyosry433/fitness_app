@@ -14,8 +14,7 @@ class FitnessApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isIOS = !kIsWeb && Platform.isIOS;
-    return isIOS
+    return Platform.isIOS
         ? CupertinoTheme(
             data: CupertinoThemeData(
               primaryColor: AppColors.primaryLight,

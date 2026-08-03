@@ -162,20 +162,6 @@
         "skeleton_title": "عنوان الهيكل",
         "skeleton_desc": "نص وصف الهيكل يكتب هنا...",
         "lorem_ipsum": "هذا النص هو مثال لنص يمكن أن يستبدل\nفي نفس المساحة، لقد تم توليد هذا النص",
-        "invalid_video_url": "رابط الفيديو غير صالح",
-        "recommendation_to_day": "Recommendation to day",
-        "upcoming_workouts": "Upcoming Workouts",
-        "see_all": "See All",
-        "jogging": "Jogging",
-        "push_up": "Push-up",
-        "squat": "Squat",
-        "full_body": "Full Body",
-        "chest": "Chest",
-        "arm": "Arm",
-        "shoulder": "Shoulder",
-        "back": "Back",
-        "legs": "Legs",
-        "stomach": "Stomach",
-        "arms": "Arms"
+        "invalid_video_url": "رابط الفيديو غير صالح"
     }
 }

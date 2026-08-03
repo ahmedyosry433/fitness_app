@@ -15,6 +15,7 @@ abstract class BaseCubit<State, UiEvent> extends Cubit<State> {
 
   /// Alias for eventStream used in navigation contexts.
   Stream<UiEvent> get navigationStream => _eventController.stream;
+
   void emitEvent(UiEvent event) {
     if (_eventController.isClosed) return;
     _eventController.add(event);
