@@ -1,3 +1,4 @@
+import 'package:fitness/features/auth/data/models/complete_register_params.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 
 class AuthSocialResult {
@@ -11,15 +12,15 @@ class AuthSocialResult {
     this.photoUrl = '',
   });
 
-  Map<String, dynamic> get completeRegisterArgs {
+  CompleteRegisterParams get completeRegisterArgs {
     final nameParts = user.name.trim().split(RegExp(r'\s+'));
-    return {
-      'uid': user.id,
-      'firstName': nameParts.isNotEmpty ? nameParts.first : user.name,
-      'lastName': nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
-      'email': user.email,
-      'photoUrl': photoUrl,
-      'isSocial': true,
-    };
+    return CompleteRegisterParams(
+      uid: user.id,
+      firstName: nameParts.isNotEmpty ? nameParts.first : user.name,
+      lastName: nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '',
+      email: user.email,
+      photoUrl: photoUrl,
+      isSocial: true,
+    );
   }
 }

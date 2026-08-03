@@ -19,44 +19,56 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSourceContract {
 
   @override
   Future<Result<void>> saveUser(AuthUserEntity user) async {
-    await _prefs.setString(Apikeys.userId, user.id);
-    await _secureStorage.write(key: Apikeys.accessToken, value: user.token);
-    await _prefs.setString(
-      _userKey,
-      jsonEncode({
-        'id': user.id,
-        'name': user.name,
-        'email': user.email,
-        'phone': user.phone,
-      }),
-    );
-    return const Success();
+    try {
+      await _prefs.setString(Apikeys.userId, user.id);
+      await _secureStorage.write(key: Apikeys.accessToken, value: user.token);
+      await _prefs.setString(
+        _userKey,
+        jsonEncode({
+          'id': user.id,
+          'name': user.name,
+          'email': user.email,
+          'phone': user.phone,
+        }),
+      );
+      return const Success();
+    } catch (e) {
+      return Error(exception: e is Exception ? e : Exception(e.toString()));
+    }
   }
 
   @override
   Future<Result<AuthUserEntity?>> getCachedUser() async {
-    final raw = _prefs.getString(_userKey);
-    if (raw == null) return const Success(data: null);
+    try {
+      final raw = _prefs.getString(_userKey);
+      if (raw == null) return const Success(data: null);
 
-    final map = jsonDecode(raw) as Map<String, dynamic>;
-    final token = await _secureStorage.read(key: Apikeys.accessToken);
+      final map = jsonDecode(raw) as Map<String, dynamic>;
+      final token = await _secureStorage.read(key: Apikeys.accessToken);
 
-    return Success(
-      data: AuthUserEntity(
-        id: map['id'] as String? ?? '',
-        name: map['name'] as String? ?? '',
-        email: map['email'] as String? ?? '',
-        phone: map['phone'] as String? ?? '',
-        token: token ?? '',
-      ),
-    );
+      return Success(
+        data: AuthUserEntity(
+          id: map['id'] as String? ?? '',
+          name: map['name'] as String? ?? '',
+          email: map['email'] as String? ?? '',
+          phone: map['phone'] as String? ?? '',
+          token: token ?? '',
+        ),
+      );
+    } catch (e) {
+      return Error(exception: e is Exception ? e : Exception(e.toString()));
+    }
   }
 
   @override
   Future<Result<void>> clearUser() async {
-    await _prefs.remove(_userKey);
-    await _prefs.remove(Apikeys.userId);
-    await _secureStorage.delete(key: Apikeys.accessToken);
-    return const Success();
+    try {
+      await _prefs.remove(_userKey);
+      await _prefs.remove(Apikeys.userId);
+      await _secureStorage.delete(key: Apikeys.accessToken);
+      return const Success();
+    } catch (e) {
+      return Error(exception: e is Exception ? e : Exception(e.toString()));
+    }
   }
 }
