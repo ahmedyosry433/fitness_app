@@ -9,9 +9,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/enums/gender.dart';
 import 'package:fitness/core/values/app_images.dart';
+import 'package:fitness/features/auth/data/models/complete_register_params.dart';
 
 class CompleteRegisterPage extends StatefulWidget {
-  const CompleteRegisterPage({super.key});
+  final CompleteRegisterParams? params;
+  const CompleteRegisterPage({super.key, this.params});
 
   @override
   State<CompleteRegisterPage> createState() => _CompleteRegisterPageState();

@@ -1,5 +1,4 @@
 import 'package:fitness/core/routes/routes.dart';
-import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
@@ -12,7 +11,11 @@ import 'package:fitness/features/workout/presentation/view/pages/workout_page.da
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/features/auth/data/models/complete_register_params.dart';
+import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
+import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -30,12 +33,10 @@ final GoRouter router = GoRouter(
       page: (state, context) => const LoginPage(),
     ),
     _customAnimatedGoRoute(
-      route: Routes.register,
-      page: (state, context) => const RegisterPage(),
-    ),
-    _customAnimatedGoRoute(
       route: Routes.completeRegister,
-      page: (state, context) => const CompleteRegisterPage(),
+      page: (state, context) => CompleteRegisterPage(
+        params: state.extra as CompleteRegisterParams?,
+      ),
     ),
 
     _customAnimatedGoRoute(
@@ -48,7 +49,10 @@ final GoRouter router = GoRouter(
     ),
     _customAnimatedGoRoute(
       route: Routes.register,
-      page: (state, context) => const CompleteRegisterPage(),
+      page: (state, context) => BlocProvider(
+        create: (_) => getIt<RegisterCubit>(),
+        child: const RegisterPage(),
+      ),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
