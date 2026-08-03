@@ -13,7 +13,7 @@ class RegisterSocialSignedInNavigation extends RegisterNavigation {
 }
 
 class RegisterSocialProfileRequiredNavigation extends RegisterNavigation {
-  final Map<String, dynamic> socialData;
+  final CompleteRegisterParams socialData;
 
   const RegisterSocialProfileRequiredNavigation(this.socialData);
 }

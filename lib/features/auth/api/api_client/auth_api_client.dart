@@ -4,12 +4,15 @@ import 'package:fitness/features/auth/data/models/auth_user_model.dart';
 import 'package:fitness/features/auth/data/models/forgot_password_params.dart';
 import 'package:fitness/features/auth/data/models/login_params.dart';
 import 'package:fitness/features/auth/data/models/register_params.dart';
+import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'auth_api_client.g.dart';
 
+@injectable
 @RestApi()
 abstract class AuthApiClient {
+  @factoryMethod
   factory AuthApiClient(Dio dio, {String? baseUrl}) = _AuthApiClient;
 
   @POST(AppEndPoints.signIn)

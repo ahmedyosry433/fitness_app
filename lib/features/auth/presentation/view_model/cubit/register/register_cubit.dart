@@ -3,9 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:fitness/config/base_state/base_cubit.dart';
 import 'package:fitness/config/base_state/base_state.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
+import 'package:fitness/features/auth/data/models/complete_register_params.dart';
 import 'package:fitness/features/auth/data/models/register_params.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
-import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
+import 'package:fitness/features/auth/domain/use_cases/register_use_case.dart';
+import 'package:fitness/features/auth/domain/use_cases/social_login_use_case.dart';
 import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 import 'package:injectable/injectable.dart';
 
@@ -15,9 +17,11 @@ part 'register_states.dart';
 
 @injectable
 class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
-  RegisterCubit(this._authRepository) : super(const RegisterState());
+  RegisterCubit(this._registerUseCase, this._socialLoginUseCase)
+      : super(const RegisterState());
 
-  final AuthRepository _authRepository;
+  final RegisterUseCase _registerUseCase;
+  final SocialLoginUseCase _socialLoginUseCase;
 
   @override
   Future<void> doAction(RegisterEvent event) async => switch (event) {
@@ -38,7 +42,7 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
         ? nameParts.sublist(1).join(' ')
         : 'Tech';
 
-    final result = await _authRepository.register(
+    final result = await _registerUseCase(
       params: RegisterParams(
         firstName: firstName,
         lastName: lastName,
@@ -68,7 +72,7 @@ class RegisterCubit extends BaseCubit<RegisterState, RegisterNavigation> {
 
     emit(state.copyWith(registerState: const BaseState.loading()));
 
-    final result = await _authRepository.socialLogin(provider: provider);
+    final result = await _socialLoginUseCase(provider: provider);
 
     result.when(
       success: (socialResult) {

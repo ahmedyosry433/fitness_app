@@ -3,6 +3,8 @@ import 'package:fitness/config/base_state/base_state.dart';
 import 'package:fitness/features/auth/domain/entities/auth_social_result.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:fitness/features/auth/domain/repositories/auth_repository.dart';
+import 'package:fitness/features/auth/domain/use_cases/register_use_case.dart';
+import 'package:fitness/features/auth/domain/use_cases/social_login_use_case.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
 import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,11 +53,15 @@ class MockAuthRepository implements AuthRepository {
 
 void main() {
   late MockAuthRepository mockRepository;
+  late RegisterUseCase registerUseCase;
+  late SocialLoginUseCase socialLoginUseCase;
   late RegisterCubit cubit;
 
   setUp(() {
     mockRepository = MockAuthRepository();
-    cubit = RegisterCubit(mockRepository);
+    registerUseCase = RegisterUseCase(mockRepository);
+    socialLoginUseCase = SocialLoginUseCase(mockRepository);
+    cubit = RegisterCubit(registerUseCase, socialLoginUseCase);
   });
 
   tearDown(() {
@@ -113,9 +119,9 @@ void main() {
           predicate<RegisterNavigation>(
             (event) =>
                 event is RegisterSocialProfileRequiredNavigation &&
-                event.socialData['firstName'] == 'New' &&
-                event.socialData['lastName'] == 'Google User' &&
-                event.socialData['isSocial'] == true,
+                event.socialData.firstName == 'New' &&
+                event.socialData.lastName == 'Google User' &&
+                event.socialData.isSocial == true,
           ),
         ),
       );

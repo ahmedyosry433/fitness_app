@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/core/shared/widgets/custom_toast.dart';
+import 'package:fitness/features/auth/data/models/complete_register_params.dart';
 import 'package:fitness/features/auth/presentation/view/widgets/register_body_widget.dart';
 import 'package:fitness/features/auth/presentation/view_model/cubit/register/register_cubit.dart';
 import 'package:flutter/material.dart';
@@ -12,26 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<RegisterCubit>(),
-      child: const _RegisterView(),
-    );
-  }
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterView extends StatefulWidget {
-  const _RegisterView();
-
-  @override
-  State<_RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<_RegisterView> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -80,13 +68,13 @@ class _RegisterViewState extends State<_RegisterView> {
 
     context.push(
       Routes.completeRegister,
-      extra: {
-        'firstName': firstName,
-        'lastName': lastName.isEmpty ? 'Tech' : lastName,
-        'email': _emailController.text.trim(),
-        'password': _passwordController.text,
-        'rePassword': _passwordController.text,
-      },
+      extra: CompleteRegisterParams(
+        firstName: firstName,
+        lastName: lastName.isEmpty ? 'Tech' : lastName,
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        rePassword: _passwordController.text,
+      ),
     );
   }
 
