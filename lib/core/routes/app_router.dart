@@ -11,8 +11,7 @@ import 'package:fitness/features/exercise_module/presentation/view/pages/workout
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fitness/config/di/injectable_config.dart';
+
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
