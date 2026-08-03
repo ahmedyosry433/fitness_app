@@ -1,3 +1,4 @@
+import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
@@ -10,9 +11,11 @@ import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart
 import 'package:fitness/features/exercise_module/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
+import 'package:fitness/features/exercise_module/presentation/view_model/cubit/workout_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -78,7 +81,13 @@ final GoRouter router = GoRouter(
                 final queryId = state.uri.queryParameters['categoryId'];
                 final initialCategoryId = categoryId ?? queryId;
 
-                return WorkoutPage(initialCategoryId: initialCategoryId);
+                return BlocProvider<WorkoutCubit>(
+                  create: (context) => getIt<WorkoutCubit>()
+                    ..doIntent(
+                      InitWorkoutEvent(initialCategoryId: initialCategoryId),
+                    ),
+                  child: WorkoutPage(initialCategoryId: initialCategoryId),
+                );
               },
             ),
           ],
@@ -102,7 +111,7 @@ final GoRouter router = GoRouter(
         final pageDescription = extra?['pageDescription'] ?? '';
         final backgroundImage = extra?['backgroundImage'] ?? '';
 
-        return BlocProvider(
+        return BlocProvider<ExerciseModuleCubit>(
           create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
             InitExerciseModuleIntent(
               primeMoverMuscleId: primeMoverMuscleId,

@@ -308,5 +308,14 @@
         "legs": "أرجل",
         "stomach": "بطن",
         "arms": "أذرع"
+    },
+    "details": {
+        "no_meal_found": "لم يتم العثور على وجبة",
+        "no_meal_details_found": "لم يتم العثور على تفاصيل الوجبة",
+        "ingredients": "المكونات",
+        "energy": "الطاقة",
+        "protein": "بروتين",
+        "carbs": "كارب",
+        "fat": "دهون"
     }
 }
