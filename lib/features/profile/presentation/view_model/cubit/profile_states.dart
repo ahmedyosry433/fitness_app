@@ -16,7 +16,7 @@ class ProfileState extends Equatable {
     this.uploadPhotoState = const BaseState.initial(),
     this.changePasswordState = const BaseState.initial(),
     this.logoutState = const BaseState.initial(),
-    this.deleteAccountState = const BaseState.initial(), 
+    this.deleteAccountState = const BaseState.initial(),
   });
 
   ProfileState copyWith({
@@ -39,11 +39,11 @@ class ProfileState extends Equatable {
 
   @override
   List<Object?> get props => [
-        getProfileState,
-        updateProfileState,
-        uploadPhotoState,
-        changePasswordState,
-        logoutState,
-        deleteAccountState,
-      ];
+    getProfileState,
+    updateProfileState,
+    uploadPhotoState,
+    changePasswordState,
+    logoutState,
+    deleteAccountState,
+  ];
 }

@@ -12,10 +12,12 @@ class DifficultyLevelDataDto {
 
   DifficultyLevelDataDto({this.id, this.level});
 
-  factory DifficultyLevelDataDto.fromJson(Map<String, dynamic> json) => _$DifficultyLevelDataDtoFromJson(json);
+  factory DifficultyLevelDataDto.fromJson(Map<String, dynamic> json) =>
+      _$DifficultyLevelDataDtoFromJson(json);
   Map<String, dynamic> toJson() => _$DifficultyLevelDataDtoToJson(this);
 
-  DifficultyLevelEntity toEntity() => DifficultyLevelEntity(id: id ?? '', name: level ?? 'Unknown');
+  DifficultyLevelEntity toEntity() =>
+      DifficultyLevelEntity(id: id ?? '', name: level ?? 'Unknown');
 }
 
 @JsonSerializable()
@@ -27,10 +29,12 @@ class DifficultyLevelNameDto {
 
   DifficultyLevelNameDto({this.id, this.name});
 
-  factory DifficultyLevelNameDto.fromJson(Map<String, dynamic> json) => _$DifficultyLevelNameDtoFromJson(json);
+  factory DifficultyLevelNameDto.fromJson(Map<String, dynamic> json) =>
+      _$DifficultyLevelNameDtoFromJson(json);
   Map<String, dynamic> toJson() => _$DifficultyLevelNameDtoToJson(this);
 
-  DifficultyLevelEntity toEntity() => DifficultyLevelEntity(id: id ?? '', name: name ?? 'Unknown');
+  DifficultyLevelEntity toEntity() =>
+      DifficultyLevelEntity(id: id ?? '', name: name ?? 'Unknown');
 }
 
 @JsonSerializable()
@@ -42,8 +46,10 @@ class DifficultyLevelTitleDto {
 
   DifficultyLevelTitleDto({this.id, this.title});
 
-  factory DifficultyLevelTitleDto.fromJson(Map<String, dynamic> json) => _$DifficultyLevelTitleDtoFromJson(json);
+  factory DifficultyLevelTitleDto.fromJson(Map<String, dynamic> json) =>
+      _$DifficultyLevelTitleDtoFromJson(json);
   Map<String, dynamic> toJson() => _$DifficultyLevelTitleDtoToJson(this);
 
-  DifficultyLevelEntity toEntity() => DifficultyLevelEntity(id: id ?? '', name: title ?? 'Unknown');
+  DifficultyLevelEntity toEntity() =>
+      DifficultyLevelEntity(id: id ?? '', name: title ?? 'Unknown');
 }

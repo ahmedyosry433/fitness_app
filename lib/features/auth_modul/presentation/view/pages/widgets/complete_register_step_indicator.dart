@@ -23,12 +23,18 @@ class CompleteRegisterStepIndicator extends StatelessWidget {
             value: (currentStep + 1) / totalSteps,
             strokeWidth: 3,
             backgroundColor: Colors.white24,
-            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryOrange),
+            valueColor: const AlwaysStoppedAnimation<Color>(
+              AppColors.primaryOrange,
+            ),
           ),
         ),
         Text(
           '${currentStep + 1}/$totalSteps',
-          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

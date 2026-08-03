@@ -19,26 +19,24 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              AppImages.homeBack,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(AppImages.homeBack, fit: BoxFit.cover),
           ),
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.5),
-              ),
+              child: Container(color: Colors.black.withValues(alpha: 0.5)),
             ),
           ),
-          
+
           SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 20.0,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -71,12 +69,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                
-                const Expanded(
-                  child: SizedBox(
-                    width: double.infinity,
-                  ),
-                ),
+
+                const Expanded(child: SizedBox(width: double.infinity)),
               ],
             ),
           ),

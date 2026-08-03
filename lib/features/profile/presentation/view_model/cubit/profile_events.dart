@@ -6,7 +6,18 @@ class LoadProfileEvent extends ProfileEvent {}
 
 class UpdateProfileEvent extends ProfileEvent {
   final String name;
-  UpdateProfileEvent({required this.name});
+  final String? email;
+  final int? weight;
+  final String? goal;
+  final String? activityLevel;
+
+  UpdateProfileEvent({
+    required this.name,
+    this.email,
+    this.weight,
+    this.goal,
+    this.activityLevel,
+  });
 }
 
 class UploadPhotoEvent extends ProfileEvent {}

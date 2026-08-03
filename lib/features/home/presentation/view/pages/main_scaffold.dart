@@ -60,7 +60,7 @@ class MainScaffold extends StatelessWidget {
                       ),
                       label: LocaleKeys.home_workout.tr(),
                       index: 2,
-                      isSlanted: true, 
+                      isSlanted: true,
                     ),
                     _buildNavItem(
                       customIcon: (color) => CustomPaint(

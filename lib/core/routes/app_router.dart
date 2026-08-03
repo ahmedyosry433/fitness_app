@@ -11,6 +11,7 @@ import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
 import 'package:fitness/features/workout/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
+import 'package:fitness/features/profile/presentation/view_model/cubit/profile_cubit.dart';
 import 'package:fitness/core/widgets/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,9 +27,7 @@ final GoRouter router = GoRouter(
   navigatorKey: navigatorKey,
   errorBuilder: (context, state) => Scaffold(
     appBar: AppBar(title: const Text('Error')),
-    body: Center(
-      child: Text('Page not found: ${state.uri.toString()}'),
-    ),
+    body: Center(child: Text('Page not found: ${state.uri.toString()}')),
   ),
   routes: [
     _customAnimatedGoRoute(
@@ -117,11 +116,23 @@ final GoRouter router = GoRouter(
     ),
     _customAnimatedGoRoute(
       route: Routes.editProfile,
-      page: (state, context) => const EditProfilePage(),
+      page: (state, context) {
+        final profileCubit = state.extra as ProfileCubit;
+        return BlocProvider.value(
+          value: profileCubit,
+          child: const EditProfilePage(),
+        );
+      },
     ),
     _customAnimatedGoRoute(
       route: Routes.changePassword,
-      page: (state, context) => const ChangePasswordPage(),
+      page: (state, context) {
+        final profileCubit = state.extra as ProfileCubit;
+        return BlocProvider.value(
+          value: profileCubit,
+          child: const ChangePasswordPage(),
+        );
+      },
     ),
 
     _customAnimatedGoRoute(
@@ -183,8 +194,5 @@ class WebViewPageArguments {
   final String title;
   final String url;
 
-  WebViewPageArguments({
-    required this.title,
-    required this.url,
-  });
+  WebViewPageArguments({required this.title, required this.url});
 }

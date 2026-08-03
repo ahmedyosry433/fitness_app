@@ -36,16 +36,19 @@ class ProfileMenuItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             children: [
-              leadingIcon ?? Icon(
-                icon,
-                color: iconColor ?? AppColors.primaryOrange,
-                size: 24,
-              ),
+              leadingIcon ??
+                  Icon(
+                    icon,
+                    color: iconColor ?? AppColors.primaryOrange,
+                    size: 24,
+                  ),
               const SizedBox(width: 16),
               Expanded(
                 child: Text(
                   title,
-                  style: 16.regular.copyWith(color: titleColor ?? AppColors.whiteFF),
+                  style: 16.regular.copyWith(
+                    color: titleColor ?? AppColors.whiteFF,
+                  ),
                 ),
               ),
               if (trailingText != null) ...[

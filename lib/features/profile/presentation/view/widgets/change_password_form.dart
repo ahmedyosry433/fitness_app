@@ -52,146 +52,153 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      buildWhen: (previous, current) => previous.changePasswordState != current.changePasswordState,
-      builder: (context, state) {
-        return Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              ValueListenableBuilder<bool>(
-                valueListenable: _obscureOld,
-                builder: (context, isObscure, child) {
-                  return CustomTextFormField(
-                    controller: _oldPasswordController,
-                    hintText: LocaleKeys.profile_old_password.tr(),
-                    isObscureText: isObscure,
-                    validator: AppValidators.validateRequired,
-                    isDense: true,
-                    textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
-                    hintStyle: 14.regular.copyWith(
-                        color: AppColors.whiteFF.withValues(alpha: 0.8)),
-                    prefixWidget: const Icon(
-                      Icons.lock_outline,
-                      color: AppColors.whiteFF,
-                      size: 20,
-                    ),
-                    suffixWidget: IconButton(
-                      icon: Icon(
-                        isObscure
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.whiteFF,
-                        size: 20,
-                      ),
-                      onPressed: () => _obscureOld.value = !isObscure,
-                    ),
-                    enableFill: true,
-                    fillColor: Colors.transparent,
-                    borderColor: AppColors.whiteFF,
-                    focusBorderColor: AppColors.whiteFF,
-                    borderRadius: 50,
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              ValueListenableBuilder<bool>(
-                valueListenable: _obscureNew,
-                builder: (context, isObscure, child) {
-                  return CustomTextFormField(
-                    controller: _newPasswordController,
-                    hintText: LocaleKeys.forget_password_new_password.tr(),
-                    isObscureText: isObscure,
-                    validator: AppValidators.validatePassword,
-                    isDense: true,
-                    textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
-                    hintStyle: 14.regular.copyWith(
-                        color: AppColors.whiteFF.withValues(alpha: 0.8)),
-                    prefixWidget: const Icon(
-                      Icons.lock_outline,
-                      color: AppColors.whiteFF,
-                      size: 20,
-                    ),
-                    suffixWidget: IconButton(
-                      icon: Icon(
-                        isObscure
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.whiteFF,
-                        size: 20,
-                      ),
-                      onPressed: () => _obscureNew.value = !isObscure,
-                    ),
-                    enableFill: true,
-                    fillColor: Colors.transparent,
-                    borderColor: AppColors.whiteFF,
-                    focusBorderColor: AppColors.whiteFF,
-                    borderRadius: 50,
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              ValueListenableBuilder<bool>(
-                valueListenable: _obscureConfirm,
-                builder: (context, isObscure, child) {
-                  return CustomTextFormField(
-                    controller: _confirmPasswordController,
-                    hintText: LocaleKeys.forget_password_confirm_password.tr(),
-                    isObscureText: isObscure,
-                    validator: (val) => AppValidators.validateConfirmPassword(
-                        val, _newPasswordController.text),
-                    isDense: true,
-                    textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
-                    hintStyle: 14.regular.copyWith(
-                        color: AppColors.whiteFF.withValues(alpha: 0.8)),
-                    prefixWidget: const Icon(
-                      Icons.lock_outline,
-                      color: AppColors.whiteFF,
-                      size: 20,
-                    ),
-                    suffixWidget: IconButton(
-                      icon: Icon(
-                        isObscure
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: AppColors.whiteFF,
-                        size: 20,
-                      ),
-                      onPressed: () => _obscureConfirm.value = !isObscure,
-                    ),
-                    enableFill: true,
-                    fillColor: Colors.transparent,
-                    borderColor: AppColors.whiteFF,
-                    focusBorderColor: AppColors.whiteFF,
-                    borderRadius: 50,
-                  );
-                },
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton(
-                onPressed: state.changePasswordState.state == StateType.loading
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: _obscureOld,
+            builder: (context, isObscure, child) {
+              return CustomTextFormField(
+                controller: _oldPasswordController,
+                hintText: LocaleKeys.profile_old_password.tr(),
+                isObscureText: isObscure,
+                validator: AppValidators.validateRequired,
+                isDense: true,
+                textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
+                hintStyle: 14.regular.copyWith(
+                  color: AppColors.whiteFF.withValues(alpha: 0.8),
+                ),
+                prefixWidget: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.whiteFF,
+                  size: 20,
+                ),
+                suffixWidget: IconButton(
+                  icon: Icon(
+                    isObscure
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: AppColors.whiteFF,
+                    size: 20,
+                  ),
+                  onPressed: () => _obscureOld.value = !isObscure,
+                ),
+                enableFill: true,
+                fillColor: Colors.transparent,
+                borderColor: AppColors.whiteFF,
+                focusBorderColor: AppColors.whiteFF,
+                borderRadius: 50,
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          ValueListenableBuilder<bool>(
+            valueListenable: _obscureNew,
+            builder: (context, isObscure, child) {
+              return CustomTextFormField(
+                controller: _newPasswordController,
+                hintText: LocaleKeys.forget_password_new_password.tr(),
+                isObscureText: isObscure,
+                validator: AppValidators.validatePassword,
+                isDense: true,
+                textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
+                hintStyle: 14.regular.copyWith(
+                  color: AppColors.whiteFF.withValues(alpha: 0.8),
+                ),
+                prefixWidget: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.whiteFF,
+                  size: 20,
+                ),
+                suffixWidget: IconButton(
+                  icon: Icon(
+                    isObscure
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: AppColors.whiteFF,
+                    size: 20,
+                  ),
+                  onPressed: () => _obscureNew.value = !isObscure,
+                ),
+                enableFill: true,
+                fillColor: Colors.transparent,
+                borderColor: AppColors.whiteFF,
+                focusBorderColor: AppColors.whiteFF,
+                borderRadius: 50,
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          ValueListenableBuilder<bool>(
+            valueListenable: _obscureConfirm,
+            builder: (context, isObscure, child) {
+              return CustomTextFormField(
+                controller: _confirmPasswordController,
+                hintText: LocaleKeys.forget_password_confirm_password.tr(),
+                isObscureText: isObscure,
+                validator: (val) => AppValidators.validateConfirmPassword(
+                  val,
+                  _newPasswordController.text,
+                ),
+                isDense: true,
+                textStyle: 14.regular.copyWith(color: AppColors.whiteFF),
+                hintStyle: 14.regular.copyWith(
+                  color: AppColors.whiteFF.withValues(alpha: 0.8),
+                ),
+                prefixWidget: const Icon(
+                  Icons.lock_outline,
+                  color: AppColors.whiteFF,
+                  size: 20,
+                ),
+                suffixWidget: IconButton(
+                  icon: Icon(
+                    isObscure
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    color: AppColors.whiteFF,
+                    size: 20,
+                  ),
+                  onPressed: () => _obscureConfirm.value = !isObscure,
+                ),
+                enableFill: true,
+                fillColor: Colors.transparent,
+                borderColor: AppColors.whiteFF,
+                focusBorderColor: AppColors.whiteFF,
+                borderRadius: 50,
+              );
+            },
+          ),
+          const SizedBox(height: 32),
+          BlocSelector<ProfileCubit, ProfileState, bool>(
+            selector: (state) =>
+                state.changePasswordState.state == StateType.loading,
+            builder: (context, isLoading) {
+              return ElevatedButton(
+                onPressed: isLoading
                     ? null
                     : () {
                         if (_formKey.currentState?.validate() ?? false) {
                           context.read<ProfileCubit>().doAction(
-                                ChangePasswordEvent(
-                                  oldPassword: _oldPasswordController.text,
-                                  newPassword: _newPasswordController.text,
-                                ),
-                              );
+                            ChangePasswordEvent(
+                              oldPassword: _oldPasswordController.text,
+                              newPassword: _newPasswordController.text,
+                            ),
+                          );
                         }
                       },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryOrange,
-                  disabledBackgroundColor:
-                      AppColors.primaryOrange.withValues(alpha: 0.5),
+                  disabledBackgroundColor: AppColors.primaryOrange.withValues(
+                    alpha: 0.5,
+                  ),
                   minimumSize: const Size(double.infinity, 48),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
                   elevation: 0,
                 ),
-                child: state.changePasswordState.state == StateType.loading
+                child: isLoading
                     ? const SizedBox(
                         height: 24,
                         width: 24,
@@ -204,11 +211,11 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
                         LocaleKeys.custom_widget_done.tr(),
                         style: 16.bold.copyWith(color: AppColors.whiteFF),
                       ),
-              ),
-            ],
+              );
+            },
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

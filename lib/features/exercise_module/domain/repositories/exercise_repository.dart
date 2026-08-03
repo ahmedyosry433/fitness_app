@@ -3,7 +3,11 @@ import 'package:fitness/features/exercise_module/domain/entities/difficulty_leve
 import 'package:fitness/features/exercise_module/domain/entities/exercise_entity.dart';
 
 abstract interface class ExerciseRepository {
-  Future<Result<List<ExerciseEntity>>> getAllExercises(
-      {required String primeMoverMuscleId, required String difficultyLevelId});
-  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({required String primeMoverMuscleId});
+  Future<Result<List<ExerciseEntity>>> getAllExercises({
+    required String primeMoverMuscleId,
+    required String difficultyLevelId,
+  });
+  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({
+    required String primeMoverMuscleId,
+  });
 }

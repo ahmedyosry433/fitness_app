@@ -16,10 +16,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   ProfileRepositoryImpl(this._remoteDataSource, this._userHelper);
 
-  UserEntity _mapToEntity(ProfileResponseDto response, {String? defaultName}) {
+  UserEntity _mapToEntity(ProfileResponseDto response) {
     return UserEntity(
       id: response.data?.id ?? '',
-      name: response.data?.name ?? defaultName ?? '',
+      name: response.data?.name ?? '',
       email: response.data?.email ?? '',
       photo: response.data?.photo,
     );
@@ -36,19 +36,25 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Result<UserEntity>> updateProfile({
     required String name,
+    String? email,
+    int? weight,
+    String? goal,
+    String? activityLevel,
   }) async {
     return executeApi(() async {
       final response = await _remoteDataSource.updateProfile(
         name: name,
+        email: email,
+        weight: weight,
+        goal: goal,
+        activityLevel: activityLevel,
       );
-      return _mapToEntity(response, defaultName: name);
+      return _mapToEntity(response);
     });
   }
 
   @override
-  Future<Result<UserEntity>> uploadPhoto({
-    required File profileImage,
-  }) async {
+  Future<Result<UserEntity>> uploadPhoto({required File profileImage}) async {
     return executeApi(() async {
       final response = await _remoteDataSource.uploadPhoto(
         profileImage: profileImage,

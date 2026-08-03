@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fitness/core/languages/locale_keys.g.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/widgets/blurred_background_wrapper.dart';
@@ -34,13 +34,13 @@ class _WeightPickerDialogState extends State<WeightPickerDialog> {
         child: SafeArea(
           child: Column(
             children: [
-              CompleteRegisterAppBar(
-                onBack: () => context.pop(),
-              ),
+              CompleteRegisterAppBar(onBack: () => context.pop()),
               Expanded(
                 child: CompleteRegisterStepContent(
                   title: LocaleKeys.complete_register_what_is_your_weight.tr(),
-                  subtitle: LocaleKeys.complete_register_this_helps_us_create_your_personalized_plan.tr(),
+                  subtitle: LocaleKeys
+                      .complete_register_this_helps_us_create_your_personalized_plan
+                      .tr(),
                   buttonText: LocaleKeys.custom_widget_done.tr(),
                   onNext: () {
                     context.pop(_currentWeight);
@@ -63,4 +63,3 @@ class _WeightPickerDialogState extends State<WeightPickerDialog> {
     );
   }
 }
-

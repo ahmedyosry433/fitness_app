@@ -42,11 +42,7 @@ class CompleteRegisterGenderSelection extends StatelessWidget {
                 width: 2,
               ),
             ),
-            child: Icon(
-              icon,
-              size: 50,
-              color: Colors.white,
-            ),
+            child: Icon(icon, size: 50, color: Colors.white),
           ),
           const SizedBox(height: 12),
           Text(

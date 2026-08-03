@@ -35,8 +35,8 @@ class EditProfileHeader extends StatelessWidget {
                     image: selectedImage != null
                         ? FileImage(selectedImage!) as ImageProvider
                         : (photoUrl != null && photoUrl!.isNotEmpty
-                            ? NetworkImage(photoUrl!) as ImageProvider
-                            : const AssetImage(AppImages.imagesIcLauncher)),
+                              ? NetworkImage(photoUrl!) as ImageProvider
+                              : const AssetImage(AppImages.imagesIcLauncher)),
                     fit: BoxFit.cover,
                   ),
                 ),

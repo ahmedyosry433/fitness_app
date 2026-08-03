@@ -11,9 +11,8 @@ class ChangePasswordUseCase {
   Future<Result<void>> call({
     required String oldPassword,
     required String newPassword,
-  }) =>
-      repository.changePassword(
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      );
+  }) => repository.changePassword(
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+  );
 }

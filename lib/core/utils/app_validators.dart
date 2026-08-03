@@ -4,7 +4,8 @@ import 'package:fitness/core/languages/locale_keys.g.dart';
 class AppValidators {
   static String? validateRequired(String? val) {
     if (val == null || val.isEmpty) {
-      return LocaleKeys.validations_password_required.tr(); // Reusing string as fallback
+      return LocaleKeys.validations_password_required
+          .tr(); // Reusing string as fallback
     }
     return null;
   }
@@ -30,8 +31,9 @@ class AppValidators {
     final hasUppercase = val.contains(RegExp(r'[A-Z]'));
     final hasLowercase = val.contains(RegExp(r'[a-z]'));
     final hasDigits = val.contains(RegExp(r'[0-9]'));
-    final hasSpecialCharacters =
-        val.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
+    final hasSpecialCharacters = val.contains(
+      RegExp(r'[!@#\$%^&*(),.?":{}|<>]'),
+    );
 
     if (!hasUppercase || !hasLowercase || !hasDigits || !hasSpecialCharacters) {
       return LocaleKeys.validations_password_advanced_validation.tr();

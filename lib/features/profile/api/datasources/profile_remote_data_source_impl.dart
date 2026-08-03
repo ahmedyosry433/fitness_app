@@ -15,16 +15,24 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSourceContract {
   @override
   Future<ProfileResponseDto> updateProfile({
     required String name,
+    String? email,
+    int? weight,
+    String? goal,
+    String? activityLevel,
   }) {
     return _apiClient.updateProfile(
-      UpdateProfileRequestDto(name: name),
+      UpdateProfileRequestDto(
+        name: name,
+        email: email,
+        weight: weight,
+        goal: goal,
+        activityLevel: activityLevel,
+      ),
     );
   }
 
   @override
-  Future<ProfileResponseDto> uploadPhoto({
-    required File profileImage,
-  }) {
+  Future<ProfileResponseDto> uploadPhoto({required File profileImage}) {
     return _apiClient.uploadPhoto(profileImage: profileImage);
   }
 

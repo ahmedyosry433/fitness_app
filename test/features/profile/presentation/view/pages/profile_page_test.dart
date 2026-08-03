@@ -11,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
-
-class MockProfileCubit extends MockCubit<BaseState<ProfileUIModel>> implements ProfileCubit {}
+import 'package:fitness/features/profile/presentation/view/widgets/logout_confirmation_dialog.dart';
+class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {}
 
 class FakeProfileEvent extends Fake implements ProfileEvent {}
 
@@ -38,7 +39,10 @@ void main() {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const ProfilePage(),
+          builder: (context, state) => BlocProvider<ProfileCubit>.value(
+            value: mockProfileCubit,
+            child: const ProfilePage(),
+          ),
         ),
       ],
     );
@@ -56,7 +60,7 @@ void main() {
     final user = UserEntity(id: '1', name: 'John Doe', email: 'john@doe.com');
     
     when(() => mockProfileCubit.state).thenReturn(
-      BaseState.success(ProfileUIModel(user: user))
+      const ProfileState().copyWith(getProfileState: BaseState.success(user))
     );
     // Mock doAction to return Future
     when(() => mockProfileCubit.doAction(any())).thenAnswer((_) async {});
@@ -71,30 +75,30 @@ void main() {
     final user = UserEntity(id: '1', name: 'John Doe', email: 'john@doe.com');
     
     when(() => mockProfileCubit.state).thenReturn(
-      BaseState.success(ProfileUIModel(user: user))
+      const ProfileState().copyWith(getProfileState: BaseState.success(user))
     );
     when(() => mockProfileCubit.doAction(any())).thenAnswer((_) async {});
 
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pumpAndSettle();
 
-    // Scroll down to ensure logout icon is visible
-    final scrollable = find.byType(Scrollable);
-    await tester.drag(scrollable, const Offset(0, -500));
+    // Find logout icon/button
+    final logoutIcon = find.byIcon(Icons.logout);
+    
+    // Ensure it's visible before tapping
+    await tester.ensureVisible(logoutIcon);
     await tester.pumpAndSettle();
 
-    // Find logout icon/button (assuming Icons.logout is used)
-    final logoutIcon = find.byIcon(Icons.logout);
     expect(logoutIcon, findsOneWidget);
 
     await tester.tap(logoutIcon);
     await tester.pumpAndSettle();
 
     // Verify dialog appears
-    expect(find.text("Are You Sure To Logout?"), findsOneWidget);
+    expect(find.byType(LogoutConfirmationDialog), findsOneWidget);
     
     // Tap the Yes button
-    final yesButton = find.text("Yes");
+    final yesButton = find.text('profile.yes');
     expect(yesButton, findsOneWidget);
     await tester.tap(yesButton);
     await tester.pumpAndSettle();

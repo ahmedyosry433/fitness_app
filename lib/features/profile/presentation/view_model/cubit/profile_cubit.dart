@@ -56,35 +56,52 @@ class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
   }
 
   Future<void> _loadProfile() async {
+    if (state.getProfileState.data != null) return;
     emit(state.copyWith(getProfileState: const BaseState.loading()));
     final result = await _getProfileUseCase();
     result.when(
       success: (data) {
         emit(state.copyWith(getProfileState: BaseState.success(data)));
       },
-      error: (exception) {
-        emit(state.copyWith(getProfileState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(state.copyWith(getProfileState: BaseState.error(errorMessage)));
       },
     );
   }
 
   Future<void> _updateProfile(UpdateProfileEvent event) async {
     final currentData = state.getProfileState.data;
-    emit(state.copyWith(updateProfileState: BaseState.all(state: StateType.loading, data: currentData, exception: null)));
-    
+    emit(
+      state.copyWith(
+        updateProfileState: BaseState.all(
+          state: StateType.loading,
+          data: currentData,
+          errorMessage: null,
+        ),
+      ),
+    );
+
     final updateResult = await _updateProfileUseCase(
       name: event.name,
+      email: event.email,
+      weight: event.weight,
+      goal: event.goal,
+      activityLevel: event.activityLevel,
     );
 
     updateResult.when(
       success: (data) {
-        emit(state.copyWith(
-          updateProfileState: BaseState.success(data),
-          getProfileState: BaseState.success(data), // Update general profile too
-        ));
+        emit(
+          state.copyWith(
+            updateProfileState: BaseState.success(data),
+            getProfileState: BaseState.success(
+              data,
+            ), // Update general profile too
+          ),
+        );
       },
-      error: (exception) {
-        emit(state.copyWith(updateProfileState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(state.copyWith(updateProfileState: BaseState.error(errorMessage)));
       },
     );
   }
@@ -94,18 +111,30 @@ class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
     if (file == null) return; // User cancelled
 
     final currentData = state.getProfileState.data;
-    emit(state.copyWith(uploadPhotoState: BaseState.all(state: StateType.loading, data: currentData, exception: null)));
+    emit(
+      state.copyWith(
+        uploadPhotoState: BaseState.all(
+          state: StateType.loading,
+          data: currentData,
+          errorMessage: null,
+        ),
+      ),
+    );
 
     final photoResult = await _uploadPhotoUseCase(profileImage: file);
     photoResult.when(
       success: (photoData) {
-        emit(state.copyWith(
-          uploadPhotoState: BaseState.success(photoData),
-          getProfileState: BaseState.success(photoData), // Update general profile too
-        ));
+        emit(
+          state.copyWith(
+            uploadPhotoState: BaseState.success(photoData),
+            getProfileState: BaseState.success(
+              photoData,
+            ), // Update general profile too
+          ),
+        );
       },
-      error: (exception) {
-        emit(state.copyWith(uploadPhotoState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(state.copyWith(uploadPhotoState: BaseState.error(errorMessage)));
       },
     );
   }
@@ -118,10 +147,14 @@ class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
     );
     result.when(
       success: (_) {
-        emit(state.copyWith(changePasswordState: const BaseState.success(null)));
+        emit(
+          state.copyWith(changePasswordState: const BaseState.success(null)),
+        );
       },
-      error: (exception) {
-        emit(state.copyWith(changePasswordState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(
+          state.copyWith(changePasswordState: BaseState.error(errorMessage)),
+        );
       },
     );
   }
@@ -133,8 +166,8 @@ class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
       success: (_) {
         emit(state.copyWith(logoutState: const BaseState.success(null)));
       },
-      error: (exception) {
-        emit(state.copyWith(logoutState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(state.copyWith(logoutState: BaseState.error(errorMessage)));
       },
     );
   }
@@ -146,8 +179,8 @@ class ProfileCubit extends BaseCubit<ProfileState, ProfileEvent, void> {
       success: (_) {
         emit(state.copyWith(deleteAccountState: const BaseState.success(null)));
       },
-      error: (exception) {
-        emit(state.copyWith(deleteAccountState: BaseState.error(exception)));
+      error: (errorMessage) {
+        emit(state.copyWith(deleteAccountState: BaseState.error(errorMessage)));
       },
     );
   }

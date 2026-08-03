@@ -12,8 +12,15 @@ class UpdateProfileUseCase {
 
   Future<Result<UserEntity>> call({
     required String name,
-  }) =>
-      repository.updateProfile(
-        name: name,
-      );
+    String? email,
+    int? weight,
+    String? goal,
+    String? activityLevel,
+  }) => repository.updateProfile(
+    name: name,
+    email: email,
+    weight: weight,
+    goal: goal,
+    activityLevel: activityLevel,
+  );
 }

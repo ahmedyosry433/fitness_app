@@ -82,7 +82,7 @@ void main() {
     blocTest<ProfileCubit, ProfileState>(
       'emits [loading, error] when LoadProfileEvent is added and use case fails',
       build: () {
-        when(() => mockGetProfileUseCase.call()).thenAnswer((_) async => Error(exception: Exception('Failed')));
+        when(() => mockGetProfileUseCase.call()).thenAnswer((_) async => Error(errorMessage: 'Failed'));
         return cubit;
       },
       act: (cubit) => cubit.doAction(LoadProfileEvent()),
@@ -90,6 +90,19 @@ void main() {
         const ProfileState().copyWith(getProfileState: const BaseState.loading()),
         isA<ProfileState>().having((s) => s.getProfileState.state, 'state', StateType.error),
       ],
+    );
+
+    blocTest<ProfileCubit, ProfileState>(
+      'does not fetch from API when LoadProfileEvent is added and data is already cached',
+      build: () {
+        return cubit;
+      },
+      seed: () => const ProfileState().copyWith(getProfileState: BaseState.success(tUser)),
+      act: (cubit) => cubit.doAction(LoadProfileEvent()),
+      expect: () => [],
+      verify: (_) {
+        verifyNever(() => mockGetProfileUseCase.call());
+      },
     );
 
     blocTest<ProfileCubit, ProfileState>(

@@ -4,8 +4,13 @@ import 'package:fitness/features/exercise_module/data/models/exercise_response_m
 import 'package:injectable/injectable.dart';
 
 abstract interface class ExerciseRemoteDataSource {
-  Future<ExerciseResponseModel> getExercises(String primeMoverMuscleId, String difficultyLevelId);
-  Future<DifficultyLevelResponseModel> getDifficultyLevels(String primeMoverMuscleId);
+  Future<ExerciseResponseModel> getExercises(
+    String primeMoverMuscleId,
+    String difficultyLevelId,
+  );
+  Future<DifficultyLevelResponseModel> getDifficultyLevels(
+    String primeMoverMuscleId,
+  );
 }
 
 @Injectable(as: ExerciseRemoteDataSource)
@@ -15,12 +20,17 @@ class ExerciseRemoteDataSourceImpl implements ExerciseRemoteDataSource {
   ExerciseRemoteDataSourceImpl(this._apiClient);
 
   @override
-  Future<ExerciseResponseModel> getExercises(String primeMoverMuscleId, String difficultyLevelId) {
+  Future<ExerciseResponseModel> getExercises(
+    String primeMoverMuscleId,
+    String difficultyLevelId,
+  ) {
     return _apiClient.getExercises(primeMoverMuscleId, difficultyLevelId);
   }
 
   @override
-  Future<DifficultyLevelResponseModel> getDifficultyLevels(String primeMoverMuscleId) {
+  Future<DifficultyLevelResponseModel> getDifficultyLevels(
+    String primeMoverMuscleId,
+  ) {
     return _apiClient.getDifficultyLevels(primeMoverMuscleId);
   }
 }

@@ -7,11 +7,13 @@ abstract interface class ProfileRepository {
 
   Future<Result<UserEntity>> updateProfile({
     required String name,
+    String? email,
+    int? weight,
+    String? goal,
+    String? activityLevel,
   });
 
-  Future<Result<UserEntity>> uploadPhoto({
-    required File profileImage,
-  });
+  Future<Result<UserEntity>> uploadPhoto({required File profileImage});
 
   Future<Result<void>> changePassword({
     required String oldPassword,

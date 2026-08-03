@@ -10,9 +10,9 @@ import '../di/injectable_config.dart';
 Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
   if (!await getIt.get<InternetConnection>().hasInternetAccess) {
     return Error(
-      exception: NetworkFailures(
+      errorMessage: NetworkFailures(
         errorMessage: LocaleKeys.global_no_internet.tr(),
-      ),
+      ).errorMessage,
     );
   }
   try {
@@ -20,9 +20,11 @@ Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
     return Success<T>(data: result);
   } on DioException catch (ex) {
     return Error<T>(
-      exception: ServerFailure.fromDioException(dioException: ex),
+      errorMessage: ServerFailure.fromDioException(
+        dioException: ex,
+      ).errorMessage,
     );
   } on Exception catch (ex) {
-    return Error<T>(exception: ex);
+    return Error<T>(errorMessage: ex.toString());
   }
 }

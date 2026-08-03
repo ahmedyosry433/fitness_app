@@ -78,7 +78,7 @@ void main() {
       'emits [error] when InitExerciseModuleIntent fails',
       build: () {
         when(() => mockGetDifficultyLevelsUseCase(tPrimeMoverMuscleId))
-            .thenAnswer((_) async => Error<List<DifficultyLevelEntity>>(exception: Exception('Error')));
+            .thenAnswer((_) async => const Error<List<DifficultyLevelEntity>>(errorMessage: 'Error'));
         return cubit;
       },
       act: (cubit) => cubit.processIntent(const InitExerciseModuleIntent(primeMoverMuscleId: tPrimeMoverMuscleId, pageTitle: 'Test Title', pageDescription: 'Test Description')),

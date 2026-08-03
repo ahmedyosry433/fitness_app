@@ -39,7 +39,10 @@ class LogoutConfirmationDialog extends StatelessWidget {
                     },
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      side: const BorderSide(color: AppColors.primaryOrange, width: 2),
+                      side: const BorderSide(
+                        color: AppColors.primaryOrange,
+                        width: 2,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),

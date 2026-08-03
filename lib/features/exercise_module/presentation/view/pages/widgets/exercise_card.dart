@@ -21,9 +21,7 @@ class ExerciseCard extends StatelessWidget {
         showDialog(
           context: context,
           barrierColor: Colors.transparent,
-          builder: (context) => VideoPlayerPopup(
-            videoUrl: exercise.videoUrl,
-          ),
+          builder: (context) => VideoPlayerPopup(videoUrl: exercise.videoUrl),
         );
       },
       child: Container(
@@ -50,9 +48,7 @@ class ExerciseCard extends StatelessWidget {
                 children: [
                   Text(
                     exercise.title,
-                    style: 16.bold.copyWith(
-                      color: AppColors.whiteFF,
-                    ),
+                    style: 16.bold.copyWith(color: AppColors.whiteFF),
                   ),
                   SizedBox(height: 4.h),
                   Text(
@@ -61,8 +57,8 @@ class ExerciseCard extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    exercise.description.isNotEmpty 
-                        ? exercise.description 
+                    exercise.description.isNotEmpty
+                        ? exercise.description
                         : LocaleKeys.exercise_lorem_ipsum.tr(),
                     style: 11.regular.copyWith(
                       color: AppColors.grayA6,

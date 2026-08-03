@@ -13,18 +13,27 @@ class ExerciseRepositoryImpl implements ExerciseRepository {
   ExerciseRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Result<List<ExerciseEntity>>> getAllExercises(
-      {required String primeMoverMuscleId, required String difficultyLevelId}) {
+  Future<Result<List<ExerciseEntity>>> getAllExercises({
+    required String primeMoverMuscleId,
+    required String difficultyLevelId,
+  }) {
     return executeApi(() async {
-      final response = await _remoteDataSource.getExercises(primeMoverMuscleId, difficultyLevelId);
+      final response = await _remoteDataSource.getExercises(
+        primeMoverMuscleId,
+        difficultyLevelId,
+      );
       return response.exerciseEntities;
     });
   }
 
   @override
-  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({required String primeMoverMuscleId}) {
+  Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({
+    required String primeMoverMuscleId,
+  }) {
     return executeApi(() async {
-      final response = await _remoteDataSource.getDifficultyLevels(primeMoverMuscleId);
+      final response = await _remoteDataSource.getDifficultyLevels(
+        primeMoverMuscleId,
+      );
       return response.difficultyLevels;
     });
   }

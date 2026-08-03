@@ -21,7 +21,7 @@ abstract class FoodApiClient {
     final foodDio = Dio(dio.options);
     foodDio.interceptors.addAll(dio.interceptors);
     foodDio.interceptors.add(FoodApiInterceptor());
-    
+
     return _FoodApiClient(foodDio);
   }
 

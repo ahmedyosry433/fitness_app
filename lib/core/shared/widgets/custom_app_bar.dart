@@ -1,6 +1,7 @@
 import 'package:fitness/core/theme/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness/core/widgets/custom_back_button.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   // added isCenteredTitle parameter to make title go left if needed

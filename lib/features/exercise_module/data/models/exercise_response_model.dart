@@ -8,7 +8,7 @@ part 'exercise_response_model.g.dart';
 class ExerciseResponseModel {
   @JsonKey(name: 'message')
   final String? message;
-  
+
   @JsonKey(name: 'totalExercises')
   final int? totalExercises;
 
@@ -22,5 +22,6 @@ class ExerciseResponseModel {
 
   Map<String, dynamic> toJson() => _$ExerciseResponseModelToJson(this);
 
-  List<ExerciseEntity> get exerciseEntities => exercises?.map((e) => e.toEntity()).toList() ?? [];
+  List<ExerciseEntity> get exerciseEntities =>
+      exercises?.map((e) => e.toEntity()).toList() ?? [];
 }

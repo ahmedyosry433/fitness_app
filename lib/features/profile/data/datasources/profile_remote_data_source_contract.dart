@@ -5,11 +5,13 @@ import 'package:fitness/features/profile/data/models/profile_response_dto.dart';
 abstract interface class ProfileRemoteDataSourceContract {
   Future<ProfileResponseDto> updateProfile({
     required String name,
+    String? email,
+    int? weight,
+    String? goal,
+    String? activityLevel,
   });
 
-  Future<ProfileResponseDto> uploadPhoto({
-    required File profileImage,
-  });
+  Future<ProfileResponseDto> uploadPhoto({required File profileImage});
 
   Future<ProfileResponseDto> getProfileData();
 

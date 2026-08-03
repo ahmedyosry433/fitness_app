@@ -261,7 +261,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       spreadRadius: 5,
                     ),
                     BoxShadow(
-                      color: AppColors.primaryOrangeDark.withValues(alpha: 0.10),
+                      color: AppColors.primaryOrangeDark.withValues(
+                        alpha: 0.10,
+                      ),
                       blurRadius: 40,
                       spreadRadius: 10,
                     ),
@@ -313,7 +315,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
             ShaderMask(
               shaderCallback: (bounds) {
                 return LinearGradient(
-                  colors: const [Colors.white, AppColors.primaryOrangeDark, Colors.white],
+                  colors: const [
+                    Colors.white,
+                    AppColors.primaryOrangeDark,
+                    Colors.white,
+                  ],
                   stops: [
                     (_shimmerAnimation.value - 0.3).clamp(0.0, 1.0),
                     _shimmerAnimation.value.clamp(0.0, 1.0),
@@ -369,11 +375,16 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       gradient: const LinearGradient(
-                        colors: [AppColors.primaryOrangeLight, AppColors.primaryOrangeDark],
+                        colors: [
+                          AppColors.primaryOrangeLight,
+                          AppColors.primaryOrangeDark,
+                        ],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryOrangeDark.withValues(alpha: 0.5),
+                          color: AppColors.primaryOrangeDark.withValues(
+                            alpha: 0.5,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 0),
                         ),

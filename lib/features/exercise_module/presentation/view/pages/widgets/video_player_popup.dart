@@ -65,7 +65,9 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
           color: Colors.black.withValues(alpha: 0.3),
           child: Dialog(
             backgroundColor: AppColors.black22,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.r),
+            ),
             child: Padding(
               padding: EdgeInsets.all(20.r),
               child: Column(
@@ -78,8 +80,13 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
                   SizedBox(height: 15.h),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.orangePrimary),
-                    child: Text(LocaleKeys.exercise_close.tr(), style: 14.regular.copyWith(color: AppColors.whiteFF)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.orangePrimary,
+                    ),
+                    child: Text(
+                      LocaleKeys.exercise_close.tr(),
+                      style: 14.regular.copyWith(color: AppColors.whiteFF),
+                    ),
                   ),
                 ],
               ),
@@ -99,9 +106,7 @@ class _VideoPlayerPopupState extends State<VideoPlayerPopup> {
           insetPadding: EdgeInsets.symmetric(horizontal: 10.w),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
-            child: YoutubePlayer(
-              controller: _controller,
-            ),
+            child: YoutubePlayer(controller: _controller),
           ),
         ),
       ),

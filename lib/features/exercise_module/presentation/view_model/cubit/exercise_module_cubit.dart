@@ -15,12 +15,11 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
   final GetExercisesUseCase getExercisesUseCase;
   final GetDifficultyLevelsUseCase getDifficultyLevelsUseCase;
 
-  ExerciseModuleCubit(
-    this.getExercisesUseCase,
-    this.getDifficultyLevelsUseCase,
-  ) : super(const BaseState.initial());
+  ExerciseModuleCubit(this.getExercisesUseCase, this.getDifficultyLevelsUseCase)
+    : super(const BaseState.initial());
 
-  ExerciseModuleUIModel get _data => state.data ?? const ExerciseModuleUIModel();
+  ExerciseModuleUIModel get _data =>
+      state.data ?? const ExerciseModuleUIModel();
 
   void processIntent(ExerciseIntent intent) {
     if (intent is InitExerciseModuleIntent) {
@@ -39,37 +38,49 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
     required String pageTitle,
     required String pageDescription,
   }) async {
-    emit(BaseState.all(
+    emit(
+      BaseState.all(
         state: StateType.loading,
         data: _data.copyWith(
           primeMoverMuscleId: primeMoverMuscleId,
           pageTitle: pageTitle,
           pageDescription: pageDescription,
         ),
-        exception: null));
-    
+        errorMessage: null,
+      ),
+    );
+
     final levelsResult = await getDifficultyLevelsUseCase(primeMoverMuscleId);
-    
+
     levelsResult.when(
       success: (levels) {
         if (levels == null || levels.isEmpty) {
-          emit(BaseState.all(
+          emit(
+            BaseState.all(
               state: StateType.error,
               data: _data,
-              exception: Exception(LocaleKeys.exercise_no_exercises_found.tr())));
+              errorMessage: LocaleKeys.exercise_no_exercises_found.tr(),
+            ),
+          );
           return;
         }
-        emit(BaseState.all(
+        emit(
+          BaseState.all(
             state: StateType.success,
             data: _data.copyWith(difficultyLevels: levels),
-            exception: null));
+            errorMessage: null,
+          ),
+        );
         _loadExercises(0);
       },
-      error: (exception) {
-        emit(BaseState.all(
+      error: (errorMessage) {
+        emit(
+          BaseState.all(
             state: StateType.error,
             data: _data,
-            exception: exception));
+            errorMessage: errorMessage,
+          ),
+        );
       },
     );
   }
@@ -77,14 +88,19 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
   Future<void> _loadExercises(int difficultyIndex) async {
     if (_data.difficultyLevels.isEmpty) return;
 
-    emit(BaseState.all(
+    emit(
+      BaseState.all(
         state: StateType.loading,
         data: _data.copyWith(selectedDifficultyIndex: difficultyIndex),
-        exception: null));
+        errorMessage: null,
+      ),
+    );
 
     // Ensure index is within bounds, fallback to first if not
-    final safeIndex = (difficultyIndex >= 0 && difficultyIndex < _data.difficultyLevels.length) 
-        ? difficultyIndex 
+    final safeIndex =
+        (difficultyIndex >= 0 &&
+            difficultyIndex < _data.difficultyLevels.length)
+        ? difficultyIndex
         : 0;
     final difficultyLevelId = _data.difficultyLevels[safeIndex].id;
 
@@ -95,16 +111,22 @@ class ExerciseModuleCubit extends Cubit<BaseState<ExerciseModuleUIModel>> {
 
     result.when(
       success: (exercises) {
-        emit(BaseState.all(
+        emit(
+          BaseState.all(
             state: StateType.success,
             data: _data.copyWith(exercises: exercises),
-            exception: null));
+            errorMessage: null,
+          ),
+        );
       },
-      error: (exception) {
-        emit(BaseState.all(
+      error: (errorMessage) {
+        emit(
+          BaseState.all(
             state: StateType.error,
             data: _data,
-            exception: exception));
+            errorMessage: errorMessage,
+          ),
+        );
       },
     );
   }

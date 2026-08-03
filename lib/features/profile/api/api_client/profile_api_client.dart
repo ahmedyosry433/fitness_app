@@ -10,7 +10,7 @@ import 'package:injectable/injectable.dart';
 part 'profile_api_client.g.dart';
 
 @RestApi()
-@lazySingleton
+@injectable
 abstract class ProfileApiClient {
   @factoryMethod
   factory ProfileApiClient(Dio dio) = _ProfileApiClient;
