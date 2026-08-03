@@ -13,20 +13,19 @@ import 'package:fitness/features/exercise_module/domain/use_cases/get_muscles_by
 import 'package:fitness/features/exercise_module/domain/use_cases/get_random_muscles_use_case.dart';
 import 'package:injectable/injectable.dart';
 
-part 'workout_state.dart';
 part 'workout_events.dart';
+part 'workout_state.dart';
 part 'workout_ui_events.dart';
 
 @injectable
 class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
   static const String fullBodyCategoryId = 'full_body';
+  static const String defaultDifficultyLevelId = '69d982ed85f6bfa972bf2216';
 
   final GetMuscleGroupsUseCase _getMuscleGroupsUseCase;
   final GetMusclesByGroupUseCase _getMusclesByGroupUseCase;
   final GetExercisesUseCase _getExercisesUseCase;
   final GetRandomMusclesUseCase _getRandomMusclesUseCase;
-
-  bool _isLoadingCategory = false;
 
   WorkoutCubit(
     this._getMuscleGroupsUseCase,
@@ -35,22 +34,25 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     this._getRandomMusclesUseCase,
   ) : super(const WorkoutState());
 
-  String? _pendingCategoryId;
-
-  Future<void> doIntent(WorkoutEvent event) async => switch (event) {
+  @override
+  Future<void> doAction(covariant WorkoutEvent event) async => switch (event) {
         InitWorkoutEvent(:final initialCategoryId) => _init(initialCategoryId),
         LoadWorkoutCategoryEvent(:final index) => _loadCategory(index),
-        SelectCategoryByIdEvent(:final categoryId) => _selectCategoryById(categoryId),
+        SelectCategoryByIdEvent(:final categoryId) =>
+          _selectCategoryById(categoryId),
       };
 
-  Future<void> _init(String? initialCategoryId) async {
-    if (initialCategoryId != null && initialCategoryId.isNotEmpty) {
-      _pendingCategoryId = initialCategoryId;
-    }
+  Future<void> doIntent(WorkoutEvent event) => doAction(event);
 
-    if (!state.categoriesState.isSuccess) {
-      emit(state.copyWith(categoriesState: const BaseState.loading()));
-    }
+  Future<void> _init(String? initialCategoryId) async {
+    final pending = initialCategoryId ?? state.pendingCategoryId;
+
+    emit(
+      state.copyWith(
+        pendingCategoryId: pending,
+        categoriesState: const BaseState.loading(),
+      ),
+    );
 
     final groupsResult = await _getMuscleGroupsUseCase();
     if (isClosed) return;
@@ -66,16 +68,16 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
         ];
 
         int selectedIndex = 0;
-        final target = _pendingCategoryId ?? initialCategoryId;
+        final target = state.pendingCategoryId ?? initialCategoryId;
         if (target != null && target.isNotEmpty) {
           selectedIndex = _findCategoryIndex(categories, target);
         }
-        _pendingCategoryId = null;
 
         emit(
           state.copyWith(
             categoriesState: BaseState.success(categories),
             selectedCategoryIndex: selectedIndex,
+            pendingCategoryId: null,
           ),
         );
         _loadCategory(selectedIndex);
@@ -93,7 +95,7 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     if (categoryId.isEmpty) return;
 
     if (!state.categoriesState.isSuccess) {
-      _pendingCategoryId = categoryId;
+      emit(state.copyWith(pendingCategoryId: categoryId));
       return;
     }
 
@@ -117,51 +119,45 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     return 0;
   }
 
-  static const String defaultDifficultyLevelId = '69d982ed85f6bfa972bf2216';
-  final Map<String, List<ExerciseEntity>> _categoryCache = {};
-
   Future<void> _loadCategory(int index) async {
-    if (_isLoadingCategory) return;
     if (index < 0 || index >= state.categories.length) return;
 
     final category = state.categories[index];
 
-    if (_categoryCache.containsKey(category.id)) {
+    if (state.categoryCache.containsKey(category.id)) {
       emit(
         state.copyWith(
           selectedCategoryIndex: index,
-          exercisesState: BaseState.success(_categoryCache[category.id]!),
+          exercisesState: BaseState.success(state.categoryCache[category.id]!),
         ),
       );
       return;
     }
 
-    _isLoadingCategory = true;
-
+    final nextRequestId = state.activeRequestId + 1;
     emit(
       state.copyWith(
         selectedCategoryIndex: index,
+        activeRequestId: nextRequestId,
         exercisesState: const BaseState.loading(),
       ),
     );
 
-    final Result<List<ExerciseEntity>> exercisesResult =
-        category.id == fullBodyCategoryId
-            ? await _loadFullBodyExercises()
-            : await _loadGroupExercises(category.id);
+    final exercisesResult = category.id == fullBodyCategoryId
+        ? await _loadFullBodyExercises()
+        : await _loadGroupExercises(category.id);
 
-    if (isClosed) {
-      _isLoadingCategory = false;
-      return;
-    }
+    if (nextRequestId != state.activeRequestId || isClosed) return;
 
     exercisesResult.when(
       success: (exercises) {
         final list = exercises ?? const [];
-        _categoryCache[category.id] = list;
+        final updatedCache =
+            Map<String, List<ExerciseEntity>>.from(state.categoryCache)
+              ..[category.id] = list;
         emit(
           state.copyWith(
-            selectedCategoryIndex: index,
+            categoryCache: updatedCache,
             exercisesState: BaseState.success(list),
           ),
         );
@@ -169,17 +165,10 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
       error: (exception) {
         final error = exception ??
             Exception(LocaleKeys.exercise_failed_to_load.tr(args: ['']));
-        emit(
-          state.copyWith(
-            selectedCategoryIndex: index,
-            exercisesState: BaseState.error(error),
-          ),
-        );
+        emit(state.copyWith(exercisesState: BaseState.error(error)));
         emitEvent(WorkoutErrorUiEvent(error.toString()));
       },
     );
-
-    _isLoadingCategory = false;
   }
 
   Future<Result<List<ExerciseEntity>>> _loadFullBodyExercises() async {
@@ -196,8 +185,8 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     final results = await Future.wait(
       muscles.take(4).map((m) => _fetchExercisesForMuscle(m.id)),
     );
-    final exercises = results.expand((list) => list).toList()..shuffle();
-    return Success(data: exercises);
+
+    return _combineExerciseResults(results, shuffleResult: true);
   }
 
   Future<Result<List<ExerciseEntity>>> _loadGroupExercises(
@@ -218,18 +207,39 @@ class WorkoutCubit extends BaseCubit<WorkoutState, WorkoutUiEvent> {
     final results = await Future.wait(
       muscles.map((m) => _fetchExercisesForMuscle(m.id)),
     );
-    return Success(data: results.expand((list) => list).toList());
+
+    return _combineExerciseResults(results);
   }
 
-  Future<List<ExerciseEntity>> _fetchExercisesForMuscle(String muscleId) async {
-    final exercisesResult = await _getExercisesUseCase(
+  Future<Result<List<ExerciseEntity>>> _fetchExercisesForMuscle(
+    String muscleId,
+  ) {
+    return _getExercisesUseCase(
       primeMoverMuscleId: muscleId,
       difficultyLevelId: defaultDifficultyLevelId,
     );
+  }
 
-    return exercisesResult.when(
-      success: (exercises) => exercises ?? const [],
-      error: (_) => const [],
-    );
+  Result<List<ExerciseEntity>> _combineExerciseResults(
+    List<Result<List<ExerciseEntity>>> results, {
+    bool shuffleResult = false,
+  }) {
+    final allExercises = <ExerciseEntity>[];
+
+    for (final result in results) {
+      if (result is Success<List<ExerciseEntity>>) {
+        if (result.data != null) {
+          allExercises.addAll(result.data!);
+        }
+      } else if (result is Error<List<ExerciseEntity>>) {
+        return Error(exception: result.exception);
+      }
+    }
+
+    if (shuffleResult) {
+      allExercises.shuffle();
+    }
+
+    return Success(data: allExercises);
   }
 }

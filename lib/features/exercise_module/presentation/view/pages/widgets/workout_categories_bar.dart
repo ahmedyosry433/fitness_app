@@ -35,43 +35,40 @@ class _WorkoutCategoriesBarState extends State<WorkoutCategoriesBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WorkoutCubit, WorkoutState>(
+    return BlocConsumer<WorkoutCubit, WorkoutState>(
       listenWhen: (previous, current) =>
           previous.selectedCategoryIndex != current.selectedCategoryIndex,
       listener: (context, state) {
         _scrollToIndex(state.selectedCategoryIndex);
       },
-      child: BlocBuilder<WorkoutCubit, WorkoutState>(
-        buildWhen: (previous, current) {
-          return previous.categoriesState != current.categoriesState ||
-              previous.selectedCategoryIndex != current.selectedCategoryIndex;
-        },
-        builder: (context, state) {
-          if (state.categories.isEmpty) {
-            return SizedBox(height: 30.h);
-          }
+      buildWhen: (previous, current) =>
+          previous.categoriesState != current.categoriesState ||
+          previous.selectedCategoryIndex != current.selectedCategoryIndex,
+      builder: (context, state) {
+        if (state.categories.isEmpty) {
+          return SizedBox(height: 30.h);
+        }
 
-          return SizedBox(
-            height: 30.h,
-            child: ListView.separated(
-              controller: _scrollController,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemCount: state.categories.length,
-              separatorBuilder: (context, index) => SizedBox(width: 8.w),
-              itemBuilder: (context, index) {
-                final category = state.categories[index];
-                return WorkoutCategoryChip(
-                  label: category.name,
-                  isSelected: state.selectedCategoryIndex == index,
-                  index: index,
-                );
-              },
-            ),
-          );
-        },
-      ),
+        return SizedBox(
+          height: 30.h,
+          child: ListView.separated(
+            controller: _scrollController,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: state.categories.length,
+            separatorBuilder: (context, index) => SizedBox(width: 8.w),
+            itemBuilder: (context, index) {
+              final category = state.categories[index];
+              return WorkoutCategoryChip(
+                label: category.name,
+                isSelected: state.selectedCategoryIndex == index,
+                index: index,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
