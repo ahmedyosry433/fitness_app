@@ -9,7 +9,6 @@ import 'package:fitness/features/exercise_module/presentation/view_model/cubit/e
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class MockExerciseModuleCubit extends MockCubit<BaseState<ExerciseModuleUIModel>> implements ExerciseModuleCubit {}
 
