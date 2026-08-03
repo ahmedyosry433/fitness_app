@@ -33,14 +33,14 @@ class UserFirestoreService {
         'uid': uid,
         'name': name,
         'email': email,
-        if (phone != null && phone.isNotEmpty) 'phone': phone,
-        if (photoUrl != null && photoUrl.isNotEmpty) 'photoUrl': photoUrl,
-        if (gender != null && gender.isNotEmpty) 'gender': gender,
-        if (age != null) 'age': age,
-        if (weight != null) 'weight': weight,
-        if (height != null) 'height': height,
-        if (goal != null && goal.isNotEmpty) 'goal': goal,
-        if (activityLevel != null && activityLevel.isNotEmpty)
+        if (phone?.isNotEmpty ?? false) 'phone': phone,
+        if (photoUrl?.isNotEmpty ?? false) 'photoUrl': photoUrl,
+        if (gender?.isNotEmpty ?? false) 'gender': gender,
+        if (age case final age?) 'age': age,
+        if (weight case final weight?) 'weight': weight,
+        if (height case final height?) 'height': height,
+        if (goal?.isNotEmpty ?? false) 'goal': goal,
+        if (activityLevel?.isNotEmpty ?? false)
           'activityLevel': activityLevel,
         'updatedAt': FieldValue.serverTimestamp(),
       };

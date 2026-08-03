@@ -33,7 +33,7 @@ class BlurredBackgroundWrapper extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.4)),
+            child: Container(color: Colors.black.withValues(alpha: 0.4)),
           ),
           child,
         ],

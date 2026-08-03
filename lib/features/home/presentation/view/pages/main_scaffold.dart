@@ -27,10 +27,10 @@ class MainScaffold extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 decoration: BoxDecoration(
-                  color: AppColors.black22.withOpacity(0.25),
+                  color: AppColors.black22.withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
