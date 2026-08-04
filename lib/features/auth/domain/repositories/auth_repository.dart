@@ -6,7 +6,7 @@ import 'package:fitness/features/auth/domain/entities/auth_social_result.dart';
 import 'package:fitness/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:fitness/features/auth_modul/domain/entities/auth_social_provider.dart';
 
-abstract class AuthRepository {
+abstract interface class AuthRepository {
   Future<Result<AuthUserEntity>> login({required LoginParams params});
 
   Future<Result<AuthUserEntity>> register({required RegisterParams params});

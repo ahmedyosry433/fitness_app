@@ -4,7 +4,7 @@ import 'package:fitness/features/auth/data/models/forgot_password_params.dart';
 import 'package:fitness/features/auth/data/models/login_params.dart';
 import 'package:fitness/features/auth/data/models/register_params.dart';
 
-abstract class AuthRemoteDataSourceContract {
+abstract interface class AuthRemoteDataSourceContract {
   Future<Result<AuthResponseModel>> login({required LoginParams params});
 
   Future<Result<AuthResponseModel>> register({required RegisterParams params});
