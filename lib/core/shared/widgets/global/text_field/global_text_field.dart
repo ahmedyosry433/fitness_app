@@ -70,6 +70,10 @@ class GlobalTextField extends StatelessWidget {
           prefixIconAsset!,
           width: GlobalTextFieldTheme.fieldIconSize,
           height: GlobalTextFieldTheme.fieldIconSize,
+          colorFilter: ColorFilter.mode(
+            GlobalTextFieldTheme.fieldHintColor,
+            BlendMode.srcIn,
+          ),
         ),
       );
     }

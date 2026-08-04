@@ -74,6 +74,8 @@ dev_dependencies:
   retrofit_generator: ^10.2.7
   json_serializable: ^6.9.4
   injectable_generator: ^3.0.2
+  mocktail: ^1.0.5
+  bloc_test: ^10.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,7 +95,7 @@ flutter:
     - assets/images/auth/
     - assets/icons/
     - assets/localization/en-US.json
-    - assets/localization/ar-EG.json
+    - assets/localization/ar-Eg.json
   fonts:
     - family: RobotoEnglish
       fonts:

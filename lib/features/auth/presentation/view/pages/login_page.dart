@@ -12,26 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toastification/toastification.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<LoginCubit>(),
-      child: const _LoginView(),
-    );
-  }
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginView extends StatefulWidget {
-  const _LoginView();
-
-  @override
-  State<_LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<_LoginView> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -53,6 +41,7 @@ class _LoginViewState extends State<_LoginView> {
           context: context,
           header: LocaleKeys.auth_login_success.tr(),
         ).showToast();
+        context.go(Routes.home);
       case LoginShowErrorNavigation(:final message):
         CustomToast(
           context: context,
