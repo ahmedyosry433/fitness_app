@@ -19,7 +19,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:fitness/features/auth/domain/entities/auth_social_result.dart';
 
-@LazySingleton(as: AuthRepository)
+@Injectable(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSourceContract _remoteDataSource;
   final AuthLocalDataSourceContract _localDataSource;

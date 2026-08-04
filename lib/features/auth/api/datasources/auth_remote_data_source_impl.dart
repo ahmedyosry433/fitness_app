@@ -8,7 +8,7 @@ import 'package:fitness/features/auth/data/models/login_params.dart';
 import 'package:fitness/features/auth/data/models/register_params.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: AuthRemoteDataSourceContract)
+@Injectable(as: AuthRemoteDataSourceContract)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSourceContract {
   final AuthApiClient _apiClient;
 

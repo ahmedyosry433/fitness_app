@@ -10,7 +10,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: SocialAuthDataSourceContract)
+@Injectable(as: SocialAuthDataSourceContract)
 class AuthModulSocialAuthDataSourceImpl
     implements SocialAuthDataSourceContract {
   final FirebaseAuth _firebaseAuth;
