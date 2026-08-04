@@ -18,7 +18,7 @@ abstract class AppValidators {
 
   static String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return LocaleKeys.forget_password;
+      return LocaleKeys.forget_password_password.tr();
     }
 
     if (password.length < 8) {
@@ -30,7 +30,6 @@ abstract class AppValidators {
     ).hasMatch(password)) {
       return LocaleKeys.validations_confirm_password_invalid.tr();
     }
-
     return null;
   }
 
@@ -48,15 +47,8 @@ abstract class AppValidators {
 
   static String? validateOtp(String? otp) {
     if (otp == null || otp.trim().length < 4) {
-      return "Please enter the complete 4-digit code";
+      return LocaleKeys.forget_password_please_enter_the_complete4.tr();
     }
     return null;
   }
-
-  // static String? validateEmptyTextFormField(String? value) {
-  //   if (value == null || value.trim().isEmpty) {
-  //     return LocaleKeys.empt.tr();
-  //   }
-  //   return null;
-  // }
 }

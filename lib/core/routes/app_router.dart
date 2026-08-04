@@ -1,5 +1,9 @@
 import 'package:fitness/config/di/injectable_config.dart';
 import 'package:fitness/core/routes/routes.dart';
+import 'package:fitness/features/auth_modul/presentation/forget_password/view_model/cubit/forget_password_cubit.dart';
+import 'package:fitness/features/auth_modul/presentation/forget_password/views/create_new_password_view.dart';
+import 'package:fitness/features/auth_modul/presentation/forget_password/views/forget_password_view.dart';
+import 'package:fitness/features/auth_modul/presentation/forget_password/views/otp_verification_view.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
@@ -25,7 +29,7 @@ import 'package:fitness/features/exercise_module/presentation/view_model/exercis
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.home,
+  initialLocation: Routes.splash,
   navigatorKey: navigatorKey,
   errorBuilder: (context, state) => Scaffold(
     appBar: AppBar(title: const Text('Error')),
@@ -44,7 +48,6 @@ final GoRouter router = GoRouter(
       route: Routes.completeRegister,
       page: (state, context) => const CompleteRegisterPage(),
     ),
-
     _customAnimatedGoRoute(
       route: Routes.onBoard,
       page: (state, context) => const OnboardPage(),
@@ -169,6 +172,32 @@ final GoRouter router = GoRouter(
         return WebViewPage(title: title, url: url);
       },
     ),
+      route: Routes.forgetPassword,
+      page: (state, context) => BlocProvider(
+        create: (context) => getIt<ForgetPasswordCubit>(),
+        child: const ForgetPasswordView(),
+      ),
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.otpVerificationView,
+      page: (state, context) {
+        final cubit = state.extra as ForgetPasswordCubit;
+        return BlocProvider.value(
+          value: cubit,
+          child: const OtpVerificationView(),
+        );
+      },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.createNewPasswordView, 
+      page: (state, context) {
+        final cubit = state.extra as ForgetPasswordCubit;
+        return BlocProvider.value(
+          value: cubit,
+          child: const CreateNewPasswordView(),
+        );
+      },
+    ),
   ],
 );
 
@@ -181,6 +210,7 @@ GoRoute _customAnimatedGoRoute({
   Curve curve = Curves.easeInOut,
   List<GoRoute> routes = const [],
 }) => GoRoute(
+  name: route,
   path: route,
   routes: routes,
   pageBuilder: (context, state) => CustomTransitionPage(
