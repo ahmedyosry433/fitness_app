@@ -37,10 +37,11 @@ class ExerciseModel {
     return ExerciseModel(
       id: json['_id'] as String?,
       title: json['exercise'] as String?,
-      description: 'Target: ${json['target_muscle_group'] ?? ''} - Equipment: ${json['primary_equipment'] ?? ''}',
+      description:
+          'Target: ${json['target_muscle_group'] ?? ''} - Equipment: ${json['primary_equipment'] ?? ''}',
       videoUrl: videoUrl,
       thumbnailUrl: thumbnailUrl,
-      time: '15', 
+      time: '15',
       calories: '100',
       level: json['difficulty_level'] as String?,
     );

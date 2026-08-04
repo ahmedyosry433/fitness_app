@@ -8,6 +8,13 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import '../di/injectable_config.dart';
 
 Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
+  if (!await getIt.get<InternetConnection>().hasInternetAccess) {
+    return Error(
+      errorMessage: NetworkFailures(
+        errorMessage: LocaleKeys.global_no_internet.tr(),
+      ).errorMessage,
+    );
+  }
   try {
     final result = await apiCall();
     return Success<T>(data: result);
@@ -30,9 +37,11 @@ Future<Result<T>> executeApi<T>(Future<T> Function() apiCall) async {
     }
 
     return Error<T>(
-      exception: ServerFailure.fromDioException(dioException: ex),
+      errorMessage: ServerFailure.fromDioException(
+        dioException: ex,
+      ).errorMessage,
     );
   } on Exception catch (ex) {
-    return Error<T>(exception: ex);
+    return Error<T>(errorMessage: ex.toString());
   }
 }

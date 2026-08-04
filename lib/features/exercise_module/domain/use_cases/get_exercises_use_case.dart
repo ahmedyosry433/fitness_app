@@ -9,9 +9,13 @@ class GetExercisesUseCase {
 
   GetExercisesUseCase(this.repository);
 
-  Future<Result<List<ExerciseEntity>>> call(
-      {required String primeMoverMuscleId, required String difficultyLevelId}) async {
+  Future<Result<List<ExerciseEntity>>> call({
+    required String primeMoverMuscleId,
+    required String difficultyLevelId,
+  }) async {
     return await repository.getAllExercises(
-        primeMoverMuscleId: primeMoverMuscleId, difficultyLevelId: difficultyLevelId);
+      primeMoverMuscleId: primeMoverMuscleId,
+      difficultyLevelId: difficultyLevelId,
+    );
   }
 }

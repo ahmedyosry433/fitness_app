@@ -1,14 +1,11 @@
-import 'package:fitness/core/theme/app_colors.dart';
 import 'package:fitness/core/values/app_images.dart';
 import 'package:flutter/material.dart';
+import 'package:fitness/core/widgets/custom_back_button.dart';
 
 class CompleteRegisterAppBar extends StatelessWidget {
   final VoidCallback onBack;
 
-  const CompleteRegisterAppBar({
-    super.key,
-    required this.onBack,
-  });
+  const CompleteRegisterAppBar({super.key, required this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -17,22 +14,12 @@ class CompleteRegisterAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
-            onTap: onBack,
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.primaryOrange,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
-            ),
-          ),
+          CustomBackButton(onPressed: onBack),
           Image.asset(
             AppImages.imagesIcLauncher,
             height: 40,
-            errorBuilder: (context, error, stackTrace) => const SizedBox(width: 40),
+            errorBuilder: (context, error, stackTrace) =>
+                const SizedBox(width: 40),
           ),
           const SizedBox(width: 40),
         ],

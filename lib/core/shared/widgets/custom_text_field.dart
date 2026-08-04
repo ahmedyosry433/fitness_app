@@ -128,7 +128,6 @@ class CustomTextFormField extends StatelessWidget {
           textDirection: textDirection,
           obscuringCharacter: "*",
           textCapitalization: textCapitalization ?? TextCapitalization.none,
-          // changing the autovalidateMode to be disabled by default and enable it if needed
           autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
           onSaved: onSaved,
           onEditingComplete: onEditingComplete,
@@ -198,13 +197,15 @@ class CustomTextFormField extends StatelessWidget {
             errorMaxLines: errorMaxlines ?? 2,
             // adding error text
             errorText: errorText,
-            label: labelWidget ?? Text(labelText ?? "", style: 14.regular),
+            label:
+                labelWidget ??
+                (labelText != null
+                    ? Text(labelText!, style: 14.regular)
+                    : null),
             floatingLabelBehavior:
                 floatingLabelBehavior ?? FloatingLabelBehavior.auto,
             errorBorder:
-                // use errorBorder instead of enabledBorder
                 errorBorder ??
-                // editing the defult error border to be the same as the design in figma
                 customOutLineBorders(
                   borderColor: AppColors.onErrorLight,
                   borderRadius: borderRadius,

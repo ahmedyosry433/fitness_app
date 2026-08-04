@@ -22,4 +22,3 @@ extension GenderExtension on Gender {
     }
   }
 }
-  

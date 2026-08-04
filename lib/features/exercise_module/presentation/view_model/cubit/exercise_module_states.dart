@@ -29,7 +29,8 @@ class ExerciseModuleUIModel extends Equatable {
   }) {
     return ExerciseModuleUIModel(
       exercises: exercises ?? this.exercises,
-      selectedDifficultyIndex: selectedDifficultyIndex ?? this.selectedDifficultyIndex,
+      selectedDifficultyIndex:
+          selectedDifficultyIndex ?? this.selectedDifficultyIndex,
       difficultyLevels: difficultyLevels ?? this.difficultyLevels,
       primeMoverMuscleId: primeMoverMuscleId ?? this.primeMoverMuscleId,
       pageTitle: pageTitle ?? this.pageTitle,
@@ -39,8 +40,8 @@ class ExerciseModuleUIModel extends Equatable {
 
   @override
   List<Object> get props => [
-    exercises, 
-    selectedDifficultyIndex, 
+    exercises,
+    selectedDifficultyIndex,
     difficultyLevels,
     primeMoverMuscleId,
     pageTitle,

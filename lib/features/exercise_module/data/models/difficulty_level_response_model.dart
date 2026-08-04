@@ -18,7 +18,12 @@ class DifficultyLevelResponseModel {
   @JsonKey(name: 'difficultyLevels')
   final List<DifficultyLevelTitleDto>? difficultyLevelsList;
 
-  DifficultyLevelResponseModel({this.message, this.data, this.levels, this.difficultyLevelsList});
+  DifficultyLevelResponseModel({
+    this.message,
+    this.data,
+    this.levels,
+    this.difficultyLevelsList,
+  });
 
   factory DifficultyLevelResponseModel.fromJson(Map<String, dynamic> json) =>
       _$DifficultyLevelResponseModelFromJson(json);
@@ -26,9 +31,12 @@ class DifficultyLevelResponseModel {
   Map<String, dynamic> toJson() => _$DifficultyLevelResponseModelToJson(this);
 
   List<DifficultyLevelEntity> get difficultyLevels {
-    if (data != null && data!.isNotEmpty) return data!.map((e) => e.toEntity()).toList();
-    if (levels != null && levels!.isNotEmpty) return levels!.map((e) => e.toEntity()).toList();
-    if (difficultyLevelsList != null && difficultyLevelsList!.isNotEmpty) return difficultyLevelsList!.map((e) => e.toEntity()).toList();
+    if (data != null && data!.isNotEmpty)
+      return data!.map((e) => e.toEntity()).toList();
+    if (levels != null && levels!.isNotEmpty)
+      return levels!.map((e) => e.toEntity()).toList();
+    if (difficultyLevelsList != null && difficultyLevelsList!.isNotEmpty)
+      return difficultyLevelsList!.map((e) => e.toEntity()).toList();
     return [];
   }
 }

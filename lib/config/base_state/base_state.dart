@@ -9,14 +9,12 @@ class BaseState<T> extends Equatable {
   final dynamic _exception;
 
   dynamic get exception => _exception ?? errorMessage;
-
   const BaseState({
     this.state = StateType.initial,
     this.data,
     this.errorMessage,
     dynamic exception,
   }) : _exception = exception;
-
   @override
   List<Object?> get props => [state, data, errorMessage, _exception];
 

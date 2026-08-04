@@ -26,7 +26,6 @@ abstract class ExerciseModuleApiClient {
   Future<DifficultyLevelResponseModel> getDifficultyLevels(
     @Query(AppEndPoints.primeMoverMuscleIdParam) String primeMoverMuscleId,
   );
-
   @GET(AppEndPoints.muscles)
   Future<MusclesResponseModel> getMuscleGroups();
 

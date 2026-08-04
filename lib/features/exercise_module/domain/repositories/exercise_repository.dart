@@ -9,7 +9,6 @@ abstract interface class ExerciseRepository {
     required String primeMoverMuscleId,
     required String difficultyLevelId,
   });
-
   Future<Result<List<DifficultyLevelEntity>>> getDifficultyLevels({
     required String primeMoverMuscleId,
   });

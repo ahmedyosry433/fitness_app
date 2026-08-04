@@ -4,12 +4,16 @@ import 'package:fitness/features/auth_modul/presentation/view/pages/login_page.d
 import 'package:fitness/features/auth_modul/presentation/view/pages/complete_register.dart';
 import 'package:fitness/features/ai_agent/presentation/view/pages/ai_agent_page.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/exercise_module_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/edit_profile_page.dart';
+import 'package:fitness/features/profile/presentation/view/pages/change_password_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/home_page.dart';
 import 'package:fitness/features/home/presentation/view/pages/main_scaffold.dart';
 import 'package:fitness/features/exercise_module/presentation/view/pages/workout_page.dart';
 import 'package:fitness/features/profile/presentation/view/pages/profile_page.dart';
+import 'package:fitness/features/profile/presentation/view_model/cubit/profile_cubit.dart';
+import 'package:fitness/core/widgets/web_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -17,11 +21,16 @@ import 'package:go_router/go_router.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/exercise_module_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/cubit/workout_cubit.dart';
 import 'package:fitness/features/exercise_module/presentation/view_model/exercise_intent.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 final GoRouter router = GoRouter(
-  initialLocation: Routes.home, // Open home directly to test bottom nav
+  initialLocation: Routes.home,
   navigatorKey: navigatorKey,
+  errorBuilder: (context, state) => Scaffold(
+    appBar: AppBar(title: const Text('Error')),
+    body: Center(child: Text('Page not found: ${state.uri.toString()}')),
+  ),
   routes: [
     _customAnimatedGoRoute(
       route: Routes.splash,
@@ -105,11 +114,12 @@ final GoRouter router = GoRouter(
     _customAnimatedGoRoute(
       route: Routes.exercise,
       page: (state, context) {
-        final extra = state.extra as Map<String, dynamic>?;
-        final primeMoverMuscleId = extra?['primeMoverMuscleId'] ?? '69d982ef85f6bfa972bf2248';
-        final pageTitle = extra?['pageTitle'] ?? '';
-        final pageDescription = extra?['pageDescription'] ?? '';
-        final backgroundImage = extra?['backgroundImage'] ?? '';
+        final args = state.extra as ExercisePageArguments?;
+        final primeMoverMuscleId =
+            args?.primeMoverMuscleId ?? '69d982ef85f6bfa972bf2248';
+        final pageTitle = args?.pageTitle ?? '';
+        final pageDescription = args?.pageDescription ?? '';
+        final backgroundImage = args?.backgroundImage ?? '';
 
         return BlocProvider<ExerciseModuleCubit>(
           create: (context) => getIt<ExerciseModuleCubit>()..processIntent(
@@ -126,6 +136,37 @@ final GoRouter router = GoRouter(
             backgroundImage: backgroundImage,
           ),
         );
+      },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.editProfile,
+      page: (state, context) {
+        final profileCubit = state.extra as ProfileCubit;
+        return BlocProvider.value(
+          value: profileCubit,
+          child: const EditProfilePage(),
+        );
+      },
+    ),
+    _customAnimatedGoRoute(
+      route: Routes.changePassword,
+      page: (state, context) {
+        final profileCubit = state.extra as ProfileCubit;
+        return BlocProvider.value(
+          value: profileCubit,
+          child: const ChangePasswordPage(),
+        );
+      },
+    ),
+
+    _customAnimatedGoRoute(
+      route: Routes.webView,
+      page: (state, context) {
+        final args = state.extra as WebViewPageArguments?;
+        final title = args?.title ?? '';
+        final url = args?.url ?? '';
+
+        return WebViewPage(title: title, url: url);
       },
     ),
   ],
@@ -158,3 +199,24 @@ GoRoute _customAnimatedGoRoute({
     },
   ),
 );
+
+class ExercisePageArguments {
+  final String primeMoverMuscleId;
+  final String pageTitle;
+  final String pageDescription;
+  final String backgroundImage;
+
+  ExercisePageArguments({
+    required this.primeMoverMuscleId,
+    required this.pageTitle,
+    required this.pageDescription,
+    required this.backgroundImage,
+  });
+}
+
+class WebViewPageArguments {
+  final String title;
+  final String url;
+
+  WebViewPageArguments({required this.title, required this.url});
+}
