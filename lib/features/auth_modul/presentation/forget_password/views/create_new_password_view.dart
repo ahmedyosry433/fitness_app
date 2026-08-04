@@ -26,6 +26,7 @@ class CreateNewPasswordView extends StatefulWidget {
 class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final _resetFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
     passwordController.dispose();
@@ -36,10 +37,9 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ForgetPasswordCubit>();
-    final resetFormKey = GlobalKey<FormState>();
     return AuthBackground(
       child: Form(
-        key: resetFormKey,
+        key: _resetFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -107,7 +107,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
                                 ),
                             isLoading: state.state == StateType.loading,
                             onTap: () {
-                              if (resetFormKey.currentState!.validate()) {
+                              if (_resetFormKey.currentState!.validate()) {
                                 cubit.doAction(
                                   ResetPasswordSubmitIntent(
                                     newPassword: passwordController.text,

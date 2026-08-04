@@ -42,7 +42,7 @@ class ForgetPasswordCubit
   }
 
   Future<void> _executeSendOtp(String email) async {
-    emit(state.copyWith(state: StateType.loading, errorMessage: null));
+    emit(state.copyWith(state: StateType.loading, errorMessage: () => null));
 
     final request = ForgetPasswordRequest(email: email.trim());
     final result = await _forgetPasswordUseCase(request);
@@ -61,14 +61,14 @@ class ForgetPasswordCubit
             LocaleKeys.forget_password_verification_code_sent_successfully.tr(),
           ),
         );
-        doNavigationAction(
-          const NavigateEvent(routeName: Routes.otpVerificationView),
-        );
       },
       error: (exception) {
         final errorMessage = exception.toString();
         emit(
-          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+          state.copyWith(
+            state: StateType.error,
+            errorMessage: () => errorMessage,
+          ),
         );
         doNavigationAction(ShowErrorToastEvent(errorMessage));
       },
@@ -76,7 +76,7 @@ class ForgetPasswordCubit
   }
 
   Future<void> _executeVerifyOtp(String otp) async {
-    emit(state.copyWith(state: StateType.loading, errorMessage: null));
+    emit(state.copyWith(state: StateType.loading, errorMessage: () => null));
 
     final request = VerifyOtpRequest(email: state.email, otp: otp.trim());
 
@@ -103,7 +103,10 @@ class ForgetPasswordCubit
       error: (exception) {
         final errorMessage = exception.toString();
         emit(
-          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+          state.copyWith(
+            state: StateType.error,
+            errorMessage: () => errorMessage,
+          ),
         );
         doNavigationAction(ShowErrorToastEvent(errorMessage));
       },
@@ -111,7 +114,7 @@ class ForgetPasswordCubit
   }
 
   Future<void> _executeResendOtp() async {
-    emit(state.copyWith(state: StateType.loading, errorMessage: null));
+    emit(state.copyWith(state: StateType.loading, errorMessage: () => null));
 
     final request = ForgetPasswordRequest(email: state.email);
     final result = await _forgetPasswordUseCase(request);
@@ -129,7 +132,10 @@ class ForgetPasswordCubit
       error: (exception) {
         final errorMessage = exception.toString();
         emit(
-          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+          state.copyWith(
+            state: StateType.error,
+            errorMessage: () => errorMessage,
+          ),
         );
         doNavigationAction(ShowErrorToastEvent(exception.toString()));
       },
@@ -149,7 +155,7 @@ class ForgetPasswordCubit
       return;
     }
 
-    emit(state.copyWith(state: StateType.loading, errorMessage: null));
+    emit(state.copyWith(state: StateType.loading, errorMessage: () => null));
 
     final request = ResetPasswordRequest(
       email: state.email,
@@ -178,7 +184,10 @@ class ForgetPasswordCubit
       error: (exception) {
         final errorMessage = exception.toString();
         emit(
-          state.copyWith(state: StateType.error, errorMessage: errorMessage),
+          state.copyWith(
+            state: StateType.error,
+            errorMessage: () => errorMessage,
+          ),
         );
         doNavigationAction(ShowErrorToastEvent(errorMessage));
       },
