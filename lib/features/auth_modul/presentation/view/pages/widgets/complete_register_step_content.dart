@@ -51,7 +51,7 @@ class CompleteRegisterStepContent extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.6),
+              color: Colors.black.withValues(alpha: 0.6),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
             ),
             child: Column(
