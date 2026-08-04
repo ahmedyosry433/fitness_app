@@ -1,9 +1,12 @@
 import 'package:fitness/core/routes/routes.dart';
 import 'package:fitness/features/auth/presentation/view/pages/forget_password_page.dart';
-import 'package:fitness/features/auth/presentation/view/pages/login_page.dart';
+import 'package:fitness/features/login/presentation/view/pages/login_page.dart';
 import 'package:fitness/features/auth/presentation/view/pages/register_page.dart';
 import 'package:fitness/features/splash/onbord_page.dart';
 import 'package:fitness/features/splash/splash_page.dart';
+import 'package:fitness/config/di/injectable_config.dart';
+import 'package:fitness/features/login/presentation/view_model/cubit/login_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +22,10 @@ final GoRouter router = GoRouter(
     ),
     _customAnimatedGoRoute(
       route: Routes.login,
-      page: (state, context) => const LoginPage(),
+      page: (state, context) => BlocProvider(
+        create: (context) => getIt<LoginCubit>(),
+        child: const LoginPage(),
+      ),
     ),
     _customAnimatedGoRoute(
       route: Routes.register,
